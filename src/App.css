@@ -1,3 +1,8 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+}
+
 .App-header {
   background-color: #282c34;
   display: flex;
@@ -6,4 +11,26 @@
   justify-content: center;
   color: white;
   font-size: 2em;
+}
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  width: 80%;
+  height: 80%;
+  margin-left: 10%;
+  margin-top: 1%;
+}
+
+.chat-history > div {
+  margin-top: 1em;
+  margin-left: 0.5em;
+}
+
+textarea {
+  resize: none;
+  margin-left: 10%;
+  margin-top: 1%;
+  width: 80%;
 }
