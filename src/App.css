@@ -28,9 +28,33 @@
   margin-left: 0.5em;
 }
 
-textarea {
-  resize: none;
+.writing-form {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
   margin-left: 10%;
   margin-top: 1%;
+}
+
+.writing-field {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 95%;
+}
+
+textarea {
+  resize: none;
   width: 80%;
+}
+
+.emoji-mart {
+  position: absolute;
+  top: -650%;
+  left: 80%
+}
+
+.emoji-mart-preview {
+  display: none;
 }
