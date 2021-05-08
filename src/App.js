@@ -11,7 +11,25 @@ const App = () => {
 
   const submitNewMessage = (e) => {
     e.preventDefault();
-    setMessages([...messages, typedMessage]);
+    const newMessageDate = new Date(Date.now());
+    const newMessageHours =
+      newMessageDate.getHours() < 10
+        ? `0${newMessageDate.getHours()}`
+        : newMessageDate.getHours();
+    const newMessageMinutes =
+      newMessageDate.getMinutes() < 10
+        ? `0${newMessageDate.getMinutes()}`
+        : newMessageDate.getMinutes();
+    const newMessageSeconds =
+      newMessageDate.getSeconds() < 10
+        ? `0${newMessageDate.getSeconds()}`
+        : newMessageDate.getSeconds();
+
+    let newMessage = {
+      date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
+      text: typedMessage,
+    };
+    setMessages([...messages, newMessage]);
     setTypedMessage("");
   };
 
@@ -24,7 +42,9 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       <div className="chat-history">
         {messages.map((message) => (
-          <div>{message}</div>
+          <div>
+            {message.date} : {message.text}
+          </div>
         ))}
       </div>
       <form className="writing-form" onSubmit={submitNewMessage}>
@@ -34,7 +54,7 @@ const App = () => {
             onChange={(e) => setTypedMessage(e.target.value)}
           />
           <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
-          {showEmojis && <Picker onSelect={addEmoji} />}
+          {showEmojis && <Picker onSelect={addEmoji} emojiTooltip={true} />}
         </div>
         <input type="submit" value="Send" />
       </form>
