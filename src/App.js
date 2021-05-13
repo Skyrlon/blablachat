@@ -42,17 +42,21 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       <div className="chat-history">
         {messages.map((message) => (
-          <div>
-            {message.date} : {message.text}
-          </div>
+          <div
+            key={message.date}
+            dangerouslySetInnerHTML={{
+              __html: message.date + " : " + message.text,
+            }}
+          ></div>
         ))}
       </div>
       <form className="writing-form" onSubmit={submitNewMessage}>
         <div className="writing-field">
-          <textarea
-            value={typedMessage}
-            onChange={(e) => setTypedMessage(e.target.value)}
-          />
+          <div
+            className="writing-input"
+            contentEditable="true"
+            onInput={(e) => setTypedMessage(e.target.innerHTML)}
+          ></div>
           <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
           {showEmojis && <Picker onSelect={addEmoji} emojiTooltip={true} />}
         </div>

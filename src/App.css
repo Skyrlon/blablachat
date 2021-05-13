@@ -44,15 +44,15 @@
   width: 95%;
 }
 
-textarea {
-  resize: none;
+.writing-input {
   width: 80%;
+  border: 2px solid black;
 }
 
 .emoji-mart {
   position: absolute;
   top: -650%;
-  left: 80%
+  left: 80%;
 }
 
 .emoji-mart-preview {
