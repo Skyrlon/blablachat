@@ -40,6 +40,21 @@ const App = () => {
     contentEditable.current.innerHTML = `${contentEditable.current.innerHTML} ${emoji.native}`;
   };
 
+  const handleChange = (e) => {
+    const hyperlinkRegex =
+      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi;
+    if (hyperlinkRegex.test(e.target.value)) {
+      typedMessage.current = e.target.value.replace(
+        hyperlinkRegex,
+        function (match) {
+          return `<a href="${match}">${match}</a>`;
+        }
+      );
+    } else {
+      typedMessage.current = e.target.value;
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">BlaBlaChat</header>
@@ -60,7 +75,7 @@ const App = () => {
             className="writing-input"
             html={typedMessage.current}
             disabled={false}
-            onChange={(e) => (typedMessage.current = e.target.value)}
+            onChange={handleChange}
           />
 
           <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
