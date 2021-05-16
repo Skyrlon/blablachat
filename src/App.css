@@ -28,6 +28,15 @@
   margin-left: 0.5em;
 }
 
+.message {
+  display: flex;
+  flex-direction: row;
+}
+
+.message-text {
+  margin-left: 0.5em;
+}
+
 .writing-form {
   position: relative;
   display: flex;

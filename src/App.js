@@ -60,12 +60,15 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       <div className="chat-history">
         {messages.map((message) => (
-          <div
-            key={message.date}
-            dangerouslySetInnerHTML={{
-              __html: message.date + " : " + message.text,
-            }}
-          ></div>
+          <div className="message" key={message.date}>
+            <div>{message.date + " : "}</div>
+            <div
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html: message.text,
+              }}
+            ></div>
+          </div>
         ))}
       </div>
       <form className="writing-form" onSubmit={submitNewMessage}>
