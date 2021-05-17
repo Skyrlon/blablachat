@@ -4,6 +4,7 @@ import "./App.css";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import ContentEditable from "react-contenteditable";
+import ClickAwayListener from "react-click-away-listener";
 
 const App = () => {
   const contentEditable = createRef();
@@ -83,7 +84,13 @@ const App = () => {
 
           <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
 
-          {showEmojis && <Picker onSelect={addEmoji} emojiTooltip={true} />}
+          {showEmojis && (
+            <ClickAwayListener onClickAway={() => setShowEmojis(false)}>
+              <div>
+                <Picker onSelect={addEmoji} emojiTooltip={true} />
+              </div>
+            </ClickAwayListener>
+          )}
         </div>
         <input type="submit" value="Send" />
       </form>
