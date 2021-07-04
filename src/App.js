@@ -1,21 +1,19 @@
-import { useState, createRef, useRef } from "react";
+import { useState } from "react";
 import "./App.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
+import { TextareaAutosize } from "@material-ui/core";
+
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
-import ContentEditable from "react-contenteditable";
 import ClickAwayListener from "react-click-away-listener";
 
 const App = () => {
-  const contentEditable = createRef();
-  const contentEditableEdit = createRef();
-  const typedMessage = useRef("");
-  const editedMessage = useRef("");
-
   const [messages, setMessages] = useState([]);
+  const [msgEdited, setMsgEdited] = useState();
+  const [msgTyped, setMsgTyped] = useState();
   const [showEmojis, setShowEmojis] = useState(false);
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
@@ -39,15 +37,14 @@ const App = () => {
     let newMessage = {
       id: messages.length,
       date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
-      text: typedMessage.current,
+      text: msgTyped,
     };
     setMessages([...messages, newMessage]);
-    typedMessage.current = "";
+    setMsgTyped("");
   };
 
   const addEmoji = (emoji) => {
-    typedMessage.current = `${contentEditable.current.innerHTML} ${emoji.native}`;
-    contentEditable.current.innerHTML = `${contentEditable.current.innerHTML} ${emoji.native}`;
+    setMsgTyped(`${msgTyped} ${emoji.native}`);
   };
 
   const handleChange = (e, type) => {
@@ -62,16 +59,16 @@ const App = () => {
       value = e.target.value;
     }
     if (type === "new") {
-      typedMessage.current = value;
+      setMsgTyped(value);
     } else if (type === "edit") {
-      editedMessage.current = value;
+      setMsgEdited(value);
     }
   };
 
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
-    editedMessage.current = messages.filter((msg) => msg.id === id)[0].text;
+    setMsgEdited(messages.filter((msg) => msg.id === id)[0].text);
   };
 
   const submitEditedMessage = (e, msgToEdit) => {
@@ -81,7 +78,7 @@ const App = () => {
     newMsgArray.splice(idMsgToEdit, 1, {
       id: msgToEdit.id,
       date: msgToEdit.date,
-      text: editedMessage.current,
+      text: msgEdited,
     });
     setMessages([...newMsgArray]);
     setIsEditingMessage(false);
@@ -117,11 +114,10 @@ const App = () => {
                 onSubmit={(e) => submitEditedMessage(e, message)}
               >
                 <div className="writing-field">
-                  <ContentEditable
-                    innerRef={contentEditableEdit}
+                  <TextareaAutosize
                     className="writing-input"
-                    html={editedMessage.current}
-                    disabled={false}
+                    rowsMin={1}
+                    value={msgEdited}
                     onChange={(e) => handleChange(e, "edit")}
                   />
 
@@ -143,11 +139,10 @@ const App = () => {
       </div>
       <form className="writing-form" onSubmit={submitNewMessage}>
         <div className="writing-field">
-          <ContentEditable
-            innerRef={contentEditable}
+          <TextareaAutosize
             className="writing-input"
-            html={typedMessage.current}
-            disabled={false}
+            rowsMin={1}
+            value={msgTyped}
             onChange={(e) => handleChange(e, "new")}
           />
 
