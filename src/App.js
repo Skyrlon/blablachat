@@ -4,22 +4,24 @@ import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
-import { TextareaAutosize } from "@material-ui/core";
-
-import "emoji-mart/css/emoji-mart.css";
-import { Picker } from "emoji-mart";
-import ClickAwayListener from "react-click-away-listener";
+import TextBox from "./TextBox.jsx";
 
 const App = () => {
   const [messages, setMessages] = useState([]);
-  const [msgEdited, setMsgEdited] = useState();
-  const [msgTyped, setMsgTyped] = useState();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
   const [isEditingMessage, setIsEditingMessage] = useState(false);
+  const [textToEdit, setTextToEdit] = useState("");
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
 
-  const submitNewMessage = (e) => {
-    e.preventDefault();
+  const handleSubmitMessage = (type, message) => {
+    if (type === "new") {
+      submitNewMessage(message);
+    } else if (type === "edit") {
+      submitEditedMessage(message);
+    }
+  };
+
+  const submitNewMessage = (message) => {
     const newMessageDate = new Date(Date.now());
     const newMessageHours =
       newMessageDate.getHours() < 10
@@ -37,48 +39,23 @@ const App = () => {
     let newMessage = {
       id: messages.length,
       date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
-      text: msgTyped,
+      text: message,
     };
     setMessages([...messages, newMessage]);
-    setMsgTyped("");
-  };
-
-  const addEmoji = (emoji) => {
-    setMsgTyped(`${msgTyped} ${emoji.native}`);
-  };
-
-  const handleChange = (e, type) => {
-    let value;
-    const hyperlinkRegex =
-      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi;
-    if (hyperlinkRegex.test(e.target.value)) {
-      value = e.target.value.replace(hyperlinkRegex, function (match) {
-        return `<a href="${match}">${match}</a>`;
-      });
-    } else {
-      value = e.target.value;
-    }
-    if (type === "new") {
-      setMsgTyped(value);
-    } else if (type === "edit") {
-      setMsgEdited(value);
-    }
   };
 
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
-    setMsgEdited(messages.filter((msg) => msg.id === id)[0].text);
+    setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
   };
 
-  const submitEditedMessage = (e, msgToEdit) => {
-    e.preventDefault();
-    let idMsgToEdit = messages.indexOf(msgToEdit);
+  const submitEditedMessage = (message) => {
     let newMsgArray = messages;
-    newMsgArray.splice(idMsgToEdit, 1, {
-      id: msgToEdit.id,
-      date: msgToEdit.date,
-      text: msgEdited,
+    newMsgArray.splice(idMessageToEdit, 1, {
+      id: idMessageToEdit,
+      date: messages[idMessageToEdit].date,
+      text: message,
     });
     setMessages([...newMsgArray]);
     setIsEditingMessage(false);
@@ -109,89 +86,26 @@ const App = () => {
               </div>
             )}
             {isEditingMessage && message.id === idMessageToEdit && (
-              <form
-                className="writing-form"
-                onSubmit={(e) => submitEditedMessage(e, message)}
-              >
-                <div className="writing-field">
-                  <TextareaAutosize
-                    className="writing-input"
-                    rowsMin={1}
-                    value={msgEdited}
-                    onChange={(e) => handleChange(e, "edit")}
-                  />
-
-                  <div
-                    className="emoji-button"
-                    onClick={() => {
-                      setShowEmojis({
-                        show:
-                          showEmojis.input !== "edit" ||
-                          (showEmojis.input === "edit" && !showEmojis.show),
-                        input: "edit",
-                      });
-                    }}
-                  >
-                    Emoji
-                  </div>
-
-                  {showEmojis.show && showEmojis.input === "edit" && (
-                    <ClickAwayListener
-                      onClickAway={(e) => {
-                        if (e.target.className !== "emoji-button")
-                          setShowEmojis({ show: false, input: "" });
-                      }}
-                    >
-                      <div>
-                        <Picker onSelect={addEmoji} emojiTooltip={true} />
-                      </div>
-                    </ClickAwayListener>
-                  )}
-                </div>
-                <input type="submit" value="Send" />
-              </form>
+              <TextBox
+                type="edit"
+                showEmojis={showEmojis}
+                onEmojiButtonClick={(e) => setShowEmojis(e)}
+                onEmojiClickAway={(e) => setShowEmojis(e)}
+                submitMessage={handleSubmitMessage}
+                text={textToEdit}
+              />
             )}
           </div>
         ))}
       </div>
-      <form className="writing-form" onSubmit={submitNewMessage}>
-        <div className="writing-field">
-          <TextareaAutosize
-            className="writing-input"
-            rowsMin={1}
-            value={msgTyped}
-            onChange={(e) => handleChange(e, "new")}
-          />
-
-          <div
-            className="emoji-button"
-            onClick={() => {
-              setShowEmojis({
-                show:
-                  showEmojis.input !== "type" ||
-                  (showEmojis.input === "type" && !showEmojis.show),
-                input: "type",
-              });
-            }}
-          >
-            Emoji
-          </div>
-
-          {showEmojis.show && showEmojis.input === "type" && (
-            <ClickAwayListener
-              onClickAway={(e) => {
-                if (e.target.className !== "emoji-button")
-                  setShowEmojis({ show: false, input: "" });
-              }}
-            >
-              <div>
-                <Picker onSelect={addEmoji} emojiTooltip={true} />
-              </div>
-            </ClickAwayListener>
-          )}
-        </div>
-        <input type="submit" value="Send" />
-      </form>
+      <TextBox
+        type="new"
+        showEmojis={showEmojis}
+        onEmojiButtonClick={(e) => setShowEmojis(e)}
+        onEmojiClickAway={(e) => setShowEmojis(e)}
+        submitMessage={handleSubmitMessage}
+        text={textToEdit}
+      />
     </div>
   );
 };
