@@ -14,7 +14,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [msgEdited, setMsgEdited] = useState();
   const [msgTyped, setMsgTyped] = useState();
-  const [showEmojis, setShowEmojis] = useState(false);
+  const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
 
@@ -121,10 +121,27 @@ const App = () => {
                     onChange={(e) => handleChange(e, "edit")}
                   />
 
-                  <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
+                  <div
+                    className="emoji-button"
+                    onClick={() => {
+                      setShowEmojis({
+                        show:
+                          showEmojis.input !== "edit" ||
+                          (showEmojis.input === "edit" && !showEmojis.show),
+                        input: "edit",
+                      });
+                    }}
+                  >
+                    Emoji
+                  </div>
 
-                  {showEmojis && (
-                    <ClickAwayListener onClickAway={() => setShowEmojis(false)}>
+                  {showEmojis.show && showEmojis.input === "edit" && (
+                    <ClickAwayListener
+                      onClickAway={(e) => {
+                        if (e.target.className !== "emoji-button")
+                          setShowEmojis({ show: false, input: "" });
+                      }}
+                    >
                       <div>
                         <Picker onSelect={addEmoji} emojiTooltip={true} />
                       </div>
@@ -146,10 +163,27 @@ const App = () => {
             onChange={(e) => handleChange(e, "new")}
           />
 
-          <div onClick={() => setShowEmojis(!showEmojis)}>Emoji</div>
+          <div
+            className="emoji-button"
+            onClick={() => {
+              setShowEmojis({
+                show:
+                  showEmojis.input !== "type" ||
+                  (showEmojis.input === "type" && !showEmojis.show),
+                input: "type",
+              });
+            }}
+          >
+            Emoji
+          </div>
 
-          {showEmojis && (
-            <ClickAwayListener onClickAway={() => setShowEmojis(false)}>
+          {showEmojis.show && showEmojis.input === "type" && (
+            <ClickAwayListener
+              onClickAway={(e) => {
+                if (e.target.className !== "emoji-button")
+                  setShowEmojis({ show: false, input: "" });
+              }}
+            >
               <div>
                 <Picker onSelect={addEmoji} emojiTooltip={true} />
               </div>
