@@ -1,11 +1,48 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-
+import styled from "styled-components";
 import { TextareaAutosize } from "@material-ui/core";
 
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import ClickAwayListener from "react-click-away-listener";
+
+const StyledTextBox = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  min-height: 2em;
+  width: 100%;
+  border: 2px solid;
+  border-radius: 0.5em;
+  align-items: center;
+
+  & .emoji-button {
+    position: absolute;
+    right: 1%;
+  }
+
+  & .emoji-mart {
+    position: absolute;
+    top: -25em;
+    left: 80%;
+  }
+
+  & .emoji-mart-preview {
+    display: none;
+  }
+`;
+
+const StyledTextArea = styled(TextareaAutosize)`
+  resize: none;
+  border: none;
+  overflow: hidden;
+  margin-left: 1%;
+  width: 90%;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const TextBox = ({
   type,
@@ -58,50 +95,43 @@ const TextBox = ({
   };
 
   return (
-    <form
-      className="writing-form"
-      onSubmit={(e) => {
-        onSubmit(e);
-      }}
-    >
-      <div className="writing-field">
-        <TextareaAutosize
-          className="writing-input"
-          rowsMin={1}
-          value={message}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => handleChange(e)}
-        />
+    <StyledTextBox className="writing-form" onSubmit={(e) => onSubmit(e)}>
+      <StyledTextArea
+        className="writing-input"
+        rowsMin={1}
+        rowsMax={3}
+        value={message}
+        onKeyDown={handleKeyDown}
+        onChange={(e) => handleChange(e)}
+      />
 
-        <div
-          className="emoji-button"
-          onClick={() => {
-            onEmojiButtonClick({
-              show:
-                showEmojis.input !== type ||
-                (showEmojis.input === type && !showEmojis.show),
-              input: type,
-            });
+      <div
+        className="emoji-button"
+        onClick={() => {
+          onEmojiButtonClick({
+            show:
+              showEmojis.input !== type ||
+              (showEmojis.input === type && !showEmojis.show),
+            input: type,
+          });
+        }}
+      >
+        Emoji
+      </div>
+
+      {showEmojis.show && showEmojis.input === type && (
+        <ClickAwayListener
+          onClickAway={(e) => {
+            if (e.target.className !== "emoji-button")
+              onEmojiClickAway({ show: false, input: "" });
           }}
         >
-          Emoji
-        </div>
-
-        {showEmojis.show && showEmojis.input === type && (
-          <ClickAwayListener
-            onClickAway={(e) => {
-              if (e.target.className !== "emoji-button")
-                onEmojiClickAway({ show: false, input: "" });
-            }}
-          >
-            <div>
-              <Picker onSelect={addEmoji} emojiTooltip={true} />
-            </div>
-          </ClickAwayListener>
-        )}
-      </div>
-      <input type="submit" value="Send" />
-    </form>
+          <div>
+            <Picker onSelect={addEmoji} emojiTooltip={true} />
+          </div>
+        </ClickAwayListener>
+      )}
+    </StyledTextBox>
   );
 };
 
