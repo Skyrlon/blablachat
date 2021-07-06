@@ -48,10 +48,7 @@ const App = () => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
     setTextToEdit(
-      messages
-        .filter((msg) => msg.id === id)[0]
-        .text.split("<br>")
-        .join("\n")
+      messages.filter((msg) => msg.id === id)[0].text.replaceAll("<br>", "\n")
     );
   };
 

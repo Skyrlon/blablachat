@@ -34,7 +34,7 @@ const TextBox = ({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      submitMessage(type, message);
+      submitMessage(type, message.replaceAll("\n", "<br>"));
       setMessage("");
     }
   };
@@ -45,7 +45,9 @@ const TextBox = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    submitMessage(type, message.split("\n").join("<br>"));
+    //Prevent submiting message with only spaces, line breaks, and tabs
+    if (!message.replace(/\s/g, "")) return;
+    submitMessage(type, message.replaceAll("\n", "<br>"));
     setMessage("");
   };
 
