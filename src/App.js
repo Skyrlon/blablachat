@@ -30,16 +30,22 @@ const StyledChat = styled.div`
     display: flex;
     flex-direction: row;
     width: 99%;
-  }
 
-  & .message-date {
-    white-space: nowrap;
-    margin-right: 1em;
-  }
+    &-date {
+      white-space: nowrap;
+      margin-right: 1em;
+    }
 
-  & .message-text {
-    word-wrap: break-word;
-    width: 95%;
+    &-text {
+      word-wrap: break-word;
+      width: 95%;
+    }
+
+    &-modified {
+      font-size: 0.75em;
+      font-style: italic;
+      color: grey;
+    }
   }
 `;
 
@@ -77,6 +83,7 @@ const App = () => {
       id: messages.length,
       date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
       text: message,
+      modified: false,
     };
     setMessages([...messages, newMessage]);
   };
@@ -95,6 +102,9 @@ const App = () => {
       id: idMessageToEdit,
       date: messages[idMessageToEdit].date,
       text: message,
+      modified:
+        message !== messages[idMessageToEdit].text ||
+        messages[idMessageToEdit].modified,
     });
     setMessages([...newMsgArray]);
     setIsEditingMessage(false);
@@ -116,6 +126,9 @@ const App = () => {
                     __html: message.text,
                   }}
                 ></div>
+              )}
+              {!isEditingMessage && message.modified && (
+                <span className="message-modified">(modified)</span>
               )}
               {!(isEditingMessage && message.id === idMessageToEdit) && (
                 <div className="edit-icon">
