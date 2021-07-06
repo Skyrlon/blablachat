@@ -18,24 +18,13 @@ const TextBox = ({
   const [message, setMessage] = useState(text);
 
   const handleChange = (e) => {
-    let value;
-    const hyperlinkRegex =
-      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi;
-    if (hyperlinkRegex.test(e.target.value)) {
-      value = e.target.value.replace(hyperlinkRegex, function (match) {
-        return `<a href="${match}">${match}</a>`;
-      });
-    } else {
-      value = e.target.value;
-    }
-    setMessage(value);
+    setMessage(e.target.value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      submitMessage(type, message.replaceAll("\n", "<br>"));
-      setMessage("");
+      onSubmit(e);
     }
   };
 
@@ -47,7 +36,24 @@ const TextBox = ({
     e.preventDefault();
     //Prevent submiting message with only spaces, line breaks, and tabs
     if (!message.replace(/\s/g, "")) return;
-    submitMessage(type, message.replaceAll("\n", "<br>"));
+    let messageWithHyperlinkWrapped;
+    const hyperlinkRegex =
+      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi;
+    if (hyperlinkRegex.test(e.target.value)) {
+      messageWithHyperlinkWrapped = message.replace(
+        hyperlinkRegex,
+        function (match) {
+          return `<a href="${
+            match.slice(0, 8) === "https://" || match.slice(0, 7) === "http://"
+              ? `${match}`
+              : `http://${match}`
+          }">${match}</a>`;
+        }
+      );
+    } else {
+      messageWithHyperlinkWrapped = message;
+    }
+    submitMessage(type, messageWithHyperlinkWrapped.replaceAll("\n", "<br>"));
     setMessage("");
   };
 
