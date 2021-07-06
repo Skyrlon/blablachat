@@ -31,17 +31,29 @@ const TextBox = ({
     setMessage(value);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitMessage(type, message);
+      setMessage("");
+    }
+  };
+
   const addEmoji = (emoji) => {
     setMessage(`${message} ${emoji.native}`);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    submitMessage(type, message.split("\n").join("<br>"));
+    setMessage("");
   };
 
   return (
     <form
       className="writing-form"
       onSubmit={(e) => {
-        e.preventDefault();
-        submitMessage(type, message);
-        setMessage("");
+        onSubmit(e);
       }}
     >
       <div className="writing-field">
@@ -49,6 +61,7 @@ const TextBox = ({
           className="writing-input"
           rowsMin={1}
           value={message}
+          onKeyDown={handleKeyDown}
           onChange={(e) => handleChange(e)}
         />
 

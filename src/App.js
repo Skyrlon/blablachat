@@ -47,7 +47,12 @@ const App = () => {
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
-    setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
+    setTextToEdit(
+      messages
+        .filter((msg) => msg.id === id)[0]
+        .text.split("<br>")
+        .join("\n")
+    );
   };
 
   const submitEditedMessage = (message) => {
