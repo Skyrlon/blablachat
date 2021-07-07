@@ -5,11 +5,13 @@ import styled from "styled-components";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+import { Scrollbars } from "react-custom-scrollbars";
+
 import TextBox from "./TextBox.jsx";
 
 const StyledChat = styled.div`
   width: 80%;
-  height: 100%;
+  height: 90%;
   margin-left: 10%;
   margin-top: 1%;
 
@@ -18,7 +20,8 @@ const StyledChat = styled.div`
     flex-direction: column;
     border: 1px solid black;
     width: 100%;
-    height: 80%;
+    height: 90%;
+    overflow-y: auto;
   }
 
   & .historic > div {
@@ -39,7 +42,7 @@ const StyledChat = styled.div`
     &-text {
       word-wrap: break-word;
       &-container {
-        width: 95%;
+        max-width: 85%;
       }
     }
 
@@ -137,59 +140,62 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       <StyledChat>
         <div className="historic">
-          {messages.map((message) => (
-            <div className="message" key={message.id}>
-              <div className="message-date">{message.date + " : "}</div>
-              {!(isEditingMessage && message.id === idMessageToEdit) && (
-                <div className="message-text-container">
-                  {!message.deleted && (
-                    <span
-                      className="message-text"
-                      dangerouslySetInnerHTML={{
-                        __html: message.text,
-                      }}
-                    ></span>
-                  )}
-                  {(message.modified || message.deleted) === true && (
-                    <span className="message-modified">
-                      {message.modified && !message.deleted
-                        ? "(modified)"
-                        : "(deleted)"}
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {!(isEditingMessage && message.id === idMessageToEdit) &&
-                !message.deleted && (
-                  <div className="message-buttons">
-                    <div
-                      className="edit-icon"
-                      onClick={() => onEditMessage(message.id)}
-                    >
-                      <EditIcon />
-                    </div>
-                    <div
-                      className="delete-icon"
-                      onClick={() => deleteMessage(message.id)}
-                    >
-                      <DeleteIcon />
-                    </div>
+          <Scrollbars style={{ width: "99%", height: "100%" }}>
+            {messages.map((message) => (
+              <div className="message" key={message.id}>
+                <div className="message-date">{message.date + " : "}</div>
+                {!(isEditingMessage && message.id === idMessageToEdit) && (
+                  <div className="message-text-container">
+                    {!message.deleted && (
+                      <span
+                        className="message-text"
+                        dangerouslySetInnerHTML={{
+                          __html: message.text,
+                        }}
+                      ></span>
+                    )}
+                    {(message.modified || message.deleted) === true && (
+                      <span className="message-modified">
+                        {message.modified && !message.deleted
+                          ? "(modified)"
+                          : "(deleted)"}
+                      </span>
+                    )}
                   </div>
                 )}
-              {isEditingMessage && message.id === idMessageToEdit && (
-                <TextBox
-                  type="edit"
-                  showEmojis={showEmojis}
-                  onEmojiButtonClick={(e) => setShowEmojis(e)}
-                  onEmojiClickAway={(e) => setShowEmojis(e)}
-                  submitMessage={handleSubmitMessage}
-                  text={textToEdit}
-                />
-              )}
-            </div>
-          ))}
+
+                {!(isEditingMessage && message.id === idMessageToEdit) &&
+                  !message.deleted && (
+                    <div className="message-buttons">
+                      <div
+                        className="edit-icon"
+                        onClick={() => onEditMessage(message.id)}
+                      >
+                        <EditIcon />
+                      </div>
+                      <div
+                        className="delete-icon"
+                        onClick={() => deleteMessage(message.id)}
+                      >
+                        <DeleteIcon />
+                      </div>
+                    </div>
+                  )}
+                {isEditingMessage && message.id === idMessageToEdit && (
+                  <TextBox
+                    type="edit"
+                    showEmojis={showEmojis}
+                    onEmojiButtonClick={(e) => setShowEmojis(e)}
+                    onEmojiClickAway={(e) => setShowEmojis(e)}
+                    submitMessage={handleSubmitMessage}
+                    text={textToEdit}
+                  />
+                )}
+              </div>
+            ))}
+          </Scrollbars>
         </div>
+
         <TextBox
           type="new"
           showEmojis={showEmojis}
