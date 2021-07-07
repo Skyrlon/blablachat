@@ -2,8 +2,8 @@ import { useState } from "react";
 import "./App.css";
 import styled from "styled-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import TextBox from "./TextBox.jsx";
 
@@ -38,7 +38,14 @@ const StyledChat = styled.div`
 
     &-text {
       word-wrap: break-word;
-      width: 95%;
+      &-container {
+        width: 95%;
+      }
+    }
+
+    &-buttons {
+      display: flex;
+      flex-direction: row;
     }
 
     &-modified {
@@ -84,6 +91,7 @@ const App = () => {
       date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
       text: message,
       modified: false,
+      deleted: false,
     };
     setMessages([...messages, newMessage]);
   };
@@ -105,10 +113,23 @@ const App = () => {
       modified:
         message !== messages[idMessageToEdit].text ||
         messages[idMessageToEdit].modified,
+      deleted: false,
     });
     setMessages([...newMsgArray]);
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
+  };
+
+  const deleteMessage = (idMsgToDelete) => {
+    let newMsgArray = messages;
+    newMsgArray.splice(idMsgToDelete, 1, {
+      id: idMsgToDelete,
+      date: messages[idMsgToDelete].date,
+      text: messages[idMsgToDelete].text,
+      modified: messages[idMsgToDelete].modified,
+      deleted: true,
+    });
+    setMessages([...newMsgArray]);
   };
 
   return (
@@ -120,24 +141,42 @@ const App = () => {
             <div className="message" key={message.id}>
               <div className="message-date">{message.date + " : "}</div>
               {!(isEditingMessage && message.id === idMessageToEdit) && (
-                <div
-                  className="message-text"
-                  dangerouslySetInnerHTML={{
-                    __html: message.text,
-                  }}
-                ></div>
-              )}
-              {!isEditingMessage && message.modified && (
-                <span className="message-modified">(modified)</span>
-              )}
-              {!(isEditingMessage && message.id === idMessageToEdit) && (
-                <div className="edit-icon">
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    onClick={() => onEditMessage(message.id)}
-                  />
+                <div className="message-text-container">
+                  {!message.deleted && (
+                    <span
+                      className="message-text"
+                      dangerouslySetInnerHTML={{
+                        __html: message.text,
+                      }}
+                    ></span>
+                  )}
+                  {(message.modified || message.deleted) === true && (
+                    <span className="message-modified">
+                      {message.modified && !message.deleted
+                        ? "(modified)"
+                        : "(deleted)"}
+                    </span>
+                  )}
                 </div>
               )}
+
+              {!(isEditingMessage && message.id === idMessageToEdit) &&
+                !message.deleted && (
+                  <div className="message-buttons">
+                    <div
+                      className="edit-icon"
+                      onClick={() => onEditMessage(message.id)}
+                    >
+                      <EditIcon />
+                    </div>
+                    <div
+                      className="delete-icon"
+                      onClick={() => deleteMessage(message.id)}
+                    >
+                      <DeleteIcon />
+                    </div>
+                  </div>
+                )}
               {isEditingMessage && message.id === idMessageToEdit && (
                 <TextBox
                   type="edit"
