@@ -73,24 +73,7 @@ const TextBox = ({
     e.preventDefault();
     //Prevent submiting message with only spaces, line breaks, and tabs
     if (!message.replace(/\s/g, "")) return;
-    let messageWithHyperlinkWrapped;
-    const hyperlinkRegex =
-      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi;
-    if (hyperlinkRegex.test(e.target.value)) {
-      messageWithHyperlinkWrapped = message.replace(
-        hyperlinkRegex,
-        function (match) {
-          return `<a href="${
-            match.slice(0, 8) === "https://" || match.slice(0, 7) === "http://"
-              ? `${match}`
-              : `http://${match}`
-          }">${match}</a>`;
-        }
-      );
-    } else {
-      messageWithHyperlinkWrapped = message;
-    }
-    submitMessage(type, messageWithHyperlinkWrapped.replaceAll("\n", "<br>"));
+    submitMessage(type, message);
     setMessage("");
   };
 

@@ -7,6 +7,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Scrollbars } from "react-custom-scrollbars";
 
+import Linkify from "react-linkify";
+
 import TextBox from "./TextBox.jsx";
 
 const StyledChat = styled.div`
@@ -41,6 +43,7 @@ const StyledChat = styled.div`
 
     &-text {
       word-wrap: break-word;
+      white-space: pre-line;
       &-container {
         max-width: 85%;
       }
@@ -102,9 +105,7 @@ const App = () => {
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
-    setTextToEdit(
-      messages.filter((msg) => msg.id === id)[0].text.replaceAll("<br>", "\n")
-    );
+    setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
   };
 
   const submitEditedMessage = (message) => {
@@ -147,12 +148,9 @@ const App = () => {
                 {!(isEditingMessage && message.id === idMessageToEdit) && (
                   <div className="message-text-container">
                     {!message.deleted && (
-                      <span
-                        className="message-text"
-                        dangerouslySetInnerHTML={{
-                          __html: message.text,
-                        }}
-                      ></span>
+                      <span className="message-text">
+                        <Linkify>{message.text}</Linkify>
+                      </span>
                     )}
                     {(message.modified || message.deleted) === true && (
                       <span className="message-modified">
