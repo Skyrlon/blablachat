@@ -63,7 +63,16 @@ const StyledChat = styled.div`
 `;
 
 const App = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      id: 0,
+      date: "2021-01-01",
+      time: "11:11",
+      text: "Message for test",
+      modified: false,
+      deleted: false,
+    },
+  ]);
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
@@ -77,24 +86,31 @@ const App = () => {
     }
   };
 
+  const handleOneDigitNumber = (number) => {
+    return number < 10 ? `0${number}` : number;
+  };
+
+  const currentDate = `${new Date(
+    Date.now()
+  ).getFullYear()}-${handleOneDigitNumber(
+    new Date(Date.now()).getMonth() + 1
+  )}-${handleOneDigitNumber(new Date(Date.now()).getDate())}`;
+
   const submitNewMessage = (message) => {
     const newMessageDate = new Date(Date.now());
-    const newMessageHours =
-      newMessageDate.getHours() < 10
-        ? `0${newMessageDate.getHours()}`
-        : newMessageDate.getHours();
-    const newMessageMinutes =
-      newMessageDate.getMinutes() < 10
-        ? `0${newMessageDate.getMinutes()}`
-        : newMessageDate.getMinutes();
-    const newMessageSeconds =
-      newMessageDate.getSeconds() < 10
-        ? `0${newMessageDate.getSeconds()}`
-        : newMessageDate.getSeconds();
 
     let newMessage = {
       id: messages.length,
-      date: `${newMessageHours}:${newMessageMinutes}:${newMessageSeconds}`,
+      date: `${handleOneDigitNumber(
+        newMessageDate.getFullYear()
+      )}-${handleOneDigitNumber(
+        newMessageDate.getMonth() + 1
+      )}-${handleOneDigitNumber(newMessageDate.getDate())}`,
+      time: `${handleOneDigitNumber(
+        newMessageDate.getHours()
+      )}:${handleOneDigitNumber(
+        newMessageDate.getMinutes()
+      )}:${handleOneDigitNumber(newMessageDate.getSeconds())}`,
       text: message,
       modified: false,
       deleted: false,
@@ -113,6 +129,7 @@ const App = () => {
     newMsgArray.splice(idMessageToEdit, 1, {
       id: idMessageToEdit,
       date: messages[idMessageToEdit].date,
+      time: messages[idMessageToEdit].time,
       text: message,
       modified:
         message !== messages[idMessageToEdit].text ||
@@ -129,6 +146,7 @@ const App = () => {
     newMsgArray.splice(idMsgToDelete, 1, {
       id: idMsgToDelete,
       date: messages[idMsgToDelete].date,
+      time: messages[idMsgToDelete].time,
       text: messages[idMsgToDelete].text,
       modified: messages[idMsgToDelete].modified,
       deleted: true,
@@ -144,7 +162,10 @@ const App = () => {
           <Scrollbars style={{ width: "99%", height: "100%" }}>
             {messages.map((message) => (
               <div className="message" key={message.id}>
-                <div className="message-date">{message.date + " : "}</div>
+                <div className="message-date">
+                  {message.date !== currentDate && `${message.date} `}
+                  {message.time}
+                </div>
                 {!(isEditingMessage && message.id === idMessageToEdit) && (
                   <div className="message-text-container">
                     {!message.deleted && (
