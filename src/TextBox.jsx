@@ -7,6 +7,16 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import ClickAwayListener from "react-click-away-listener";
 
+const StyledTextBoxContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  & .tips {
+    & span {
+      color: blue;
+    }
+  }
+`;
+
 const StyledTextBox = styled.form`
   position: relative;
   display: flex;
@@ -51,6 +61,7 @@ const TextBox = ({
   onEmojiClickAway,
   submitMessage,
   text,
+  cancelEdit,
 }) => {
   const [message, setMessage] = useState(text);
 
@@ -62,6 +73,9 @@ const TextBox = ({
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit(e);
+    }
+    if (e.key === "Escape") {
+      cancelEdit();
     }
   };
 
@@ -78,43 +92,50 @@ const TextBox = ({
   };
 
   return (
-    <StyledTextBox className="writing-form" onSubmit={(e) => onSubmit(e)}>
-      <StyledTextArea
-        className="writing-input"
-        rowsMin={1}
-        rowsMax={3}
-        value={message}
-        onKeyDown={handleKeyDown}
-        onChange={(e) => handleChange(e)}
-      />
+    <StyledTextBoxContainer>
+      <StyledTextBox onSubmit={onSubmit}>
+        <StyledTextArea
+          rowsMin={1}
+          rowsMax={3}
+          value={message}
+          onKeyDown={handleKeyDown}
+          onChange={(e) => handleChange(e)}
+        />
 
-      <div
-        className="emoji-button"
-        onClick={() => {
-          onEmojiButtonClick({
-            show:
-              showEmojis.input !== type ||
-              (showEmojis.input === type && !showEmojis.show),
-            input: type,
-          });
-        }}
-      >
-        Emoji
-      </div>
-
-      {showEmojis.show && showEmojis.input === type && (
-        <ClickAwayListener
-          onClickAway={(e) => {
-            if (e.target.className !== "emoji-button")
-              onEmojiClickAway({ show: false, input: "" });
+        <div
+          className="emoji-button"
+          onClick={() => {
+            onEmojiButtonClick({
+              show:
+                showEmojis.input !== type ||
+                (showEmojis.input === type && !showEmojis.show),
+              input: type,
+            });
           }}
         >
-          <div>
-            <Picker onSelect={addEmoji} emojiTooltip={true} />
-          </div>
-        </ClickAwayListener>
+          Emoji
+        </div>
+
+        {showEmojis.show && showEmojis.input === type && (
+          <ClickAwayListener
+            onClickAway={(e) => {
+              if (e.target.className !== "emoji-button")
+                onEmojiClickAway({ show: false, input: "" });
+            }}
+          >
+            <div>
+              <Picker onSelect={addEmoji} emojiTooltip={true} />
+            </div>
+          </ClickAwayListener>
+        )}
+      </StyledTextBox>
+      {type === "edit" && (
+        <div className="tips">
+          Press Esc to <span onClick={cancelEdit}>cancel</span> - Press Enter to{" "}
+          <span onClick={onSubmit}>save</span>
+        </div>
       )}
-    </StyledTextBox>
+    </StyledTextBoxContainer>
   );
 };
 

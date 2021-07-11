@@ -59,6 +59,11 @@ const StyledChat = styled.div`
       font-style: italic;
       color: grey;
     }
+    &-edit {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
   }
 `;
 
@@ -115,6 +120,7 @@ const App = () => {
       modified: false,
       deleted: false,
     };
+
     setMessages([...messages, newMessage]);
   };
 
@@ -122,6 +128,12 @@ const App = () => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
     setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingMessage(false);
+    setIdMessageToEdit(undefined);
+    setTextToEdit("");
   };
 
   const submitEditedMessage = (message) => {
@@ -139,6 +151,7 @@ const App = () => {
     setMessages([...newMsgArray]);
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
+    setTextToEdit("");
   };
 
   const deleteMessage = (idMsgToDelete) => {
@@ -208,6 +221,7 @@ const App = () => {
                     onEmojiClickAway={(e) => setShowEmojis(e)}
                     submitMessage={handleSubmitMessage}
                     text={textToEdit}
+                    cancelEdit={handleCancelEdit}
                   />
                 )}
               </div>
