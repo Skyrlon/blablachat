@@ -11,8 +11,13 @@ const StyledSignIn = styled.form`
 
 const SignIn = () => {
   const [signIn, setSignIn] = useState(true);
-
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setpasswordConfirm] = useState("");
+
+  const [isSubmitCorrect, setIsSubmitCorrect] = useState(undefined);
+
+  const [isUsernameLengthCorrect, setIsUsernameLengthCorrect] = useState(false);
 
   const [isPasswordMinChar, setIsPasswordMinChar] = useState(false);
   const [isPasswordUppercase, setIsPasswordUppercase] = useState(false);
@@ -20,9 +25,21 @@ const SignIn = () => {
   const [isPasswordNumber, setIsPasswordNumber] = useState(false);
   const [isPasswordSpecial, setIsPasswordSpecial] = useState(false);
 
+  const [isPasswordConfirmSame, setIsPasswordConfirmSame] = useState(undefined);
+
+  const handleOnChangeUserName = (e) => {
+    if (!signIn) {
+      const usernameChars = e.target.value.split("");
+      usernameChars.length > 5 && usernameChars.length < 31
+        ? setIsUsernameLengthCorrect(true)
+        : setIsUsernameLengthCorrect(false);
+    }
+    setUsername(e.target.value);
+  };
+
   const handleOnChangePassword = (e) => {
     if (!signIn) {
-      let passwordChars = e.target.value.split("");
+      const passwordChars = e.target.value.split("");
       passwordChars.length > 7
         ? setIsPasswordMinChar(true)
         : setIsPasswordMinChar(false);
@@ -48,10 +65,46 @@ const SignIn = () => {
     setPassword(e.target.value);
   };
 
+  const handleOnChangePasswordConfirm = (e) => {
+    e.target.value === password
+      ? setIsPasswordConfirmSame(true)
+      : setIsPasswordConfirmSame(false);
+    setpasswordConfirm(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      [
+        isUsernameLengthCorrect,
+        isPasswordMinChar,
+        isPasswordUppercase,
+        isPasswordLowercase,
+        isPasswordNumber,
+        isPasswordSpecial,
+        isPasswordConfirmSame,
+      ].some((element) => element === false)
+    ) {
+      setIsSubmitCorrect(false);
+    } else {
+      setIsSubmitCorrect(undefined);
+      alert("Account Created");
+    }
+  };
+
   return (
-    <StyledSignIn>
+    <StyledSignIn onSubmit={handleSubmit}>
       <label htmlFor="username">User name : </label>
-      <input type="text" name="username" placeholder="User name" />
+      <input
+        type="text"
+        name="username"
+        placeholder="User name"
+        onChange={handleOnChangeUserName}
+        value={username}
+      />
+      {!signIn &&
+        isSubmitCorrect === false &&
+        (isUsernameLengthCorrect ? <CheckIcon /> : <ClearIcon />)}
       <label htmlFor="password">Password : </label>
       <input
         type="password"
@@ -63,12 +116,6 @@ const SignIn = () => {
 
       {!signIn && (
         <>
-          <label htmlFor="password-confirm">Confirm your password : </label>
-          <input
-            type="password"
-            name="password-confirm"
-            placeholder="Password"
-          />
           <ul>
             Password must have atleast:
             <li>
@@ -89,6 +136,16 @@ const SignIn = () => {
               character
             </li>
           </ul>
+          <label htmlFor="password-confirm">Confirm your password : </label>
+          <input
+            type="password"
+            name="password-confirm"
+            placeholder="Password"
+            onChange={handleOnChangePasswordConfirm}
+            value={passwordConfirm}
+          />
+          {isSubmitCorrect === false &&
+            (isPasswordConfirmSame ? <CheckIcon /> : <ClearIcon />)}
         </>
       )}
       <input type="submit" />
