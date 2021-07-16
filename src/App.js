@@ -6,6 +6,13 @@ import ChatPage from "./ChatPage.jsx";
 import SignIn from "./SignIn.jsx";
 
 const App = () => {
+  const [users, setUsers] = useState([
+    { name: "SimpleOne", password: "Password1@" },
+    { name: "Toto1337", password: "AVeryDifficultPassword1@" },
+    { name: "HolderPlace85!", password: "Password11$" },
+    { name: "Human", password: "@!1Az1!@" },
+  ]);
+
   const [messages, setMessages] = useState([
     {
       id: 0,
@@ -42,7 +49,7 @@ const App = () => {
               <ChatPage msg={messages} modifyMessages={handleModifyMessages} />
             </Route>
             <Route path="/sign">
-              <SignIn />
+              <SignIn users={users} />
             </Route>
           </Switch>
         </div>

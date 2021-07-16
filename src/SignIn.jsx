@@ -9,7 +9,7 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = () => {
+const SignIn = ({ users }) => {
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -74,21 +74,36 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      [
-        isUsernameLengthCorrect,
-        isPasswordMinChar,
-        isPasswordUppercase,
-        isPasswordLowercase,
-        isPasswordNumber,
-        isPasswordSpecial,
-        isPasswordConfirmSame,
-      ].some((element) => element === false)
-    ) {
-      setIsSubmitCorrect(false);
+    if (!signIn) {
+      if (
+        [
+          isUsernameLengthCorrect,
+          isPasswordMinChar,
+          isPasswordUppercase,
+          isPasswordLowercase,
+          isPasswordNumber,
+          isPasswordSpecial,
+          isPasswordConfirmSame,
+        ].some((element) => element === false)
+      ) {
+        setIsSubmitCorrect(false);
+      } else {
+        setIsSubmitCorrect(undefined);
+        alert("Account Created");
+      }
     } else {
-      setIsSubmitCorrect(undefined);
-      alert("Account Created");
+      if (
+        users.some(
+          (user) => user.name === username && user.password === password
+        )
+      ) {
+        const userLogged = users.filter(
+          (user) => user.name === username && user.password === password
+        )[0];
+        alert(`Welcome Back ${userLogged.name}`);
+      } else {
+        alert("No account found");
+      }
     }
   };
 
