@@ -28,6 +28,10 @@ const App = () => {
     setMessages(newMessages);
   };
 
+  const handleAddUser = (newUser) => {
+    setUsers([...users, newUser]);
+  };
+
   return (
     <div className="App">
       <header className="App-header">BlaBlaChat</header>
@@ -49,7 +53,7 @@ const App = () => {
               <ChatPage msg={messages} modifyMessages={handleModifyMessages} />
             </Route>
             <Route path="/sign">
-              <SignIn users={users} />
+              <SignIn users={users} addUser={handleAddUser} />
             </Route>
           </Switch>
         </div>

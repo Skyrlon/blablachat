@@ -9,7 +9,7 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = ({ users }) => {
+const SignIn = ({ users, addUser }) => {
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -94,6 +94,7 @@ const SignIn = ({ users }) => {
         setIsSubmitCorrect(false);
       } else {
         setIsSubmitCorrect(undefined);
+        addUser({ name: username, password: password });
         alert("Account Created");
       }
     } else {
