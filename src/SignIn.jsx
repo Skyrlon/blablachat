@@ -18,6 +18,7 @@ const SignIn = ({ users }) => {
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(undefined);
 
   const [isUsernameLengthCorrect, setIsUsernameLengthCorrect] = useState(false);
+  const [isUsernameTaken, setIsUsernameTaken] = useState(undefined);
 
   const [isPasswordMinChar, setIsPasswordMinChar] = useState(false);
   const [isPasswordUppercase, setIsPasswordUppercase] = useState(false);
@@ -84,8 +85,12 @@ const SignIn = ({ users }) => {
           isPasswordNumber,
           isPasswordSpecial,
           isPasswordConfirmSame,
-        ].some((element) => element === false)
+        ].some((element) => element === false) ||
+        users.some((user) => user.name === username)
       ) {
+        users.some((user) => user.name === username)
+          ? setIsUsernameTaken(true)
+          : setIsUsernameTaken(false);
         setIsSubmitCorrect(false);
       } else {
         setIsSubmitCorrect(undefined);
@@ -117,9 +122,16 @@ const SignIn = ({ users }) => {
         onChange={handleOnChangeUserName}
         value={username}
       />
+      {!signIn && isSubmitCorrect === false && isUsernameTaken && (
+        <div>Username already taken</div>
+      )}
       {!signIn &&
         isSubmitCorrect === false &&
-        (isUsernameLengthCorrect ? <CheckIcon /> : <ClearIcon />)}
+        (isUsernameLengthCorrect && !isUsernameTaken ? (
+          <CheckIcon />
+        ) : (
+          <ClearIcon />
+        ))}
       <label htmlFor="password">Password : </label>
       <input
         type="password"
