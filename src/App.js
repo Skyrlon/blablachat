@@ -6,6 +6,7 @@ import ChatPage from "./ChatPage.jsx";
 import SignIn from "./SignIn.jsx";
 
 const App = () => {
+  const [isAuthentified, setIsAuthentified] = useState(false);
   const [users, setUsers] = useState([
     { name: "SimpleOne", password: "Password1@" },
     { name: "Toto1337", password: "AVeryDifficultPassword1@" },
@@ -50,10 +51,18 @@ const App = () => {
 
           <Switch>
             <Route path="/chat">
-              <ChatPage msg={messages} modifyMessages={handleModifyMessages} />
+              <ChatPage
+                msg={messages}
+                modifyMessages={handleModifyMessages}
+                isAuthentified={isAuthentified}
+              />
             </Route>
             <Route path="/sign">
-              <SignIn users={users} addUser={handleAddUser} />
+              <SignIn
+                users={users}
+                addUser={handleAddUser}
+                onSuccessfulSignIn={() => setIsAuthentified(true)}
+              />
             </Route>
           </Switch>
         </div>

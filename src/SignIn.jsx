@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router";
+
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 
@@ -9,7 +11,9 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = ({ users, addUser }) => {
+const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
+  let history = useHistory();
+
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -106,7 +110,10 @@ const SignIn = ({ users, addUser }) => {
         const userLogged = users.filter(
           (user) => user.name === username && user.password === password
         )[0];
+
         alert(`Welcome Back ${userLogged.name}`);
+        onSuccessfulSignIn();
+        history.push("/chat");
       } else {
         alert("No account found");
       }
