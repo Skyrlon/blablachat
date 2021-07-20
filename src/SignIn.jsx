@@ -4,6 +4,8 @@ import { useHistory } from "react-router";
 
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 const StyledSignIn = styled.form`
   display: flex;
@@ -31,6 +33,8 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
   const [isPasswordSpecial, setIsPasswordSpecial] = useState(false);
 
   const [isPasswordConfirmSame, setIsPasswordConfirmSame] = useState(undefined);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleOnChangeUserName = (e) => {
     if (!signIn) {
@@ -142,12 +146,16 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         ))}
       <label htmlFor="password">Password : </label>
       <input
-        type="password"
+        type={showPassword ? "text" : "password"}
         name="password"
         placeholder="Password"
         onChange={handleOnChangePassword}
         value={password}
       />
+
+      <div onClick={() => setShowPassword(!showPassword)}>
+        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+      </div>
 
       {!signIn && (
         <>
@@ -173,7 +181,7 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
           </ul>
           <label htmlFor="password-confirm">Confirm your password : </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password-confirm"
             placeholder="Password"
             onChange={handleOnChangePasswordConfirm}
