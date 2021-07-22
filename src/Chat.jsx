@@ -84,27 +84,10 @@ const Chat = ({ messages, modifyMessages }) => {
     return number < 10 ? `0${number}` : number;
   };
 
-  const currentDate = `${new Date(
-    Date.now()
-  ).getFullYear()}-${handleOneDigitNumber(
-    new Date(Date.now()).getMonth() + 1
-  )}-${handleOneDigitNumber(new Date(Date.now()).getDate())}`;
-
   const submitNewMessage = (message) => {
-    const newMessageDate = new Date(Date.now());
-
     let newMessage = {
       id: messages.length,
-      date: `${handleOneDigitNumber(
-        newMessageDate.getFullYear()
-      )}-${handleOneDigitNumber(
-        newMessageDate.getMonth() + 1
-      )}-${handleOneDigitNumber(newMessageDate.getDate())}`,
-      time: `${handleOneDigitNumber(
-        newMessageDate.getHours()
-      )}:${handleOneDigitNumber(
-        newMessageDate.getMinutes()
-      )}:${handleOneDigitNumber(newMessageDate.getSeconds())}`,
+      time: Date.now(),
       text: message,
       modified: false,
       deleted: false,
@@ -129,7 +112,6 @@ const Chat = ({ messages, modifyMessages }) => {
     let newMsgArray = messages;
     newMsgArray.splice(idMessageToEdit, 1, {
       id: idMessageToEdit,
-      date: messages[idMessageToEdit].date,
       time: messages[idMessageToEdit].time,
       text: message,
       modified:
@@ -147,13 +129,40 @@ const Chat = ({ messages, modifyMessages }) => {
     let newMsgArray = messages;
     newMsgArray.splice(idMsgToDelete, 1, {
       id: idMsgToDelete,
-      date: messages[idMsgToDelete].date,
       time: messages[idMsgToDelete].time,
       text: messages[idMsgToDelete].text,
       modified: messages[idMsgToDelete].modified,
       deleted: true,
     });
     modifyMessages([...newMsgArray]);
+  };
+
+  const formatMessageDate = (time) => {
+    const date = new Date(time);
+    const currentDate = new Date(Date.now());
+    if (
+      date.getDate() === currentDate.getDate() &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getFullYear() === currentDate.getFullYear()
+    ) {
+      return `Today at ${handleOneDigitNumber(
+        date.getHours()
+      )}:${handleOneDigitNumber(date.getMinutes())}`;
+    } else if (
+      date.getDate() === currentDate.getDate() - 1 &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getFullYear() === currentDate.getFullYear()
+    ) {
+      return `Yesterday at ${handleOneDigitNumber(
+        date.getHours()
+      )}:${handleOneDigitNumber(date.getMinutes())}`;
+    } else {
+      return `${handleOneDigitNumber(date.getDate())}/${handleOneDigitNumber(
+        date.getMonth()
+      )}/${handleOneDigitNumber(date.getFullYear())} at ${handleOneDigitNumber(
+        date.getHours()
+      )}:${handleOneDigitNumber(date.getMinutes())}`;
+    }
   };
 
   return (
@@ -163,8 +172,7 @@ const Chat = ({ messages, modifyMessages }) => {
           {messages.map((message) => (
             <div className="message" key={message.id}>
               <div className="message-date">
-                {message.date !== currentDate && `${message.date} `}
-                {message.time}
+                {formatMessageDate(message.time)}
               </div>
               {!(isEditingMessage && message.id === idMessageToEdit) && (
                 <div className="message-text-container">

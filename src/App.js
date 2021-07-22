@@ -17,8 +17,7 @@ const App = () => {
   const [messages, setMessages] = useState([
     {
       id: 0,
-      date: "2021-01-01",
-      time: "11:11",
+      time: 1626874479000,
       text: "Message for test",
       modified: false,
       deleted: false,
