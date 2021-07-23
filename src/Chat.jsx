@@ -158,7 +158,7 @@ const Chat = ({ messages, modifyMessages }) => {
       )}:${handleOneDigitNumber(date.getMinutes())}`;
     } else {
       return `${handleOneDigitNumber(date.getDate())}/${handleOneDigitNumber(
-        date.getMonth()
+        date.getMonth() + 1
       )}/${handleOneDigitNumber(date.getFullYear())} at ${handleOneDigitNumber(
         date.getHours()
       )}:${handleOneDigitNumber(date.getMinutes())}`;

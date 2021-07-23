@@ -7,6 +7,8 @@ import CheckIcon from "@material-ui/icons/Check";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
+import { Button, Input, InputLabel } from "@material-ui/core";
+
 const StyledSignIn = styled.form`
   display: flex;
   flex-direction: column;
@@ -126,8 +128,8 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
 
   return (
     <StyledSignIn onSubmit={handleSubmit}>
-      <label htmlFor="username">User name : </label>
-      <input
+      <InputLabel htmlFor="username">Username : </InputLabel>
+      <Input
         type="text"
         name="username"
         placeholder="User name"
@@ -144,8 +146,8 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         ) : (
           <ClearIcon />
         ))}
-      <label htmlFor="password">Password : </label>
-      <input
+      <InputLabel htmlFor="password">Password : </InputLabel>
+      <Input
         type={showPassword ? "text" : "password"}
         name="password"
         placeholder="Password"
@@ -179,8 +181,8 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
               character
             </li>
           </ul>
-          <label htmlFor="password-confirm">Confirm your password : </label>
-          <input
+          <InputLabel htmlFor="password-confirm">Confirm password</InputLabel>
+          <Input
             type={showPassword ? "text" : "password"}
             name="password-confirm"
             placeholder="Password"
@@ -191,7 +193,9 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
             (isPasswordConfirmSame ? <CheckIcon /> : <ClearIcon />)}
         </>
       )}
-      <input type="submit" />
+      <Button onClick={handleSubmit} variant="contained" color="primary">
+        Submit
+      </Button>
       <div onClick={() => setSignIn(!signIn)}>
         {signIn
           ? "Don't have an account yet ? Sign Up !"
