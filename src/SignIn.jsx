@@ -7,7 +7,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
-import { Button, Input, InputLabel } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 
 const StyledSignIn = styled.form`
   display: flex;
@@ -83,6 +83,13 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
     setpasswordConfirm(e.target.value);
   };
 
+  const handleInputSubmit = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!signIn) {
@@ -128,17 +135,20 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
 
   return (
     <StyledSignIn onSubmit={handleSubmit}>
-      <InputLabel htmlFor="username">Username : </InputLabel>
-      <Input
+      <TextField
         type="text"
-        name="username"
-        placeholder="User name"
+        label="Username"
+        placeholder="Username"
         onChange={handleOnChangeUserName}
+        onKeyPress={(e) => handleInputSubmit(e)}
         value={username}
+        error={!signIn && isSubmitCorrect === false && isUsernameTaken}
+        helperText={
+          !signIn && isSubmitCorrect === false && isUsernameTaken
+            ? "Username already taken"
+            : ""
+        }
       />
-      {!signIn && isSubmitCorrect === false && isUsernameTaken && (
-        <div>Username already taken</div>
-      )}
       {!signIn &&
         isSubmitCorrect === false &&
         (isUsernameLengthCorrect && !isUsernameTaken ? (
@@ -146,13 +156,23 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         ) : (
           <ClearIcon />
         ))}
-      <InputLabel htmlFor="password">Password : </InputLabel>
-      <Input
+      <TextField
         type={showPassword ? "text" : "password"}
-        name="password"
+        label="Password"
         placeholder="Password"
         onChange={handleOnChangePassword}
+        onKeyPress={(e) => handleInputSubmit(e)}
         value={password}
+        error={
+          isSubmitCorrect === false &&
+          !(
+            isPasswordMinChar &&
+            isPasswordUppercase &&
+            isPasswordLowercase &&
+            isPasswordNumber &&
+            isPasswordSpecial
+          )
+        }
       />
 
       <div onClick={() => setShowPassword(!showPassword)}>
@@ -181,16 +201,21 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
               character
             </li>
           </ul>
-          <InputLabel htmlFor="password-confirm">Confirm password</InputLabel>
-          <Input
+          <TextField
             type={showPassword ? "text" : "password"}
+            label="Confirm Password"
             name="password-confirm"
             placeholder="Password"
             onChange={handleOnChangePasswordConfirm}
+            onKeyPress={(e) => handleInputSubmit(e)}
             value={passwordConfirm}
+            error={isSubmitCorrect === false && !isPasswordConfirmSame}
+            helperText={
+              isSubmitCorrect === false && !isPasswordConfirmSame
+                ? "Not same password"
+                : ""
+            }
           />
-          {isSubmitCorrect === false &&
-            (isPasswordConfirmSame ? <CheckIcon /> : <ClearIcon />)}
         </>
       )}
       <Button onClick={handleSubmit} variant="contained" color="primary">
