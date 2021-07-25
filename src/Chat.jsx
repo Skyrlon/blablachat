@@ -66,7 +66,7 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({ messages, modifyMessages }) => {
+const Chat = ({ messages, modifyMessages, currentUser }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
@@ -171,6 +171,7 @@ const Chat = ({ messages, modifyMessages }) => {
         <Scrollbars style={{ width: "99%", height: "100%" }}>
           {messages.map((message) => (
             <div className="message" key={message.id}>
+              <div className="message-user">{currentUser} </div>
               <div className="message-date">
                 {formatMessageDate(message.time)}
               </div>
@@ -190,7 +191,6 @@ const Chat = ({ messages, modifyMessages }) => {
                   )}
                 </div>
               )}
-
               {!(isEditingMessage && message.id === idMessageToEdit) &&
                 !message.deleted && (
                   <div className="message-buttons">

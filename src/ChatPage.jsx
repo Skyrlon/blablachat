@@ -6,13 +6,17 @@ const StyledChatPage = styled.div`
   height: 90vh;
 `;
 
-const ChatPage = ({ msg, modifyMessages, isAuthentified }) => {
+const ChatPage = ({ msg, modifyMessages, isAuthentified, currentUser }) => {
   if (!isAuthentified) {
     return <Redirect to="/sign" />;
   }
   return (
     <StyledChatPage>
-      <Chat messages={msg} modifyMessages={modifyMessages} />
+      <Chat
+        messages={msg}
+        modifyMessages={modifyMessages}
+        currentUser={currentUser}
+      />
     </StyledChatPage>
   );
 };

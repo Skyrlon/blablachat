@@ -14,6 +14,8 @@ const App = () => {
     { name: "Human", password: "@!1Az1!@" },
   ]);
 
+  const [currentUser, setCurrentUser] = useState(undefined);
+
   const [messages, setMessages] = useState([
     {
       id: 0,
@@ -54,13 +56,17 @@ const App = () => {
                 msg={messages}
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
+                currentUser={currentUser}
               />
             </Route>
             <Route path="/sign">
               <SignIn
                 users={users}
                 addUser={handleAddUser}
-                onSuccessfulSignIn={() => setIsAuthentified(true)}
+                onSuccessfulSignIn={(user) => {
+                  setCurrentUser(user);
+                  setIsAuthentified(true);
+                }}
               />
             </Route>
           </Switch>
