@@ -100,12 +100,14 @@ const Chat = ({ messages, modifyMessages, currentUser }) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
     setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
+    setShowEmojis({ show: false, input: "" });
   };
 
   const handleCancelEdit = () => {
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
     setTextToEdit("");
+    setShowEmojis({ show: false, input: "" });
   };
 
   const submitEditedMessage = (message) => {
