@@ -66,7 +66,7 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({ messages, modifyMessages, currentUser }) => {
+const Chat = ({ messages, modifyMessages, currentUser, users }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
@@ -87,12 +87,13 @@ const Chat = ({ messages, modifyMessages, currentUser }) => {
   const submitNewMessage = (message) => {
     let newMessage = {
       id: messages.length,
+      writerID: currentUser.id,
       time: Date.now(),
       text: message,
       modified: false,
       deleted: false,
     };
-
+    console.log([...messages, newMessage]);
     modifyMessages([...messages, newMessage]);
   };
 
@@ -114,6 +115,7 @@ const Chat = ({ messages, modifyMessages, currentUser }) => {
     let newMsgArray = messages;
     newMsgArray.splice(idMessageToEdit, 1, {
       id: idMessageToEdit,
+      writerID: messages[idMessageToEdit].writerID,
       time: messages[idMessageToEdit].time,
       text: message,
       modified:
@@ -131,6 +133,7 @@ const Chat = ({ messages, modifyMessages, currentUser }) => {
     let newMsgArray = messages;
     newMsgArray.splice(idMsgToDelete, 1, {
       id: idMsgToDelete,
+      writerID: messages[idMsgToDelete].writerID,
       time: messages[idMsgToDelete].time,
       text: messages[idMsgToDelete].text,
       modified: messages[idMsgToDelete].modified,
@@ -171,58 +174,61 @@ const Chat = ({ messages, modifyMessages, currentUser }) => {
     <StyledChat>
       <div className="historic">
         <Scrollbars style={{ width: "99%", height: "100%" }}>
-          {messages.map((message) => (
-            <div className="message" key={message.id}>
-              <div className="message-user">{currentUser} </div>
-              <div className="message-date">
-                {formatMessageDate(message.time)}
-              </div>
-              {!(isEditingMessage && message.id === idMessageToEdit) && (
-                <div className="message-text-container">
-                  {!message.deleted && (
-                    <span className="message-text">
-                      <Linkify>{message.text}</Linkify>
-                    </span>
-                  )}
-                  {(message.modified || message.deleted) === true && (
-                    <span className="message-modified">
-                      {message.modified && !message.deleted
-                        ? "(modified)"
-                        : "(deleted)"}
-                    </span>
-                  )}
+          {messages &&
+            messages.map((message) => (
+              <div className="message" key={message.id}>
+                <div className="message-user">
+                  {users.filter((user) => user.id === message.writerID)[0].name}
                 </div>
-              )}
-              {!(isEditingMessage && message.id === idMessageToEdit) &&
-                !message.deleted && (
-                  <div className="message-buttons">
-                    <div
-                      className="edit-icon"
-                      onClick={() => onEditMessage(message.id)}
-                    >
-                      <EditIcon />
-                    </div>
-                    <div
-                      className="delete-icon"
-                      onClick={() => deleteMessage(message.id)}
-                    >
-                      <DeleteIcon />
-                    </div>
+                <div className="message-date">
+                  {formatMessageDate(message.time)}
+                </div>
+                {!(isEditingMessage && message.id === idMessageToEdit) && (
+                  <div className="message-text-container">
+                    {!message.deleted && (
+                      <span className="message-text">
+                        <Linkify>{message.text}</Linkify>
+                      </span>
+                    )}
+                    {(message.modified || message.deleted) === true && (
+                      <span className="message-modified">
+                        {message.modified && !message.deleted
+                          ? "(modified)"
+                          : "(deleted)"}
+                      </span>
+                    )}
                   </div>
                 )}
-              {isEditingMessage && message.id === idMessageToEdit && (
-                <TextBox
-                  type="edit"
-                  showEmojis={showEmojis}
-                  onEmojiButtonClick={(e) => setShowEmojis(e)}
-                  onEmojiClickAway={(e) => setShowEmojis(e)}
-                  submitMessage={handleSubmitMessage}
-                  text={textToEdit}
-                  cancelEdit={handleCancelEdit}
-                />
-              )}
-            </div>
-          ))}
+                {!(isEditingMessage && message.id === idMessageToEdit) &&
+                  !message.deleted && (
+                    <div className="message-buttons">
+                      <div
+                        className="edit-icon"
+                        onClick={() => onEditMessage(message.id)}
+                      >
+                        <EditIcon />
+                      </div>
+                      <div
+                        className="delete-icon"
+                        onClick={() => deleteMessage(message.id)}
+                      >
+                        <DeleteIcon />
+                      </div>
+                    </div>
+                  )}
+                {isEditingMessage && message.id === idMessageToEdit && (
+                  <TextBox
+                    type="edit"
+                    showEmojis={showEmojis}
+                    onEmojiButtonClick={(e) => setShowEmojis(e)}
+                    onEmojiClickAway={(e) => setShowEmojis(e)}
+                    submitMessage={handleSubmitMessage}
+                    text={textToEdit}
+                    cancelEdit={handleCancelEdit}
+                  />
+                )}
+              </div>
+            ))}
         </Scrollbars>
       </div>
 

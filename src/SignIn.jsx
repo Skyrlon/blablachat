@@ -125,7 +125,7 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         )[0];
 
         alert(`Welcome Back ${userLogged.name}`);
-        onSuccessfulSignIn(userLogged.name);
+        onSuccessfulSignIn(userLogged);
         history.push("/chat");
       } else {
         alert("No account found");
