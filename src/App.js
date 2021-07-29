@@ -37,6 +37,29 @@ const App = () => {
         },
       ],
     },
+    {
+      id: 1,
+      name: "Work room",
+      membersID: [0, 2],
+      messages: [
+        {
+          id: 0,
+          writerID: 0,
+          time: 1626774479000,
+          text: "Time to work",
+          modified: false,
+          deleted: false,
+        },
+        {
+          id: 1,
+          writerID: 2,
+          time: 1626775579000,
+          text: "Yep",
+          modified: false,
+          deleted: false,
+        },
+      ],
+    },
   ]);
 
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -78,6 +101,8 @@ const App = () => {
             <Route path="/chat">
               <ChatPage
                 users={users}
+                chatRooms={chatRooms}
+                changeChatRoom={(id) => setCurrentChatRoom(id)}
                 msg={
                   chatRooms[
                     chatRooms.findIndex((room) => room.id === currentChatRoom)
