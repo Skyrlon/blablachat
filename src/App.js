@@ -73,8 +73,9 @@ const App = () => {
       ...chatRooms[chatRoomIndexToModify],
       messages: newMessages,
     };
-    console.log(chatRooms.splice(chatRoomIndexToModify, 1, chatRoomModified));
-    setChatRooms(chatRooms.splice(chatRoomIndexToModify, 1, chatRoomModified));
+    let newChatRooms = chatRooms;
+    newChatRooms.splice(chatRoomIndexToModify, 1, chatRoomModified);
+    setChatRooms([...newChatRooms]);
   };
 
   const handleAddUser = (newUser) => {

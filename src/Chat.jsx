@@ -93,7 +93,6 @@ const Chat = ({ messages, modifyMessages, currentUser, users }) => {
       modified: false,
       deleted: false,
     };
-    console.log([...messages, newMessage]);
     modifyMessages([...messages, newMessage]);
   };
 
