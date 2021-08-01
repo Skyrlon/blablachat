@@ -87,7 +87,7 @@ const TextBox = ({
     e.preventDefault();
     //Prevent submiting message with only spaces, line breaks, and tabs
     if (!message.replace(/\s/g, "")) return;
-    submitMessage(type, message);
+    submitMessage(message);
     setMessage("");
   };
 

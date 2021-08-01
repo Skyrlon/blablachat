@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
-const StyledChatRoomNav = styled.ul`
-  width: 10vw;
-  & > li {
+const StyledChatRoomNav = styled.div`
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+  & > div {
+    box-sizing: border-box;
     width: 100%;
     padding: 1em;
     border: 1px solid;
-    list-style: none;
   }
 `;
 
@@ -14,9 +16,9 @@ const ChatRoomNav = ({ chatRooms, changeChatRoom }) => {
   return (
     <StyledChatRoomNav>
       {chatRooms.map((chatroom) => (
-        <li key={chatroom.id} onClick={() => changeChatRoom(chatroom.id)}>
+        <div key={chatroom.id} onClick={() => changeChatRoom(chatroom.id)}>
           {chatroom.name}
-        </li>
+        </div>
       ))}
     </StyledChatRoomNav>
   );

@@ -11,17 +11,14 @@ import Linkify from "react-linkify";
 import TextBox from "./TextBox.jsx";
 
 const StyledChat = styled.div`
-  width: 80%;
-  height: 90%;
-  margin-left: 10%;
-  margin-top: 1%;
+  height: 100%;
 
   & .historic {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
     width: 100%;
-    height: 90%;
+    height: 100%;
     overflow-y: auto;
   }
 
@@ -66,51 +63,36 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({ messages, modifyMessages, currentUser, users }) => {
-  const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
+const Chat = ({
+  messages,
+  modifyMessages,
+  users,
+  showEmojis,
+  switchShowEmojis,
+}) => {
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
 
-  const handleSubmitMessage = (type, message) => {
-    if (type === "new") {
-      submitNewMessage(message);
-    } else if (type === "edit") {
-      submitEditedMessage(message);
-    }
-  };
-
   const handleOneDigitNumber = (number) => {
     return number < 10 ? `0${number}` : number;
-  };
-
-  const submitNewMessage = (message) => {
-    let newMessage = {
-      id: messages.length,
-      writerID: currentUser.id,
-      time: Date.now(),
-      text: message,
-      modified: false,
-      deleted: false,
-    };
-    modifyMessages([...messages, newMessage]);
   };
 
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
     setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
-    setShowEmojis({ show: false, input: "" });
+    switchShowEmojis({ show: false, input: "" });
   };
 
   const handleCancelEdit = () => {
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
     setTextToEdit("");
-    setShowEmojis({ show: false, input: "" });
+    switchShowEmojis({ show: false, input: "" });
   };
 
-  const submitEditedMessage = (message) => {
+  const handleEditedMessage = (message) => {
     let newMsgArray = messages;
     newMsgArray.splice(idMessageToEdit, 1, {
       id: idMessageToEdit,
@@ -219,9 +201,9 @@ const Chat = ({ messages, modifyMessages, currentUser, users }) => {
                   <TextBox
                     type="edit"
                     showEmojis={showEmojis}
-                    onEmojiButtonClick={(e) => setShowEmojis(e)}
-                    onEmojiClickAway={(e) => setShowEmojis(e)}
-                    submitMessage={handleSubmitMessage}
+                    onEmojiButtonClick={switchShowEmojis}
+                    onEmojiClickAway={switchShowEmojis}
+                    submitMessage={handleEditedMessage}
                     text={textToEdit}
                     cancelEdit={handleCancelEdit}
                   />
@@ -230,15 +212,6 @@ const Chat = ({ messages, modifyMessages, currentUser, users }) => {
             ))}
         </Scrollbars>
       </div>
-
-      <TextBox
-        type="new"
-        showEmojis={showEmojis}
-        onEmojiButtonClick={(e) => setShowEmojis(e)}
-        onEmojiClickAway={(e) => setShowEmojis(e)}
-        submitMessage={handleSubmitMessage}
-        text={textToEdit}
-      />
     </StyledChat>
   );
 };
