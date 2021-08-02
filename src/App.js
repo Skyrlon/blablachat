@@ -63,7 +63,7 @@ const App = () => {
   ]);
 
   const [currentUser, setCurrentUser] = useState(undefined);
-  const [currentChatRoom, setCurrentChatRoom] = useState(0);
+  const [currentChatRoom, setCurrentChatRoom] = useState(chatRooms[0].id);
 
   const handleModifyMessages = (newMessages) => {
     const chatRoomIndexToModify = chatRooms.findIndex(
@@ -102,12 +102,22 @@ const App = () => {
             <Route path="/chat">
               <ChatPage
                 users={users}
-                chatRooms={chatRooms}
+                chatRooms={
+                  currentUser !== undefined
+                    ? chatRooms.filter((chatroom) =>
+                        chatroom.membersID.includes(currentUser.id)
+                      )
+                    : ""
+                }
                 changeChatRoom={(id) => setCurrentChatRoom(id)}
                 msg={
-                  chatRooms[
-                    chatRooms.findIndex((room) => room.id === currentChatRoom)
-                  ].messages
+                  currentUser !== undefined
+                    ? chatRooms.filter(
+                        (chatroom) =>
+                          chatroom.membersID.includes(currentUser.id) &&
+                          chatroom.id === currentChatRoom
+                      )[0].messages
+                    : ""
                 }
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
@@ -121,6 +131,11 @@ const App = () => {
                 onSuccessfulSignIn={(user) => {
                   setCurrentUser(user);
                   setIsAuthentified(true);
+                  setCurrentChatRoom(
+                    chatRooms.filter((chatroom) =>
+                      chatroom.membersID.includes(user.id)
+                    )[0].id
+                  );
                 }}
               />
             </Route>
