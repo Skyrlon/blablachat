@@ -3,15 +3,21 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import ChatPage from "./ChatPage.jsx";
+import FriendsList from "./FriendsList";
 import SignIn from "./SignIn.jsx";
 
 const App = () => {
   const [isAuthentified, setIsAuthentified] = useState(false);
   const [users, setUsers] = useState([
-    { id: 0, name: "SimpleOne", password: "Password1@" },
-    { id: 1, name: "Toto1337", password: "AVeryDifficultPassword1@" },
-    { id: 2, name: "HolderPlace85!", password: "Password11$" },
-    { id: 3, name: "Human", password: "@!1Az1!@" },
+    { id: 0, name: "SimpleOne", password: "Password1@", friendsID: [1, 2] },
+    {
+      id: 1,
+      name: "Toto1337",
+      password: "AVeryDifficultPassword1@",
+      friendsID: [2],
+    },
+    { id: 2, name: "HolderPlace85!", password: "Password11$", friendsID: [] },
+    { id: 3, name: "Human", password: "@!1Az1!@", friendsID: [0, 1] },
   ]);
   const [chatRooms, setChatRooms] = useState([
     {
@@ -78,7 +84,13 @@ const App = () => {
     setChatRooms([...newChatRooms]);
   };
 
-  const handleAddUser = (newUser) => {
+  const handleAddUser = (signupInfos) => {
+    const newUser = {
+      id: users.length,
+      name: signupInfos.name,
+      password: signupInfos.password,
+      friendsID: [],
+    };
     setUsers([...users, newUser]);
   };
 
@@ -87,16 +99,18 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/chat">Chat</Link>
-              </li>
-              <li>
-                <Link to="/sign">Sign In / Sign Up</Link>
-              </li>
-            </ul>
-          </nav>
+          {isAuthentified && (
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/chat">Chat</Link>
+                </li>
+                <li>
+                  <Link to="/friendslist">FriendsList</Link>
+                </li>
+              </ul>
+            </nav>
+          )}
 
           <Switch>
             <Route path="/chat">
@@ -122,6 +136,15 @@ const App = () => {
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
+              />
+            </Route>
+            <Route path="/friendslist">
+              <FriendsList
+                friendsID={
+                  currentUser !== undefined ? currentUser.friendsID : ""
+                }
+                users={users}
+                isAuthentified={isAuthentified}
               />
             </Route>
             <Route path="/sign">
