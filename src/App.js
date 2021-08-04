@@ -103,7 +103,7 @@ const App = () => {
             <nav>
               <ul>
                 <li>
-                  <Link to="/chat">Chat</Link>
+                  <Link to="/">Chat</Link>
                 </li>
                 <li>
                   <Link to="/friendslist">FriendsList</Link>
@@ -113,7 +113,22 @@ const App = () => {
           )}
 
           <Switch>
-            <Route path="/chat">
+            <Route path="/sign">
+              <SignIn
+                users={users}
+                addUser={handleAddUser}
+                onSuccessfulSignIn={(user) => {
+                  setCurrentUser(user);
+                  setIsAuthentified(true);
+                  setCurrentChatRoom(
+                    chatRooms.filter((chatroom) =>
+                      chatroom.membersID.includes(user.id)
+                    )[0].id
+                  );
+                }}
+              />
+            </Route>
+            <Route path="/">
               <ChatPage
                 users={users}
                 chatRooms={
@@ -145,21 +160,6 @@ const App = () => {
                 }
                 users={users}
                 isAuthentified={isAuthentified}
-              />
-            </Route>
-            <Route path="/sign">
-              <SignIn
-                users={users}
-                addUser={handleAddUser}
-                onSuccessfulSignIn={(user) => {
-                  setCurrentUser(user);
-                  setIsAuthentified(true);
-                  setCurrentChatRoom(
-                    chatRooms.filter((chatroom) =>
-                      chatroom.membersID.includes(user.id)
-                    )[0].id
-                  );
-                }}
               />
             </Route>
           </Switch>
