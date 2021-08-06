@@ -9,15 +9,34 @@ import SignIn from "./SignIn.jsx";
 const App = () => {
   const [isAuthentified, setIsAuthentified] = useState(false);
   const [users, setUsers] = useState([
-    { id: 0, name: "SimpleOne", password: "Password1@", friendsID: [1, 2] },
+    {
+      id: 0,
+      name: "SimpleOne",
+      password: "Password1@",
+      friendsID: [1, 2],
+      friendsRequest: [3],
+    },
     {
       id: 1,
       name: "Toto1337",
       password: "AVeryDifficultPassword1@",
       friendsID: [2],
+      friendsRequest: [],
     },
-    { id: 2, name: "HolderPlace85!", password: "Password11$", friendsID: [] },
-    { id: 3, name: "Human", password: "@!1Az1!@", friendsID: [0, 1] },
+    {
+      id: 2,
+      name: "HolderPlace85!",
+      password: "Password11$",
+      friendsID: [],
+      friendsRequest: [],
+    },
+    {
+      id: 3,
+      name: "Human",
+      password: "@!1Az1!@",
+      friendsID: [0, 1],
+      friendsRequest: [],
+    },
   ]);
   const [chatRooms, setChatRooms] = useState([
     {
@@ -90,8 +109,26 @@ const App = () => {
       name: signupInfos.name,
       password: signupInfos.password,
       friendsID: [],
+      friendsRequest: [],
     };
     setUsers([...users, newUser]);
+  };
+
+  const handleRequestFriend = (id) => {
+    const userToSendRequest = users.filter((user) => user.id === id)[0];
+    let friendRequestUpdated = userToSendRequest.friendsRequest;
+    if (userToSendRequest.friendsRequest.includes(id)) {
+      return;
+    } else {
+      friendRequestUpdated.push(currentUser.id);
+      const userUpdated = {
+        ...userToSendRequest,
+        friendsRequest: friendRequestUpdated,
+      };
+      let newUsers = users;
+      newUsers.splice(users.indexOf(userToSendRequest), 1, userUpdated);
+      setUsers(newUsers);
+    }
   };
 
   return (
@@ -106,7 +143,7 @@ const App = () => {
                   <Link to="/">Chat</Link>
                 </li>
                 <li>
-                  <Link to="/friendslist">FriendsList</Link>
+                  <Link to="/friends">FriendsList</Link>
                 </li>
               </ul>
             </nav>
@@ -126,6 +163,19 @@ const App = () => {
                     )[0].id
                   );
                 }}
+              />
+            </Route>
+            <Route path="/friends">
+              <FriendsList
+                friendsID={
+                  currentUser !== undefined ? currentUser.friendsID : ""
+                }
+                users={users}
+                isAuthentified={isAuthentified}
+                sendRequestFriend={handleRequestFriend}
+                friendsRequest={
+                  currentUser !== undefined ? currentUser.friendsRequest : ""
+                }
               />
             </Route>
             <Route path="/">
@@ -151,15 +201,6 @@ const App = () => {
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
-              />
-            </Route>
-            <Route path="/friendslist">
-              <FriendsList
-                friendsID={
-                  currentUser !== undefined ? currentUser.friendsID : ""
-                }
-                users={users}
-                isAuthentified={isAuthentified}
               />
             </Route>
           </Switch>
