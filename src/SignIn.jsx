@@ -9,6 +9,8 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 import { Button, TextField } from "@material-ui/core";
 
+const axios = require("axios");
+
 const StyledSignIn = styled.form`
   display: flex;
   flex-direction: column;
@@ -115,21 +117,19 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         alert("Account Created");
       }
     } else {
-      if (
-        users.some(
-          (user) => user.name === username && user.password === password
+      axios
+        .get(
+          `http://localhost:3004/users?name=${username}&password=${password}`
         )
-      ) {
-        const userLogged = users.filter(
-          (user) => user.name === username && user.password === password
-        )[0];
-
-        alert(`Welcome Back ${userLogged.name}`);
-        onSuccessfulSignIn(userLogged);
-        history.push("/chat");
-      } else {
-        alert("No account found");
-      }
+        .then((response) => {
+          if (response.data.length > 0) {
+            alert(`Welcome Back ${response.data[0].name}`);
+            onSuccessfulSignIn(response.data[0]);
+            history.push("/chat");
+          } else {
+            alert("No account found");
+          }
+        });
     }
   };
 
