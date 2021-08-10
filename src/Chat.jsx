@@ -12,6 +12,7 @@ import TextBox from "./TextBox.jsx";
 
 const StyledChat = styled.div`
   height: 100%;
+  grid-area: chat;
 
   & .historic {
     display: flex;
@@ -214,6 +215,10 @@ const Chat = ({
       </div>
     </StyledChat>
   );
+};
+
+Chat.defaultProps = {
+  messages: [],
 };
 
 export default Chat;

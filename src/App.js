@@ -112,6 +112,9 @@ const App = () => {
       friendsRequest: [],
     };
     setUsers([...users, newUser]);
+    setCurrentUser(newUser);
+    setIsAuthentified(true);
+    setCurrentChatRoom(undefined);
   };
 
   const handleRequestFriend = (id) => {
@@ -189,15 +192,7 @@ const App = () => {
                     : ""
                 }
                 changeChatRoom={(id) => setCurrentChatRoom(id)}
-                msg={
-                  currentUser !== undefined
-                    ? chatRooms.filter(
-                        (chatroom) =>
-                          chatroom.membersID.includes(currentUser.id) &&
-                          chatroom.id === currentChatRoom
-                      )[0].messages
-                    : ""
-                }
+                currentChatRoom={currentChatRoom}
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}

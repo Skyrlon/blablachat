@@ -115,6 +115,7 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         setIsSubmitCorrect(undefined);
         addUser({ name: username, password: password });
         alert("Account Created");
+        history.push("/chat");
       }
     } else {
       axios

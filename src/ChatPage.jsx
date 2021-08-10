@@ -13,19 +13,10 @@ const StyledChatPage = styled.div`
     "nav chat chat" auto
     "nav chat chat" auto
     "nav send send" 5% / 10vw auto;
-  & > :nth-child(1) {
-    grid-area: nav;
-  }
-  & > :nth-child(2) {
-    grid-area: chat;
-  }
-  & > :nth-child(3) {
-    grid-area: send;
-  }
 `;
 
 const ChatPage = ({
-  msg,
+  currentChatRoom,
   modifyMessages,
   isAuthentified,
   currentUser,
@@ -42,23 +33,33 @@ const ChatPage = ({
   return (
     <StyledChatPage>
       <ChatRoomNav chatRooms={chatRooms} changeChatRoom={changeChatRoom} />
-      <Chat
-        users={users}
-        messages={msg}
-        modifyMessages={modifyMessages}
-        currentUser={currentUser}
-        showEmojis={showEmojis}
-        switchShowEmojis={(e) => setShowEmojis(e)}
-      />
-      <SendMessage
-        messages={msg}
-        currentUser={currentUser}
-        modifyMessages={modifyMessages}
-        showEmojis={showEmojis}
-        switchShowEmojis={(e) => setShowEmojis(e)}
-      />
+      {chatRooms.length > 0 && (
+        <Chat
+          messages={chatRooms.filter(
+            (chatroom) => chatroom.id === currentChatRoom
+          )}
+          users={users}
+          modifyMessages={modifyMessages}
+          currentUser={currentUser}
+          showEmojis={showEmojis}
+          switchShowEmojis={(e) => setShowEmojis(e)}
+        />
+      )}
+      {chatRooms.length > 0 && (
+        <SendMessage
+          messages={chatRooms.filter(
+            (chatroom) => chatroom.id === currentChatRoom
+          )}
+          currentUser={currentUser}
+          modifyMessages={modifyMessages}
+          showEmojis={showEmojis}
+          switchShowEmojis={(e) => setShowEmojis(e)}
+        />
+      )}
     </StyledChatPage>
   );
 };
+
+ChatPage.defaultProps = { chatRooms: [] };
 
 export default ChatPage;

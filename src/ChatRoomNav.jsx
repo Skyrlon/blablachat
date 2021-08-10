@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const StyledChatRoomNav = styled.div`
+  grid-area: nav;
   margin: 0;
   padding: 0;
   border: 1px solid black;

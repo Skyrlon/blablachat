@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import TextBox from "./TextBox";
 
-const StyledSendMessage = styled.div``;
+const StyledSendMessage = styled.div`
+  grid-area: send;
+`;
 
 const SendMessage = ({
   messages,
@@ -35,4 +37,9 @@ const SendMessage = ({
     </StyledSendMessage>
   );
 };
+
+SendMessage.defaultProps = {
+  messages: [],
+};
+
 export default SendMessage;
