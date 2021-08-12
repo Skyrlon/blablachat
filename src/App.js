@@ -115,6 +115,7 @@ const App = () => {
     setCurrentUser(newUser);
     setIsAuthentified(true);
     setCurrentChatRoom(undefined);
+    
   };
 
   const handleRequestFriend = (id) => {

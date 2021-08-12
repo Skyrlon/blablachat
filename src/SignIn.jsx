@@ -12,6 +12,7 @@ import { Button, TextField } from "@material-ui/core";
 const axios = require("axios");
 
 const StyledSignIn = styled.form`
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   width: 20%;

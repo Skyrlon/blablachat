@@ -156,7 +156,7 @@ const Chat = ({
     <StyledChat>
       <div className="historic">
         <Scrollbars style={{ width: "99%", height: "100%" }}>
-          {messages &&
+          {messages.length > 0 &&
             messages.map((message) => (
               <div className="message" key={message.id}>
                 <div className="message-user">

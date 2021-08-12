@@ -35,9 +35,10 @@ const ChatPage = ({
       <ChatRoomNav chatRooms={chatRooms} changeChatRoom={changeChatRoom} />
       {chatRooms.length > 0 && (
         <Chat
-          messages={chatRooms.filter(
-            (chatroom) => chatroom.id === currentChatRoom
-          )}
+          messages={
+            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+              .messages
+          }
           users={users}
           modifyMessages={modifyMessages}
           currentUser={currentUser}
@@ -47,9 +48,10 @@ const ChatPage = ({
       )}
       {chatRooms.length > 0 && (
         <SendMessage
-          messages={chatRooms.filter(
-            (chatroom) => chatroom.id === currentChatRoom
-          )}
+          messages={
+            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+              .messages
+          }
           currentUser={currentUser}
           modifyMessages={modifyMessages}
           showEmojis={showEmojis}
