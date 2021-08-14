@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -111,11 +112,11 @@ const App = () => {
       friendsID: [],
       friendsRequest: [],
     };
+    axios.post("http://localhost:3004/users", { newUser });
     setUsers([...users, newUser]);
     setCurrentUser(newUser);
     setIsAuthentified(true);
     setCurrentChatRoom(undefined);
-    
   };
 
   const handleRequestFriend = (id) => {
