@@ -10,14 +10,21 @@ const StyledChatRoomNav = styled.div`
     width: 100%;
     padding: 1em;
     border: 1px solid;
+    &.active {
+      background-color: lightblue;
+    }
   }
 `;
 
-const ChatRoomNav = ({ chatRooms, changeChatRoom }) => {
+const ChatRoomNav = ({ chatRooms, changeChatRoom, currentChatRoom }) => {
   return (
     <StyledChatRoomNav>
       {chatRooms.map((chatroom) => (
-        <div key={chatroom.id} onClick={() => changeChatRoom(chatroom.id)}>
+        <div
+          className={`${chatroom.id === currentChatRoom && "active"}`}
+          key={chatroom.id}
+          onClick={() => changeChatRoom(chatroom.id)}
+        >
           {chatroom.name}
         </div>
       ))}

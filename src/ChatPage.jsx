@@ -32,7 +32,11 @@ const ChatPage = ({
 
   return (
     <StyledChatPage>
-      <ChatRoomNav chatRooms={chatRooms} changeChatRoom={changeChatRoom} />
+      <ChatRoomNav
+        chatRooms={chatRooms}
+        changeChatRoom={changeChatRoom}
+        currentChatRoom={currentChatRoom}
+      />
       {chatRooms.length > 0 && (
         <Chat
           messages={
