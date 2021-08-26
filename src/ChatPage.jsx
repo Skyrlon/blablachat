@@ -4,15 +4,16 @@ import styled from "styled-components";
 import { Redirect } from "react-router";
 import { useState } from "react";
 import SendMessage from "./SendMessage.jsx";
+import MembersSidebar from "./MembersSidebar.jsx";
 
 const StyledChatPage = styled.div`
   width: 98.5vw;
   height: 87vh;
   display: grid;
   grid-template:
-    "nav chat chat" auto
-    "nav chat chat" auto
-    "nav send send" 5% / 10vw auto;
+    "nav chat members" auto
+    "nav chat members" auto
+    "nav send members" 5% / 10vw auto 7vw;
 `;
 
 const ChatPage = ({
@@ -62,6 +63,13 @@ const ChatPage = ({
           switchShowEmojis={(e) => setShowEmojis(e)}
         />
       )}
+      <MembersSidebar
+        users={users}
+        members={
+          chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+            .membersID
+        }
+      />
     </StyledChatPage>
   );
 };
