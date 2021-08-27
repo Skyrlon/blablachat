@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Logout from "./Logout.jsx";
 
 import "./App.css";
 import ChatPage from "./ChatPage.jsx";
@@ -136,9 +137,15 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    setCurrentUser(undefined);
+    setIsAuthentified(false);
+  };
+
   return (
     <div className="App">
       <header className="App-header">BlaBlaChat</header>
+      {isAuthentified && <Logout onLogoutClick={handleLogout} />}
       <Router>
         <div>
           {isAuthentified && (
