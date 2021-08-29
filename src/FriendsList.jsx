@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const StyledFriendsList = styled.div``;
 
@@ -15,6 +15,7 @@ const FriendsList = ({
   const [searchedFriend, setSearchedFriend] = useState("");
   const [usersFound, setUsersFound] = useState([]);
   const [showUsersFound, setShowUsersFound] = useState(false);
+  const [categoryToShow, setCategoryToShow] = useState("all");
 
   const handleInputSubmit = (e) => {
     if (e.key === "Enter") {
@@ -34,26 +35,59 @@ const FriendsList = ({
     setShowUsersFound(true);
   };
 
+  useEffect(() => {
+    setShowUsersFound(false);
+    setSearchedFriend("");
+    setUsersFound([]);
+  }, [categoryToShow]);
+
   if (!isAuthentified) {
     return <Redirect to="/sign" />;
   }
   return (
     <StyledFriendsList>
-      {friendsID.map((id) => (
-        <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
-      ))}
-      {friendsID.length === 0 && <div>You have no friends yet</div>}
-      <form onSubmit={onSubmit}>
-        <TextField
-          type="text"
-          label="Add friend"
-          onChange={(e) => setSearchedFriend(e.target.value)}
-          onKeyPress={(e) => handleInputSubmit(e)}
-          value={searchedFriend}
-        />
-        <Button onClick={onSubmit}>Search</Button>
-      </form>
-      {showUsersFound &&
+      <Button
+        color="primary"
+        variant={categoryToShow === "all" ? "contained" : ""}
+        onClick={() => setCategoryToShow("all")}
+      >
+        All
+      </Button>
+      <Button
+        color="primary"
+        variant={categoryToShow === "requests" ? "contained" : ""}
+        onClick={() => setCategoryToShow("requests")}
+      >
+        Requests
+      </Button>
+      <Button
+        color="primary"
+        variant={categoryToShow === "add" ? "contained" : ""}
+        onClick={() => setCategoryToShow("add")}
+      >
+        Add Friend
+      </Button>
+      {categoryToShow === "all" &&
+        friendsID.map((id) => (
+          <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
+        ))}
+      {categoryToShow === "all" && friendsID.length === 0 && (
+        <div>You have no friends yet</div>
+      )}
+      {categoryToShow === "add" && (
+        <form onSubmit={onSubmit}>
+          <TextField
+            type="text"
+            label="Add friend"
+            onChange={(e) => setSearchedFriend(e.target.value)}
+            onKeyPress={(e) => handleInputSubmit(e)}
+            value={searchedFriend}
+          />
+          <Button onClick={onSubmit}>Search</Button>
+        </form>
+      )}
+      {categoryToShow === "add" &&
+        showUsersFound &&
         (usersFound.length > 0 ? (
           usersFound.map((user) => (
             <div key={user.id}>
@@ -66,10 +100,14 @@ const FriendsList = ({
         ) : (
           <div>No users found</div>
         ))}
-      <div>Requests</div>
-      {friendsRequest.map((id) => (
-        <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
-      ))}
+      {categoryToShow === "requests" && (
+        <div>
+          <div>Requests</div>
+          {friendsRequest.map((id) => (
+            <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
+          ))}
+        </div>
+      )}
     </StyledFriendsList>
   );
 };
