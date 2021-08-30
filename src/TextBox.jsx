@@ -148,4 +148,5 @@ TextBox.propTypes = {
   onEmojiClickAway: PropTypes.func,
   submitMessage: PropTypes.func,
   text: PropTypes.string,
+  cancelEdit: PropTypes.func,
 };

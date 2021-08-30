@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
@@ -48,21 +49,21 @@ const FriendsList = ({
     <StyledFriendsList>
       <Button
         color="primary"
-        variant={categoryToShow === "all" ? "contained" : ""}
+        variant={categoryToShow === "all" ? "contained" : "outlined"}
         onClick={() => setCategoryToShow("all")}
       >
         All
       </Button>
       <Button
         color="primary"
-        variant={categoryToShow === "requests" ? "contained" : ""}
+        variant={categoryToShow === "requests" ? "contained" : "outlined"}
         onClick={() => setCategoryToShow("requests")}
       >
         Requests
       </Button>
       <Button
         color="primary"
-        variant={categoryToShow === "add" ? "contained" : ""}
+        variant={categoryToShow === "add" ? "contained" : "outlined"}
         onClick={() => setCategoryToShow("add")}
       >
         Add Friend
@@ -110,6 +111,14 @@ const FriendsList = ({
       )}
     </StyledFriendsList>
   );
+};
+
+FriendsList.propTypes = {
+  isAuthentified: PropTypes.bool,
+  friendsID: PropTypes.array,
+  users: PropTypes.array,
+  sendRequestFriend: PropTypes.func,
+  friendsRequest: PropTypes.array,
 };
 
 export default FriendsList;

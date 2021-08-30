@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledChatRoomNav = styled.div`
   grid-area: nav;
@@ -30,6 +31,12 @@ const ChatRoomNav = ({ chatRooms, changeChatRoom, currentChatRoom }) => {
       ))}
     </StyledChatRoomNav>
   );
+};
+
+ChatRoomNav.propTypes = {
+  chatRooms: PropTypes.array,
+  changeChatRoom: PropTypes.func,
+  currentChatRoom: PropTypes.number,
 };
 
 export default ChatRoomNav;

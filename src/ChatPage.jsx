@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Chat from "./Chat.jsx";
 import ChatRoomNav from "./ChatRoomNav.jsx";
 import styled from "styled-components";
@@ -75,5 +76,15 @@ const ChatPage = ({
 };
 
 ChatPage.defaultProps = { chatRooms: [] };
+
+ChatPage.propTypes = {
+  currentChatRoom: PropTypes.number,
+  modifyMessages: PropTypes.func,
+  isAuthentified: PropTypes.bool,
+  currentUser: PropTypes.object,
+  users: PropTypes.array,
+  chatRooms: PropTypes.array,
+  changeChatRoom: PropTypes.func,
+};
 
 export default ChatPage;

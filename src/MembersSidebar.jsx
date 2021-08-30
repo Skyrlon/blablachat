@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledMembersSidebar = styled.div`
   grid-area: members;
@@ -21,5 +22,8 @@ const MembersSidebar = ({ members, users }) => {
     </StyledMembersSidebar>
   );
 };
-
+MembersSidebar.propTypes = {
+  members: PropTypes.array,
+  users: PropTypes.array,
+};
 export default MembersSidebar;

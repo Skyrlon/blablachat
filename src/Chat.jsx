@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import EditIcon from "@material-ui/icons/Edit";
@@ -219,6 +220,14 @@ const Chat = ({
 
 Chat.defaultProps = {
   messages: [],
+};
+
+Chat.propTypes = {
+  messages: PropTypes.array,
+  modifyMessages: PropTypes.func,
+  users: PropTypes.array,
+  showEmojis: PropTypes.object,
+  switchShowEmojis: PropTypes.func,
 };
 
 export default Chat;

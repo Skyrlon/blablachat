@@ -180,13 +180,13 @@ const App = () => {
             <Route path="/friends">
               <FriendsList
                 friendsID={
-                  currentUser !== undefined ? currentUser.friendsID : ""
+                  currentUser !== undefined ? currentUser.friendsID : []
                 }
                 users={users}
                 isAuthentified={isAuthentified}
                 sendRequestFriend={handleRequestFriend}
                 friendsRequest={
-                  currentUser !== undefined ? currentUser.friendsRequest : ""
+                  currentUser !== undefined ? currentUser.friendsRequest : []
                 }
               />
             </Route>
@@ -198,7 +198,7 @@ const App = () => {
                     ? chatRooms.filter((chatroom) =>
                         chatroom.membersID.includes(currentUser.id)
                       )
-                    : ""
+                    : []
                 }
                 changeChatRoom={(id) => setCurrentChatRoom(id)}
                 currentChatRoom={currentChatRoom}

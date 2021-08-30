@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import TextBox from "./TextBox";
 
 const StyledSendMessage = styled.div`
@@ -40,6 +41,14 @@ const SendMessage = ({
 
 SendMessage.defaultProps = {
   messages: [],
+};
+
+SendMessage.propTypes = {
+  messages: PropTypes.array,
+  modifyMessages: PropTypes.func,
+  currentUser: PropTypes.object,
+  showEmojis: PropTypes.object,
+  switchShowEmojis: PropTypes.func,
 };
 
 export default SendMessage;

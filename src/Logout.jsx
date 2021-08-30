@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { ExitToApp } from "@material-ui/icons";
 
 const StyledLogout = styled.div`
@@ -17,6 +18,10 @@ const Logout = ({ onLogoutClick }) => {
       <div>Logout</div>
     </StyledLogout>
   );
+};
+
+Logout.propTypes = {
+  onLogoutClick: PropTypes.func,
 };
 
 export default Logout;

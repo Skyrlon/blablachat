@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useHistory } from "react-router";
 
 import ClearIcon from "@material-ui/icons/Clear";
@@ -230,6 +231,12 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
       </div>
     </StyledSignIn>
   );
+};
+
+SignIn.propTypes = {
+  users: PropTypes.array,
+  addUser: PropTypes.func,
+  onSuccessfulSignIn: PropTypes.func,
 };
 
 export default SignIn;
