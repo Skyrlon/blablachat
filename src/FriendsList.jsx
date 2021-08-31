@@ -12,6 +12,8 @@ const FriendsList = ({
   users,
   sendRequestFriend,
   friendsRequest,
+  acceptFriendRequest,
+  rejectFriendRequest,
 }) => {
   const [searchedFriend, setSearchedFriend] = useState("");
   const [usersFound, setUsersFound] = useState([]);
@@ -68,13 +70,16 @@ const FriendsList = ({
       >
         Add Friend
       </Button>
+
       {categoryToShow === "all" &&
+        friendsID.length > 0 &&
         friendsID.map((id) => (
           <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
         ))}
       {categoryToShow === "all" && friendsID.length === 0 && (
         <div>You have no friends yet</div>
       )}
+
       {categoryToShow === "add" && (
         <form onSubmit={onSubmit}>
           <TextField
@@ -87,6 +92,7 @@ const FriendsList = ({
           <Button onClick={onSubmit}>Search</Button>
         </form>
       )}
+
       {categoryToShow === "add" &&
         showUsersFound &&
         (usersFound.length > 0 ? (
@@ -101,12 +107,20 @@ const FriendsList = ({
         ) : (
           <div>No users found</div>
         ))}
+
       {categoryToShow === "requests" && (
         <div>
-          <div>Requests</div>
-          {friendsRequest.map((id) => (
-            <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
-          ))}
+          {friendsRequest.length > 0 &&
+            friendsRequest.map((id) => (
+              <div key={id}>
+                <div className="pseudo">
+                  {users.filter((user) => user.id === id)[0].name}
+                </div>
+                <Button onClick={() => acceptFriendRequest(id)}>Accept</Button>
+                <Button onClick={() => rejectFriendRequest(id)}>Reject</Button>
+              </div>
+            ))}
+          {friendsRequest.length === 0 && <div>No requests yet</div>}
         </div>
       )}
     </StyledFriendsList>
@@ -119,6 +133,8 @@ FriendsList.propTypes = {
   users: PropTypes.array,
   sendRequestFriend: PropTypes.func,
   friendsRequest: PropTypes.array,
+  acceptFriendRequest: PropTypes.func,
+  rejectFriendRequest: PropTypes.func,
 };
 
 export default FriendsList;

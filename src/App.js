@@ -137,6 +137,35 @@ const App = () => {
     }
   };
 
+  const handleFriendRequestAccepted = (id) => {
+    const userToUpdateIndex = users.indexOf(
+      users.filter((user) => user.id === currentUser.id)[0]
+    );
+    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
+    userToUpdate.friendsID.push(id);
+    let friendsRequestUpdated = userToUpdate.friendsRequest;
+    friendsRequestUpdated.splice(friendsRequestUpdated.indexOf(id), 1);
+    userToUpdate.friendsRequest = friendsRequestUpdated;
+    let newUsers = users;
+    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    setUsers(newUsers);
+    setCurrentUser(userToUpdate);
+  };
+
+  const handleFriendRequestRejected = (id) => {
+    const userToUpdateIndex = users.indexOf(
+      users.filter((user) => user.id === currentUser.id)[0]
+    );
+    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
+    let friendsRequestUpdated = userToUpdate.friendsRequest;
+    friendsRequestUpdated.splice(friendsRequestUpdated.indexOf(id), 1);
+    userToUpdate.friendsRequest = friendsRequestUpdated;
+    let newUsers = users;
+    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    setUsers(newUsers);
+    setCurrentUser(userToUpdate);
+  };
+
   const handleLogout = () => {
     setCurrentUser(undefined);
     setIsAuthentified(false);
@@ -188,6 +217,8 @@ const App = () => {
                 friendsRequest={
                   currentUser !== undefined ? currentUser.friendsRequest : []
                 }
+                acceptFriendRequest={handleFriendRequestAccepted}
+                rejectFriendRequest={handleFriendRequestRejected}
               />
             </Route>
             <Route path="/">
