@@ -25,6 +25,7 @@ const ChatPage = ({
   users,
   chatRooms,
   changeChatRoom,
+  createChatRoom,
 }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
@@ -35,9 +36,12 @@ const ChatPage = ({
   return (
     <StyledChatPage>
       <ChatRoomNav
+        friends={currentUser.friendsID}
+        users={users}
         chatRooms={chatRooms}
         changeChatRoom={changeChatRoom}
         currentChatRoom={currentChatRoom}
+        createChatRoom={createChatRoom}
       />
       {chatRooms.length > 0 && (
         <Chat
@@ -85,6 +89,7 @@ ChatPage.propTypes = {
   users: PropTypes.array,
   chatRooms: PropTypes.array,
   changeChatRoom: PropTypes.func,
+  createChatRoom: PropTypes.func,
 };
 
 export default ChatPage;

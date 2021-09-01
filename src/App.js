@@ -166,6 +166,18 @@ const App = () => {
     setCurrentUser(userToUpdate);
   };
 
+  const handleCreateChatRoom = (friends) => {
+    setChatRooms((prev) => [
+      ...prev,
+      {
+        id: prev.length,
+        name: `New Chatroom ${prev.length}`,
+        membersID: [currentUser.id, ...friends],
+        message: [],
+      },
+    ]);
+  };
+
   const handleLogout = () => {
     setCurrentUser(undefined);
     setIsAuthentified(false);
@@ -236,6 +248,7 @@ const App = () => {
                 modifyMessages={handleModifyMessages}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
+                createChatRoom={handleCreateChatRoom}
               />
             </Route>
           </Switch>

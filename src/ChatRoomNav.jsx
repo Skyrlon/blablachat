@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import AddChatRoom from "./AddChatRoom";
 
 const StyledChatRoomNav = styled.div`
   grid-area: nav;
@@ -17,9 +18,21 @@ const StyledChatRoomNav = styled.div`
   }
 `;
 
-const ChatRoomNav = ({ chatRooms, changeChatRoom, currentChatRoom }) => {
+const ChatRoomNav = ({
+  chatRooms,
+  changeChatRoom,
+  currentChatRoom,
+  friends,
+  users,
+  createChatRoom,
+}) => {
   return (
     <StyledChatRoomNav>
+      <AddChatRoom
+        friends={friends}
+        users={users}
+        createChatRoom={createChatRoom}
+      />
       {chatRooms.map((chatroom) => (
         <div
           className={`${chatroom.id === currentChatRoom && "active"}`}
@@ -37,6 +50,9 @@ ChatRoomNav.propTypes = {
   chatRooms: PropTypes.array,
   changeChatRoom: PropTypes.func,
   currentChatRoom: PropTypes.number,
+  friends: PropTypes.array,
+  users: PropTypes.array,
+  createChatRoom: PropTypes.func,
 };
 
 export default ChatRoomNav;
