@@ -249,6 +249,7 @@ const App = () => {
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
                 createChatRoom={handleCreateChatRoom}
+                sendRequestFriend={handleRequestFriend}
               />
             </Route>
           </Switch>

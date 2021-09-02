@@ -10,6 +10,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import Linkify from "react-linkify";
 
 import TextBox from "./TextBox.jsx";
+import UserPseudo from "./UserPseudo.jsx";
 
 const StyledChat = styled.div`
   height: 100%;
@@ -71,6 +72,9 @@ const Chat = ({
   users,
   showEmojis,
   switchShowEmojis,
+  currentUser,
+  friends,
+  sendRequestFriend,
 }) => {
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
@@ -160,9 +164,15 @@ const Chat = ({
           {messages.length > 0 &&
             messages.map((message) => (
               <div className="message" key={message.id}>
-                <div className="message-user">
+                <UserPseudo
+                  className="message-user"
+                  currentUser={currentUser}
+                  friends={friends}
+                  users={users}
+                  sendRequestFriend={sendRequestFriend}
+                >
                   {users.filter((user) => user.id === message.writerID)[0].name}
-                </div>
+                </UserPseudo>
                 <div className="message-date">
                   {formatMessageDate(message.time)}
                 </div>
@@ -228,6 +238,9 @@ Chat.propTypes = {
   users: PropTypes.array,
   showEmojis: PropTypes.object,
   switchShowEmojis: PropTypes.func,
+  currentUser: PropTypes.object,
+  friends: PropTypes.array,
+  sendRequestFriend: PropTypes.func,
 };
 
 export default Chat;
