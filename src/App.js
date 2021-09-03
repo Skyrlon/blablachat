@@ -137,7 +137,7 @@ const App = () => {
   const handleRequestFriend = (id) => {
     const userToSendRequest = users.filter((user) => user.id === id)[0];
     let friendRequestUpdated = userToSendRequest.friendsRequest;
-    if (userToSendRequest.friendsRequest.includes(id)) {
+    if (friendRequestUpdated.includes(currentUser.id)) {
       return;
     } else {
       friendRequestUpdated.push(currentUser.id);
