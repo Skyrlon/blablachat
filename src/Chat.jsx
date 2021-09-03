@@ -75,6 +75,7 @@ const Chat = ({
   currentUser,
   friends,
   sendRequestFriend,
+  removeFriend,
 }) => {
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
@@ -170,6 +171,7 @@ const Chat = ({
                   friends={friends}
                   users={users}
                   sendRequestFriend={sendRequestFriend}
+                  removeFriend={removeFriend}
                 >
                   {users.filter((user) => user.id === message.writerID)[0].name}
                 </UserPseudo>
@@ -241,6 +243,7 @@ Chat.propTypes = {
   currentUser: PropTypes.object,
   friends: PropTypes.array,
   sendRequestFriend: PropTypes.func,
+  removeFriend: PropTypes.func,
 };
 
 export default Chat;

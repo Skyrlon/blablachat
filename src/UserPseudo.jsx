@@ -19,6 +19,7 @@ const UserPseudo = ({
   friends,
   users,
   sendRequestFriend,
+  removeFriend,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -52,6 +53,20 @@ const UserPseudo = ({
                   Request to be friend
                 </div>
               )}
+            {friends.includes(
+              users.filter((user) => user.name === children)[0].id
+            ) && (
+              <div
+                onClick={() => {
+                  removeFriend(
+                    users.filter((user) => user.name === children)[0].id
+                  );
+                  setShowMenu(false);
+                }}
+              >
+                Unfriend
+              </div>
+            )}
             {children === currentUser.name && (
               <div>Can't unfriend or be friend with yourself</div>
             )}
@@ -67,6 +82,7 @@ UserPseudo.propTypes = {
   currentUser: PropTypes.object,
   friends: PropTypes.array,
   sendRequestFriend: PropTypes.func,
+  removeFriend: PropTypes.func,
 };
 
 export default UserPseudo;

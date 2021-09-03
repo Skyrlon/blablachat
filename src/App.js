@@ -120,6 +120,20 @@ const App = () => {
     setCurrentChatRoom(undefined);
   };
 
+  const handleRemoveFriend = (id) => {
+    const userToUpdateIndex = users.indexOf(
+      users.filter((user) => user.id === currentUser.id)[0]
+    );
+    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
+    let friendsUpdated = userToUpdate.friendsID;
+    friendsUpdated.splice(friendsUpdated.indexOf(id), 1);
+    userToUpdate.friendsID = friendsUpdated;
+    let newUsers = users;
+    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    setUsers(newUsers);
+    setCurrentUser(userToUpdate);
+  };
+
   const handleRequestFriend = (id) => {
     const userToSendRequest = users.filter((user) => user.id === id)[0];
     let friendRequestUpdated = userToSendRequest.friendsRequest;
@@ -250,6 +264,7 @@ const App = () => {
                 currentUser={currentUser}
                 createChatRoom={handleCreateChatRoom}
                 sendRequestFriend={handleRequestFriend}
+                removeFriend={handleRemoveFriend}
               />
             </Route>
           </Switch>

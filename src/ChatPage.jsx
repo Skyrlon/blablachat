@@ -27,6 +27,7 @@ const ChatPage = ({
   changeChatRoom,
   createChatRoom,
   sendRequestFriend,
+  removeFriend,
 }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
@@ -57,6 +58,7 @@ const ChatPage = ({
           switchShowEmojis={(e) => setShowEmojis(e)}
           friends={currentUser.friendsID}
           sendRequestFriend={sendRequestFriend}
+          removeFriend={removeFriend}
         />
       )}
       {chatRooms.length > 0 && (
@@ -94,6 +96,7 @@ ChatPage.propTypes = {
   changeChatRoom: PropTypes.func,
   createChatRoom: PropTypes.func,
   sendRequestFriend: PropTypes.func,
+  removeFriend: PropTypes.func,
 };
 
 export default ChatPage;
