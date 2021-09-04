@@ -152,18 +152,24 @@ const App = () => {
   };
 
   const handleFriendRequestAccepted = (id) => {
-    const userToUpdateIndex = users.indexOf(
-      users.filter((user) => user.id === currentUser.id)[0]
+    const usersToUpdateIndex = [currentUser.id, id];
+    let usersToUpdate = users.filter((user) => user.id === currentUser.id);
+    usersToUpdate.forEach((user) =>
+      user.id === currentUser.id
+        ? user.friendsID.push(id)
+        : user.friendsID.push(currentUser.id)
     );
-    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
-    userToUpdate.friendsID.push(id);
-    let friendsRequestUpdated = userToUpdate.friendsRequest;
-    friendsRequestUpdated.splice(friendsRequestUpdated.indexOf(id), 1);
-    userToUpdate.friendsRequest = friendsRequestUpdated;
+    usersToUpdate.forEach((user) =>
+      user.id === currentUser.id
+        ? user.friendsRequest.splice(user.friendsRequest.indexOf(id), 1)
+        : ""
+    );
     let newUsers = users;
-    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    usersToUpdate.forEach((user, index) =>
+      newUsers.splice(usersToUpdateIndex[index], 1, user)
+    );
     setUsers(newUsers);
-    setCurrentUser(userToUpdate);
+    setCurrentUser(usersToUpdate.filter((user) => user.id === currentUser.id)[0]);
   };
 
   const handleFriendRequestRejected = (id) => {
