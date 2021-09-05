@@ -22,21 +22,21 @@ const App = () => {
       id: 1,
       name: "Toto1337",
       password: "AVeryDifficultPassword1@",
-      friendsID: [2],
+      friendsID: [0, 2],
       friendsRequest: [],
     },
     {
       id: 2,
       name: "HolderPlace85!",
       password: "Password11$",
-      friendsID: [],
+      friendsID: [0, 1],
       friendsRequest: [],
     },
     {
       id: 3,
       name: "Human",
       password: "@!1Az1!@",
-      friendsID: [0, 1],
+      friendsID: [],
       friendsRequest: [],
     },
   ]);
@@ -121,17 +121,23 @@ const App = () => {
   };
 
   const handleRemoveFriend = (id) => {
-    const userToUpdateIndex = users.indexOf(
-      users.filter((user) => user.id === currentUser.id)[0]
+    const usersToUpdateIndex = [currentUser.id, id];
+    let usersToUpdate = users.filter(
+      (user) => user.id === currentUser.id || user.id === id
     );
-    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
-    let friendsUpdated = userToUpdate.friendsID;
-    friendsUpdated.splice(friendsUpdated.indexOf(id), 1);
-    userToUpdate.friendsID = friendsUpdated;
+    usersToUpdate.forEach((user) =>
+      user.id === currentUser.id
+        ? user.friendsID.splice(user.friendsID.indexOf(id), 1)
+        : user.friendsID.splice(user.friendsID.indexOf(currentUser.id), 1)
+    );
     let newUsers = users;
-    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    usersToUpdate.forEach((user, index) =>
+      newUsers.splice(usersToUpdateIndex[index], 1, user)
+    );
     setUsers(newUsers);
-    setCurrentUser(userToUpdate);
+    setCurrentUser(
+      usersToUpdate.filter((user) => user.id === currentUser.id)[0]
+    );
   };
 
   const handleRequestFriend = (id) => {
@@ -153,7 +159,9 @@ const App = () => {
 
   const handleFriendRequestAccepted = (id) => {
     const usersToUpdateIndex = [currentUser.id, id];
-    let usersToUpdate = users.filter((user) => user.id === currentUser.id);
+    let usersToUpdate = users.filter(
+      (user) => user.id === currentUser.id || user.id === id
+    );
     usersToUpdate.forEach((user) =>
       user.id === currentUser.id
         ? user.friendsID.push(id)
@@ -169,7 +177,9 @@ const App = () => {
       newUsers.splice(usersToUpdateIndex[index], 1, user)
     );
     setUsers(newUsers);
-    setCurrentUser(usersToUpdate.filter((user) => user.id === currentUser.id)[0]);
+    setCurrentUser(
+      usersToUpdate.filter((user) => user.id === currentUser.id)[0]
+    );
   };
 
   const handleFriendRequestRejected = (id) => {
