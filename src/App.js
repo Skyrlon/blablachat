@@ -208,6 +208,19 @@ const App = () => {
     ]);
   };
 
+  const handleAddMember = (chatroomId, friendsId) => {
+    const chatroomToUpdateIndex = chatRooms.indexOf(
+      chatRooms.filter((chatroom) => chatroom.id === chatroomId)[0]
+    );
+    let chatroomToUpdate = chatRooms.filter(
+      (chatroom) => chatroom.id === chatroomId
+    )[0];
+    chatroomToUpdate.membersID = chatroomToUpdate.membersID.concat(friendsId);
+    let newChatrooms = chatRooms;
+    newChatrooms.splice(chatroomToUpdateIndex, 1, chatroomToUpdate);
+    setChatRooms(newChatrooms);
+  };
+
   const handleLogout = () => {
     setCurrentUser(undefined);
     setIsAuthentified(false);
@@ -281,6 +294,7 @@ const App = () => {
                 createChatRoom={handleCreateChatRoom}
                 sendRequestFriend={handleRequestFriend}
                 removeFriend={handleRemoveFriend}
+                addMember={handleAddMember}
               />
             </Route>
           </Switch>

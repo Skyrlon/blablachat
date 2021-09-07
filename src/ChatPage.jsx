@@ -6,8 +6,10 @@ import { Redirect } from "react-router";
 import { useState } from "react";
 import SendMessage from "./SendMessage.jsx";
 import MembersSidebar from "./MembersSidebar.jsx";
+import AddMember from "./AddMember.jsx";
 
 const StyledChatPage = styled.div`
+  position: relative;
   width: 98.5vw;
   height: 87vh;
   display: grid;
@@ -28,6 +30,7 @@ const ChatPage = ({
   createChatRoom,
   sendRequestFriend,
   removeFriend,
+  addMember,
 }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
@@ -37,6 +40,15 @@ const ChatPage = ({
 
   return (
     <StyledChatPage>
+      <AddMember
+        addMember={(ids) => addMember(currentChatRoom, ids)}
+        friends={currentUser.friendsID}
+        members={
+          chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+            .membersID
+        }
+        users={users}
+      />
       <ChatRoomNav
         friends={currentUser.friendsID}
         users={users}
@@ -97,6 +109,7 @@ ChatPage.propTypes = {
   createChatRoom: PropTypes.func,
   sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
+  addMember: PropTypes.func,
 };
 
 export default ChatPage;
