@@ -2,8 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import Checkbox from "@material-ui/core/Checkbox";
-import { Button } from "@material-ui/core";
+
+import SelectFriendsDropdown from "./SelectFriendsDropdown";
 
 const StyledAddMember = styled.div`
   position: absolute;
@@ -24,20 +24,9 @@ const StyledAddMember = styled.div`
 
 const AddMember = ({ addMember, friends, members, users }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const [friendsSelected, setFriendsSelected] = useState([]);
-
-  const handleChange = (e, id) => {
-    if (e.target.checked) {
-      setFriendsSelected((prev) => [...prev, id]);
-    } else {
-      setFriendsSelected((prev) => prev.filter((element) => element !== id));
-    }
-  };
-
-  const handleOnAddClick = () => {
+  const handleFriendsSubmitted = (friendsSelected) => {
     addMember(friendsSelected);
     setShowMenu(false);
-    setFriendsSelected([]);
   };
   return (
     <StyledAddMember>
@@ -46,27 +35,13 @@ const AddMember = ({ addMember, friends, members, users }) => {
         onClick={() => setShowMenu((v) => !v)}
       />
       {showMenu && (
-        <div className="menu">
-          {friends.length > 0 &&
-            friends.map(
-              (id) =>
-                !members.includes(id) && (
-                  <div className="friend" key={id}>
-                    <div className="friend-name">
-                      {users.filter((user) => user.id === id)[0].name}
-                    </div>
-                    <Checkbox
-                      className="friend-checkbox"
-                      onChange={(e) => handleChange(e, id)}
-                    />
-                  </div>
-                )
-            )}
-
-          <Button color="primary" onClick={handleOnAddClick}>
-            Add Member(s)
-          </Button>
-        </div>
+        <SelectFriendsDropdown
+          friends={friends.filter((friend) => !members.includes(friend))}
+          users={users}
+          friendsSubmitted={handleFriendsSubmitted}
+          closeMenu={() => setShowMenu(false)}
+          buttonText="Add Member(s)"
+        />
       )}
     </StyledAddMember>
   );
