@@ -91,6 +91,10 @@ const ChatPage = ({
           chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
             .membersID
         }
+        currentUser={currentUser}
+        friends={currentUser.friendsID}
+        sendRequestFriend={sendRequestFriend}
+        removeFriend={removeFriend}
       />
     </StyledChatPage>
   );

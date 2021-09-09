@@ -274,6 +274,8 @@ const App = () => {
                 }
                 acceptFriendRequest={handleFriendRequestAccepted}
                 rejectFriendRequest={handleFriendRequestRejected}
+                currentUser={currentUser}
+                removeFriend={handleRemoveFriend}
               />
             </Route>
             <Route path="/">

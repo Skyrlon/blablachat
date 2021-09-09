@@ -25,7 +25,7 @@ const UserPseudo = ({
 
   const contextMenu = (e) => {
     e.preventDefault();
-    setShowMenu(true);
+    setShowMenu((v) => !v);
   };
 
   const handleClickAwayMenu = () => {
@@ -33,10 +33,10 @@ const UserPseudo = ({
   };
 
   return (
-    <StyledUserPseudo>
-      <div onContextMenu={contextMenu}>{children}</div>
-      {showMenu && (
-        <ClickAwayListener onClickAway={handleClickAwayMenu}>
+    <ClickAwayListener onClickAway={handleClickAwayMenu}>
+      <StyledUserPseudo>
+        <div onContextMenu={contextMenu}>{children}</div>
+        {showMenu && (
           <div className="tooltip">
             {!friends.includes(
               users.filter((user) => user.name === children)[0].id
@@ -71,9 +71,9 @@ const UserPseudo = ({
               <div>Can't unfriend or be friend with yourself</div>
             )}
           </div>
-        </ClickAwayListener>
-      )}
-    </StyledUserPseudo>
+        )}
+      </StyledUserPseudo>
+    </ClickAwayListener>
   );
 };
 

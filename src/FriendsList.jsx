@@ -4,6 +4,8 @@ import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
 
+import UserPseudo from "./UserPseudo";
+
 const StyledFriendsList = styled.div``;
 
 const FriendsList = ({
@@ -14,6 +16,8 @@ const FriendsList = ({
   friendsRequest,
   acceptFriendRequest,
   rejectFriendRequest,
+  currentUser,
+  removeFriend,
 }) => {
   const [searchedFriend, setSearchedFriend] = useState("");
   const [usersFound, setUsersFound] = useState([]);
@@ -74,7 +78,16 @@ const FriendsList = ({
       {categoryToShow === "all" &&
         friendsID.length > 0 &&
         friendsID.map((id) => (
-          <div key={id}>{users.filter((user) => user.id === id)[0].name}</div>
+          <UserPseudo
+            key={id}
+            currentUser={currentUser}
+            friends={friendsID}
+            users={users}
+            sendRequestFriend={sendRequestFriend}
+            removeFriend={removeFriend}
+          >
+            {users.filter((user) => user.id === id)[0].name}
+          </UserPseudo>
         ))}
       {categoryToShow === "all" && friendsID.length === 0 && (
         <div>You have no friends yet</div>
@@ -135,6 +148,8 @@ FriendsList.propTypes = {
   friendsRequest: PropTypes.array,
   acceptFriendRequest: PropTypes.func,
   rejectFriendRequest: PropTypes.func,
+  currentUser: PropTypes.object,
+  removeFriend: PropTypes.func,
 };
 
 export default FriendsList;
