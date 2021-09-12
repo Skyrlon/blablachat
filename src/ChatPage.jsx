@@ -31,6 +31,7 @@ const ChatPage = ({
   sendRequestFriend,
   removeFriend,
   addMember,
+  leaveChatroom,
 }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
@@ -40,15 +41,17 @@ const ChatPage = ({
 
   return (
     <StyledChatPage>
-      <AddMember
-        addMember={(ids) => addMember(currentChatRoom, ids)}
-        friends={currentUser.friendsID}
-        members={
-          chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
-            .membersID
-        }
-        users={users}
-      />
+      {chatRooms.length > 0 && (
+        <AddMember
+          addMember={(ids) => addMember(currentChatRoom, ids)}
+          friends={currentUser.friendsID}
+          members={
+            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+              .membersID
+          }
+          users={users}
+        />
+      )}
       <ChatRoomNav
         friends={currentUser.friendsID}
         users={users}
@@ -56,6 +59,7 @@ const ChatPage = ({
         changeChatRoom={changeChatRoom}
         currentChatRoom={currentChatRoom}
         createChatRoom={createChatRoom}
+        leaveChatroom={leaveChatroom}
       />
       {chatRooms.length > 0 && (
         <Chat
@@ -114,6 +118,7 @@ ChatPage.propTypes = {
   sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
   addMember: PropTypes.func,
+  leaveChatroom: PropTypes.func,
 };
 
 export default ChatPage;

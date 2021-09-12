@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Logout from "./Logout.jsx";
 
@@ -221,10 +221,28 @@ const App = () => {
     setChatRooms(newChatrooms);
   };
 
+  const handleLeaveChatroom = (chatroomId) => {
+    const chatroomToUpdateIndex = chatRooms.indexOf(
+      chatRooms.filter((chatroom) => chatroom.id === chatroomId)[0]
+    );
+    let chatroomToUpdate = chatRooms.filter(
+      (chatroom) => chatroom.id === chatroomId
+    )[0];
+    chatroomToUpdate.membersID.splice(
+      chatroomToUpdate.membersID.indexOf(currentUser.id),
+      1
+    );
+    let newChatrooms = chatRooms;
+    newChatrooms.splice(chatroomToUpdateIndex, 1, chatroomToUpdate);
+    setChatRooms(newChatrooms);
+  };
+
   const handleLogout = () => {
     setCurrentUser(undefined);
     setIsAuthentified(false);
   };
+
+  useEffect(() => {}, [users, chatRooms]);
 
   return (
     <div className="App">
@@ -297,6 +315,7 @@ const App = () => {
                 sendRequestFriend={handleRequestFriend}
                 removeFriend={handleRemoveFriend}
                 addMember={handleAddMember}
+                leaveChatroom={handleLeaveChatroom}
               />
             </Route>
           </Switch>
