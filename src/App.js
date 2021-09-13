@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Logout from "./Logout.jsx";
 
+import Logout from "./components/Logout.jsx";
 import "./App.css";
-import ChatPage from "./ChatPage.jsx";
-import FriendsList from "./FriendsList";
-import SignIn from "./SignIn.jsx";
+import ChatPage from "./pages/ChatPage.jsx";
+import FriendsList from "./pages/FriendsList";
+import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
   const [isAuthentified, setIsAuthentified] = useState(false);

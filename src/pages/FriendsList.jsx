@@ -4,7 +4,7 @@ import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
 
-import UserPseudo from "./UserPseudo";
+import UserPseudo from "../components/UserPseudo";
 
 const StyledFriendsList = styled.div``;
 

@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
-import Chat from "./Chat.jsx";
-import ChatRoomNav from "./ChatRoomNav.jsx";
 import styled from "styled-components";
 import { Redirect } from "react-router";
 import { useState } from "react";
-import SendMessage from "./SendMessage.jsx";
-import MembersSidebar from "./MembersSidebar.jsx";
-import AddMember from "./AddMember.jsx";
+
+import Chat from "../components/Chat.jsx";
+import ChatRoomNav from "../components/ChatRoomNav.jsx";
+import SendMessage from "../components/SendMessage.jsx";
+import MembersSidebar from "../components/MembersSidebar.jsx";
+import AddMember from "../components/AddMember.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
