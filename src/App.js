@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -22,15 +22,14 @@ const App = () => {
   const [currentChatRoom, setCurrentChatRoom] = useState(chatRooms[0].id);
 
   const handleModifyMessages = (newMessages) => {
-    const chatRoomIndexToModify = chatRooms.findIndex(
-      (room) => room.id === currentChatRoom
-    );
-    const chatRoomModified = {
-      ...chatRooms[chatRoomIndexToModify],
-      messages: newMessages,
-    };
-    let newChatRooms = chatRooms;
-    newChatRooms.splice(chatRoomIndexToModify, 1, chatRoomModified);
+    const newChatRooms = chatRooms.map((chatroom) => {
+      if (chatroom.id === currentChatRoom)
+        return {
+          ...chatroom,
+          messages: newMessages,
+        };
+      return chatroom;
+    });
     setChatRooms([...newChatRooms]);
   };
 
@@ -49,120 +48,110 @@ const App = () => {
     setCurrentChatRoom(undefined);
   };
 
-  const handleRemoveFriend = (id) => {
-    const usersToUpdateIndex = [currentUser.id, id];
-    let usersToUpdate = users.filter(
-      (user) => user.id === currentUser.id || user.id === id
-    );
-    usersToUpdate.forEach((user) =>
-      user.id === currentUser.id
-        ? user.friendsID.splice(user.friendsID.indexOf(id), 1)
-        : user.friendsID.splice(user.friendsID.indexOf(currentUser.id), 1)
-    );
-    let newUsers = users;
-    usersToUpdate.forEach((user, index) =>
-      newUsers.splice(usersToUpdateIndex[index], 1, user)
-    );
+  const handleRemoveFriend = (friendId) => {
+    const newUsers = users.map((user) => {
+      if (user.id === currentUser.id)
+        return {
+          ...user,
+          friendsID: user.friendsID.filter((friend) => friend !== friendId),
+        };
+      if (user.id === friendId)
+        return {
+          ...user,
+          friendsID: user.friendsID.filter(
+            (friend) => friend !== currentUser.id
+          ),
+        };
+      return user;
+    });
     setUsers(newUsers);
-    setCurrentUser(
-      usersToUpdate.filter((user) => user.id === currentUser.id)[0]
-    );
+    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
   };
 
-  const handleRequestFriend = (id) => {
-    const userToSendRequest = users.filter((user) => user.id === id)[0];
-    let friendRequestUpdated = userToSendRequest.friendsRequest;
-    if (friendRequestUpdated.includes(currentUser.id)) {
-      return;
-    } else {
-      friendRequestUpdated.push(currentUser.id);
-      const userUpdated = {
-        ...userToSendRequest,
-        friendsRequest: friendRequestUpdated,
-      };
-      let newUsers = users;
-      newUsers.splice(users.indexOf(userToSendRequest), 1, userUpdated);
-      setUsers(newUsers);
-    }
+  const handleRequestFriend = (friendIdToSendRequest) => {
+    const newUsers = users.map((user) => {
+      if (user.id === friendIdToSendRequest)
+        return {
+          ...user,
+          friendsID: [...user.friendsId, friendIdToSendRequest],
+        };
+      return user;
+    });
+    setUsers(newUsers);
   };
 
   const handleFriendRequestAccepted = (id) => {
-    const usersToUpdateIndex = [currentUser.id, id];
-    let usersToUpdate = users.filter(
-      (user) => user.id === currentUser.id || user.id === id
-    );
-    usersToUpdate.forEach((user) =>
-      user.id === currentUser.id
-        ? user.friendsID.push(id)
-        : user.friendsID.push(currentUser.id)
-    );
-    usersToUpdate.forEach((user) =>
-      user.id === currentUser.id
-        ? user.friendsRequest.splice(user.friendsRequest.indexOf(id), 1)
-        : ""
-    );
-    let newUsers = users;
-    usersToUpdate.forEach((user, index) =>
-      newUsers.splice(usersToUpdateIndex[index], 1, user)
-    );
+    const newUsers = users.map((user) => {
+      if (user.id === currentUser.id)
+        return {
+          ...user,
+          friendsRequest: user.friendRequest.filter(
+            (request) => request !== id
+          ),
+          friendsId: [...user.friendsId, id],
+        };
+      if (user.id === id)
+        return {
+          ...user,
+          friendsId: [...user.friendsId, id],
+        };
+      return user;
+    });
+
     setUsers(newUsers);
-    setCurrentUser(
-      usersToUpdate.filter((user) => user.id === currentUser.id)[0]
-    );
+    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
   };
 
   const handleFriendRequestRejected = (id) => {
-    const userToUpdateIndex = users.indexOf(
-      users.filter((user) => user.id === currentUser.id)[0]
-    );
-    let userToUpdate = users.filter((user) => user.id === currentUser.id)[0];
-    let friendsRequestUpdated = userToUpdate.friendsRequest;
-    friendsRequestUpdated.splice(friendsRequestUpdated.indexOf(id), 1);
-    userToUpdate.friendsRequest = friendsRequestUpdated;
-    let newUsers = users;
-    newUsers.splice(userToUpdateIndex, 1, userToUpdate);
+    const newUsers = users.map((user) => {
+      if (user.id === currentUser.id)
+        return {
+          ...user,
+          friendsRequest: user.friendRequest.filter(
+            (request) => request !== id
+          ),
+        };
+      return user;
+    });
     setUsers(newUsers);
-    setCurrentUser(userToUpdate);
+    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
   };
 
-  const handleCreateChatRoom = (friends) => {
+  const handleCreateChatRoom = (friendsSelected) => {
     setChatRooms((prev) => [
       ...prev,
       {
         id: prev.length,
         name: `New Chatroom ${prev.length}`,
-        membersID: [currentUser.id, ...friends],
+        membersID: [currentUser.id, ...friendsSelected],
         message: [],
       },
     ]);
   };
 
-  const handleAddMember = (chatroomId, friendsId) => {
-    const chatroomToUpdateIndex = chatRooms.indexOf(
-      chatRooms.filter((chatroom) => chatroom.id === chatroomId)[0]
-    );
-    let chatroomToUpdate = chatRooms.filter(
-      (chatroom) => chatroom.id === chatroomId
-    )[0];
-    chatroomToUpdate.membersID = chatroomToUpdate.membersID.concat(friendsId);
-    let newChatrooms = chatRooms;
-    newChatrooms.splice(chatroomToUpdateIndex, 1, chatroomToUpdate);
+  const handleAddMember = (chatroomId, friendsSelected) => {
+    const newChatrooms = chatRooms.map((chatroom) => {
+      if (chatroom.id === chatroomId)
+        return {
+          ...chatroom,
+          membersID: [...chatroom.membersID, ...friendsSelected],
+        };
+      return chatroom;
+    });
     setChatRooms(newChatrooms);
   };
 
   const handleLeaveChatroom = (chatroomId) => {
-    const chatroomToUpdateIndex = chatRooms.indexOf(
-      chatRooms.filter((chatroom) => chatroom.id === chatroomId)[0]
-    );
-    let chatroomToUpdate = chatRooms.filter(
-      (chatroom) => chatroom.id === chatroomId
-    )[0];
-    chatroomToUpdate.membersID.splice(
-      chatroomToUpdate.membersID.indexOf(currentUser.id),
-      1
-    );
-    let newChatrooms = chatRooms;
-    newChatrooms.splice(chatroomToUpdateIndex, 1, chatroomToUpdate);
+    const newChatrooms = chatRooms.map((chatroom) => {
+      if (chatroom.id === chatroomId)
+        return {
+          ...chatroom,
+          membersID: chatroom.membersID.filter(
+            (member) => member !== currentUser.id
+          ),
+        };
+      return chatroom;
+    });
     setChatRooms(newChatrooms);
   };
 
@@ -170,8 +159,6 @@ const App = () => {
     setCurrentUser(undefined);
     setIsAuthentified(false);
   };
-
-  useEffect(() => {}, [users, chatRooms]);
 
   return (
     <div className="App">
