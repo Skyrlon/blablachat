@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -10,6 +10,7 @@ import FriendsList from "./pages/FriendsList";
 import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [isAuthentified, setIsAuthentified] = useState(false);
 
   const storeUsers = useSelector((state) => state.users);
@@ -22,15 +23,10 @@ const App = () => {
   const [currentChatRoom, setCurrentChatRoom] = useState(chatRooms[0].id);
 
   const handleModifyMessages = (newMessages) => {
-    const newChatRooms = chatRooms.map((chatroom) => {
-      if (chatroom.id === currentChatRoom)
-        return {
-          ...chatroom,
-          messages: newMessages,
-        };
-      return chatroom;
+    dispatch({
+      type: "MODIFY_MESSAGES",
+      payload: { messages: newMessages, chatroomId: currentChatRoom },
     });
-    setChatRooms([...newChatRooms]);
   };
 
   const handleAddUser = (signupInfos) => {

@@ -81,11 +81,29 @@ const initialState = {
   ],
 };
 
+const MODIFY_MESSAGES = "MODIFY_MESSAGES";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case MODIFY_MESSAGES:
+      return {
+        ...state,
+        chatrooms: state.chatrooms.map((chatroom) => {
+          if (chatroom.id === action.payload.chatroomId)
+            return {
+              ...chatroom,
+              messages: action.payload.messages,
+            };
+          return chatroom;
+        }),
+      };
+
     default:
       return state;
   }
 }
 
-export const store = createStore(reducer);
+export const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
