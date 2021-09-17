@@ -82,6 +82,9 @@ const initialState = {
 };
 
 const MODIFY_MESSAGES = "MODIFY_MESSAGES";
+
+const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
+
 const EDIT_MESSAGE = "EDIT_MESSAGE";
 
 function reducer(state = initialState, action) {
@@ -114,6 +117,28 @@ function reducer(state = initialState, action) {
                   };
                 return message;
               }),
+            };
+          return chatroom;
+        }),
+      };
+    case ADD_NEW_MESSAGE:
+      return {
+        ...state,
+        chatrooms: state.chatrooms.map((chatroom) => {
+          if (chatroom.id === action.payload.chatroomId)
+            return {
+              ...chatroom,
+              messages: [
+                ...chatroom.messages,
+                {
+                  id: chatroom.messages.length,
+                  writerID: action.payload.writer,
+                  time: action.payload.time,
+                  text: action.payload.text,
+                  modified: false,
+                  deleted: false,
+                },
+              ],
             };
           return chatroom;
         }),

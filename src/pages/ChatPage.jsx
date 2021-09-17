@@ -89,6 +89,7 @@ const ChatPage = ({
           modifyMessages={modifyMessages}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
+          currentChatRoom={currentChatRoom}
         />
       )}
       <MembersSidebar
