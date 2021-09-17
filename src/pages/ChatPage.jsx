@@ -76,6 +76,7 @@ const ChatPage = ({
           friends={currentUser.friendsID}
           sendRequestFriend={sendRequestFriend}
           removeFriend={removeFriend}
+          currentChatRoom={currentChatRoom}
         />
       )}
       {chatRooms.length > 0 && (

@@ -82,6 +82,7 @@ const initialState = {
 };
 
 const MODIFY_MESSAGES = "MODIFY_MESSAGES";
+const EDIT_MESSAGE = "EDIT_MESSAGE";
 
 function reducer(state = initialState, action) {
   switch (action.type) {
@@ -93,6 +94,26 @@ function reducer(state = initialState, action) {
             return {
               ...chatroom,
               messages: action.payload.messages,
+            };
+          return chatroom;
+        }),
+      };
+    case EDIT_MESSAGE:
+      return {
+        ...state,
+        chatrooms: state.chatrooms.map((chatroom) => {
+          if (chatroom.id === action.payload.chatroomId)
+            return {
+              ...chatroom,
+              messages: chatroom.messages.map((message) => {
+                if (message.id === action.payload.id)
+                  return {
+                    ...message,
+                    text: action.payload.message,
+                    edited: true,
+                  };
+                return message;
+              }),
             };
           return chatroom;
         }),

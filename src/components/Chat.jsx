@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -76,7 +77,9 @@ const Chat = ({
   friends,
   sendRequestFriend,
   removeFriend,
+  currentChatRoom,
 }) => {
+  const dispatch = useDispatch();
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
@@ -99,22 +102,19 @@ const Chat = ({
     switchShowEmojis({ show: false, input: "" });
   };
 
-  const handleEditedMessage = (message) => {
-    let newMsgArray = messages;
-    newMsgArray.splice(idMessageToEdit, 1, {
-      id: idMessageToEdit,
-      writerID: messages[idMessageToEdit].writerID,
-      time: messages[idMessageToEdit].time,
-      text: message,
-      modified:
-        message !== messages[idMessageToEdit].text ||
-        messages[idMessageToEdit].modified,
-      deleted: false,
-    });
-    modifyMessages([...newMsgArray]);
+  const handleEditedMessage = (textEdited) => {
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
     setTextToEdit("");
+    if (textEdited !== textToEdit)
+      dispatch({
+        type: "EDIT_MESSAGE",
+        payload: {
+          id: idMessageToEdit,
+          message: textEdited,
+          chatroomId: currentChatRoom,
+        },
+      });
   };
 
   const deleteMessage = (idMsgToDelete) => {
@@ -244,6 +244,7 @@ Chat.propTypes = {
   friends: PropTypes.array,
   sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
+  currentChatRoom: PropTypes.number,
 };
 
 export default Chat;
