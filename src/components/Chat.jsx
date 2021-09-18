@@ -118,16 +118,10 @@ const Chat = ({
   };
 
   const deleteMessage = (idMsgToDelete) => {
-    let newMsgArray = messages;
-    newMsgArray.splice(idMsgToDelete, 1, {
-      id: idMsgToDelete,
-      writerID: messages[idMsgToDelete].writerID,
-      time: messages[idMsgToDelete].time,
-      text: messages[idMsgToDelete].text,
-      modified: messages[idMsgToDelete].modified,
-      deleted: true,
+    dispatch({
+      type: "DELETE_MESSAGE",
+      payload: { id: idMsgToDelete, chatroomId: currentChatRoom },
     });
-    modifyMessages([...newMsgArray]);
   };
 
   const formatMessageDate = (time) => {

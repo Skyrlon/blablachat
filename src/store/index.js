@@ -87,6 +87,8 @@ const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 
 const EDIT_MESSAGE = "EDIT_MESSAGE";
 
+const DELETE_MESSAGE = "DELETE_MESSAGE";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case MODIFY_MESSAGES:
@@ -139,6 +141,26 @@ function reducer(state = initialState, action) {
                   deleted: false,
                 },
               ],
+            };
+          return chatroom;
+        }),
+      };
+    case DELETE_MESSAGE:
+      return {
+        ...state,
+        chatrooms: state.chatrooms.map((chatroom) => {
+          if (chatroom.id === action.payload.chatroomId)
+            return {
+              ...chatroom,
+              messages: chatroom.messages.map((message) => {
+                if (message.id === action.payload.id)
+                  return {
+                    ...message,
+                    text: "",
+                    deleted: true,
+                  };
+                return message;
+              }),
             };
           return chatroom;
         }),
