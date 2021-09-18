@@ -29,7 +29,8 @@ const StyledChatRoomNav = styled.div`
 `;
 
 const ChatRoomNav = ({
-  chatRooms,
+  chatrooms,
+  currentUser,
   changeChatRoom,
   currentChatRoom,
   friends,
@@ -53,31 +54,34 @@ const ChatRoomNav = ({
         users={users}
         createChatRoom={createChatRoom}
       />
-      {chatRooms.map((chatroom) => (
-        <div
-          className={`${chatroom.id === currentChatRoom && "active"}`}
-          key={chatroom.id}
-          onClick={(e) => {
-            if (e.buttons !== 2) changeChatRoom(chatroom.id);
-          }}
-          onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
-        >
-          <div>{chatroom.name}</div>
-          {showDropdown && chatroomIdDropdown === chatroom.id && (
-            <div className="dropdown">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  leaveChatroom(chatroom.id);
-                  setShowDropdown(false);
-                }}
-              >
-                Leave this chatroom
-              </div>
+      {chatrooms.map(
+        (chatroom) =>
+          chatroom.membersID.includes(currentUser.id) && (
+            <div
+              className={`${chatroom.id === currentChatRoom && "active"}`}
+              key={chatroom.id}
+              onClick={(e) => {
+                if (e.buttons !== 2) changeChatRoom(chatroom.id);
+              }}
+              onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
+            >
+              <div>{chatroom.name}</div>
+              {showDropdown && chatroomIdDropdown === chatroom.id && (
+                <div className="dropdown">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      leaveChatroom(chatroom.id);
+                      setShowDropdown(false);
+                    }}
+                  >
+                    Leave this chatroom
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
+          )
+      )}
     </StyledChatRoomNav>
   );
 };

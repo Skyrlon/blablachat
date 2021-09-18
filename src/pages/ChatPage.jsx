@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Redirect } from "react-router";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Chat from "../components/Chat.jsx";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
@@ -21,20 +22,65 @@ const StyledChatPage = styled.div`
 `;
 
 const ChatPage = ({
-  currentChatRoom,
-  modifyMessages,
   isAuthentified,
   currentUser,
   users,
-  chatRooms,
-  changeChatRoom,
-  createChatRoom,
   sendRequestFriend,
   removeFriend,
-  addMember,
-  leaveChatroom,
 }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
+
+  const storeChatrooms = useSelector((state) =>
+    state.chatrooms.filter((chatroom) =>
+      chatroom.membersID.includes(currentUser.id)
+    )
+  );
+  const [chatrooms, setChatrooms] = useState(storeChatrooms);
+  const [currentChatroom, setCurrentChatroom] = useState(
+    chatrooms.length > 0 ? chatrooms[0].id : null
+  );
+
+  const handleChangeChatroom = (chatroomId) => {
+    setCurrentChatroom(chatroomId);
+  };
+
+  const handleCreateChatroom = (friendsSelected) => {
+    setChatrooms((prev) => [
+      ...prev,
+      {
+        id: prev.length,
+        name: `New Chatroom ${prev.length}`,
+        membersID: [currentUser.id, ...friendsSelected],
+        message: [],
+      },
+    ]);
+  };
+
+  const handleAddMember = (chatroomId, friendsSelected) => {
+    const newChatrooms = chatrooms.map((chatroom) => {
+      if (chatroom.id === chatroomId)
+        return {
+          ...chatroom,
+          membersID: [...chatroom.membersID, ...friendsSelected],
+        };
+      return chatroom;
+    });
+    setChatrooms([...newChatrooms]);
+  };
+
+  const handleLeaveChatroom = (chatroomId) => {
+    const newChatrooms = chatrooms.map((chatroom) => {
+      if (chatroom.id === chatroomId)
+        return {
+          ...chatroom,
+          membersID: chatroom.membersID.filter(
+            (member) => member !== currentUser.id
+          ),
+        };
+      return chatroom;
+    });
+    setChatrooms([...newChatrooms]);
+  };
 
   if (!isAuthentified) {
     return <Redirect to="/sign" />;
@@ -42,60 +88,52 @@ const ChatPage = ({
 
   return (
     <StyledChatPage>
-      {chatRooms.length > 0 && (
+      {chatrooms.length > 0 && (
         <AddMember
-          addMember={(ids) => addMember(currentChatRoom, ids)}
+          addMember={(ids) => handleAddMember(currentChatroom, ids)}
           friends={currentUser.friendsID}
           members={
-            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+            chatrooms.filter((chatroom) => chatroom.id === currentChatroom)[0]
               .membersID
           }
           users={users}
         />
       )}
       <ChatRoomNav
+        chatrooms={chatrooms}
         friends={currentUser.friendsID}
+        currentUser={currentUser}
         users={users}
-        chatRooms={chatRooms}
-        changeChatRoom={changeChatRoom}
-        currentChatRoom={currentChatRoom}
-        createChatRoom={createChatRoom}
-        leaveChatroom={leaveChatroom}
+        chatRooms={chatrooms}
+        changeChatRoom={handleChangeChatroom}
+        currentChatRoom={currentChatroom}
+        createChatRoom={handleCreateChatroom}
+        leaveChatroom={handleLeaveChatroom}
       />
-      {chatRooms.length > 0 && (
+      {chatrooms.length > 0 && (
         <Chat
-          messages={
-            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
-              .messages
-          }
           users={users}
-          modifyMessages={modifyMessages}
           currentUser={currentUser}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           friends={currentUser.friendsID}
           sendRequestFriend={sendRequestFriend}
           removeFriend={removeFriend}
-          currentChatRoom={currentChatRoom}
+          currentChatRoom={currentChatroom}
         />
       )}
-      {chatRooms.length > 0 && (
+      {chatrooms.length > 0 && (
         <SendMessage
-          messages={
-            chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
-              .messages
-          }
           currentUser={currentUser}
-          modifyMessages={modifyMessages}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
-          currentChatRoom={currentChatRoom}
+          currentChatRoom={currentChatroom}
         />
       )}
       <MembersSidebar
         users={users}
         members={
-          chatRooms.filter((chatroom) => chatroom.id === currentChatRoom)[0]
+          chatrooms.filter((chatroom) => chatroom.id === currentChatroom)[0]
             .membersID
         }
         currentUser={currentUser}
@@ -110,18 +148,11 @@ const ChatPage = ({
 ChatPage.defaultProps = { chatRooms: [] };
 
 ChatPage.propTypes = {
-  currentChatRoom: PropTypes.number,
-  modifyMessages: PropTypes.func,
   isAuthentified: PropTypes.bool,
   currentUser: PropTypes.object,
   users: PropTypes.array,
-  chatRooms: PropTypes.array,
-  changeChatRoom: PropTypes.func,
-  createChatRoom: PropTypes.func,
   sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
-  addMember: PropTypes.func,
-  leaveChatroom: PropTypes.func,
 };
 
 export default ChatPage;

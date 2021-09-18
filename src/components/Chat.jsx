@@ -12,6 +12,7 @@ import Linkify from "react-linkify";
 
 import TextBox from "./TextBox.jsx";
 import UserPseudo from "./UserPseudo.jsx";
+import { useSelector } from "react-redux";
 
 const StyledChat = styled.div`
   height: 100%;
@@ -68,8 +69,6 @@ const StyledChat = styled.div`
 `;
 
 const Chat = ({
-  messages,
-  modifyMessages,
   users,
   showEmojis,
   switchShowEmojis,
@@ -80,9 +79,15 @@ const Chat = ({
   currentChatRoom,
 }) => {
   const dispatch = useDispatch();
+
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
+  const messages = useSelector(
+    (state) =>
+      state.chatrooms.find((chatroom) => chatroom.id === currentChatRoom)
+        .messages
+  );
 
   const handleOneDigitNumber = (number) => {
     return number < 10 ? `0${number}` : number;
@@ -91,7 +96,7 @@ const Chat = ({
   const onEditMessage = (id) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
-    setTextToEdit(messages.filter((msg) => msg.id === id)[0].text);
+    setTextToEdit(messages.find((msg) => msg.id === id).text);
     switchShowEmojis({ show: false, input: "" });
   };
 
@@ -229,8 +234,6 @@ Chat.defaultProps = {
 };
 
 Chat.propTypes = {
-  messages: PropTypes.array,
-  modifyMessages: PropTypes.func,
   users: PropTypes.array,
   showEmojis: PropTypes.object,
   switchShowEmojis: PropTypes.func,
