@@ -89,6 +89,8 @@ const EDIT_MESSAGE = "EDIT_MESSAGE";
 
 const DELETE_MESSAGE = "DELETE_MESSAGE";
 
+const CREATE_CHATROOM = "CREATE_CHATROOM";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case MODIFY_MESSAGES:
@@ -164,6 +166,19 @@ function reducer(state = initialState, action) {
             };
           return chatroom;
         }),
+      };
+    case CREATE_CHATROOM:
+      return {
+        ...state,
+        chatrooms: [
+          ...state.chatrooms,
+          {
+            id: state.chatrooms.length,
+            name: `Chatroom ${state.chatrooms.length}`,
+            membersID: action.payload.members,
+            messages: [],
+          },
+        ],
       };
 
     default:

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Redirect } from "react-router";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Chat from "../components/Chat.jsx";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
@@ -28,6 +28,7 @@ const ChatPage = ({
   sendRequestFriend,
   removeFriend,
 }) => {
+  const dispatch = useDispatch();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
   const storeChatrooms = useSelector((state) =>
@@ -49,11 +50,15 @@ const ChatPage = ({
       ...prev,
       {
         id: prev.length,
-        name: `New Chatroom ${prev.length}`,
+        name: `Chatroom ${prev.length}`,
         membersID: [currentUser.id, ...friendsSelected],
         message: [],
       },
     ]);
+    dispatch({
+      type: "CREATE_CHATROOM",
+      payload: { members: [currentUser.id, ...friendsSelected] },
+    });
   };
 
   const handleAddMember = (chatroomId, friendsSelected) => {
