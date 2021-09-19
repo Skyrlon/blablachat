@@ -91,6 +91,8 @@ const DELETE_MESSAGE = "DELETE_MESSAGE";
 
 const CREATE_CHATROOM = "CREATE_CHATROOM";
 
+const ADD_MEMBER = "ADD_MEMBER";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case MODIFY_MESSAGES:
@@ -179,6 +181,19 @@ function reducer(state = initialState, action) {
             messages: [],
           },
         ],
+      };
+
+    case ADD_MEMBER:
+      return {
+        ...state,
+        chatrooms: state.chatrooms.map((chatroom) => {
+          if (chatroom.id === action.payload.chatroomId)
+            return {
+              ...chatroom,
+              membersID: [...chatroom.membersID, ...action.payload.newMember],
+            };
+          return chatroom;
+        }),
       };
 
     default:

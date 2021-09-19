@@ -71,6 +71,10 @@ const ChatPage = ({
       return chatroom;
     });
     setChatrooms([...newChatrooms]);
+    dispatch({
+      type: "ADD_MEMBER",
+      payload: { newMember: friendsSelected, chatroomId: chatroomId },
+    });
   };
 
   const handleLeaveChatroom = (chatroomId) => {
