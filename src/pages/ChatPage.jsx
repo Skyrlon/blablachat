@@ -89,6 +89,10 @@ const ChatPage = ({
       return chatroom;
     });
     setChatrooms([...newChatrooms]);
+    dispatch({
+      type: "LEAVE_CHATROOM",
+      payload: { chatroomId, userLeaving: currentUser.id },
+    });
   };
 
   if (!isAuthentified) {
