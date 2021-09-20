@@ -31,12 +31,12 @@ const ChatPage = ({
   const dispatch = useDispatch();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
-  const storeChatrooms = useSelector((state) =>
+  const chatrooms = useSelector((state) =>
     state.chatrooms.filter((chatroom) =>
       chatroom.membersID.includes(currentUser.id)
     )
   );
-  const [chatrooms, setChatrooms] = useState(storeChatrooms);
+
   const [currentChatroom, setCurrentChatroom] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null
   );
@@ -46,15 +46,6 @@ const ChatPage = ({
   };
 
   const handleCreateChatroom = (friendsSelected) => {
-    setChatrooms((prev) => [
-      ...prev,
-      {
-        id: prev.length,
-        name: `Chatroom ${prev.length}`,
-        membersID: [currentUser.id, ...friendsSelected],
-        message: [],
-      },
-    ]);
     dispatch({
       type: "CREATE_CHATROOM",
       payload: { members: [currentUser.id, ...friendsSelected] },
@@ -62,15 +53,6 @@ const ChatPage = ({
   };
 
   const handleAddMember = (chatroomId, friendsSelected) => {
-    const newChatrooms = chatrooms.map((chatroom) => {
-      if (chatroom.id === chatroomId)
-        return {
-          ...chatroom,
-          membersID: [...chatroom.membersID, ...friendsSelected],
-        };
-      return chatroom;
-    });
-    setChatrooms([...newChatrooms]);
     dispatch({
       type: "ADD_MEMBER",
       payload: { newMember: friendsSelected, chatroomId: chatroomId },
@@ -78,21 +60,14 @@ const ChatPage = ({
   };
 
   const handleLeaveChatroom = (chatroomId) => {
-    const newChatrooms = chatrooms.map((chatroom) => {
-      if (chatroom.id === chatroomId)
-        return {
-          ...chatroom,
-          membersID: chatroom.membersID.filter(
-            (member) => member !== currentUser.id
-          ),
-        };
-      return chatroom;
-    });
-    setChatrooms([...newChatrooms]);
     dispatch({
       type: "LEAVE_CHATROOM",
       payload: { chatroomId, userLeaving: currentUser.id },
     });
+    if (chatroomId === currentChatroom)
+      setCurrentChatroom(
+        chatrooms.filter((chatroom) => chatroom.id !== chatroomId)[0].id
+      );
   };
 
   if (!isAuthentified) {
