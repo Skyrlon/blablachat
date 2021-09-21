@@ -1,4 +1,4 @@
-import axios from "axios";
+//import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -16,15 +16,19 @@ const App = () => {
 
   const [users, setUsers] = useState(storeUsers);
 
-  const [currentUser, setCurrentUser] = useState({
+  const [userLoggedId, setUserLoggedId] = useState(undefined);
+
+  const currentUser = useSelector((state) =>
+    state.users.find((user) => user.id === userLoggedId)
+  ) || {
     id: null,
     name: null,
     password: null,
     friendsID: [],
     friendsRequest: [],
-  });
+  };
 
-  const handleAddUser = (signupInfos) => {
+  /* const handleAddUser = (signupInfos) => {
     const newUser = {
       id: users.length,
       name: signupInfos.name,
@@ -36,7 +40,7 @@ const App = () => {
     setUsers([...users, newUser]);
     setCurrentUser(newUser);
     setIsAuthentified(true);
-  };
+  }; */
 
   const handleRemoveFriend = (friendId) => {
     const newUsers = users.map((user) => {
@@ -55,7 +59,6 @@ const App = () => {
       return user;
     });
     setUsers(newUsers);
-    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
   };
 
   const handleRequestFriend = (friendIdToSendRequest) => {
@@ -75,21 +78,19 @@ const App = () => {
       if (user.id === currentUser.id)
         return {
           ...user,
-          friendsRequest: user.friendRequest.filter(
+          friendsRequest: user.friendsRequest.filter(
             (request) => request !== id
           ),
-          friendsId: [...user.friendsId, id],
+          friendsID: [...user.friendsID, id],
         };
       if (user.id === id)
         return {
           ...user,
-          friendsId: [...user.friendsId, id],
+          friendsID: [...user.friendsID, id],
         };
       return user;
     });
-
-    setUsers(newUsers);
-    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
+    setUsers([...newUsers]);
   };
 
   const handleFriendRequestRejected = (id) => {
@@ -97,18 +98,17 @@ const App = () => {
       if (user.id === currentUser.id)
         return {
           ...user,
-          friendsRequest: user.friendRequest.filter(
+          friendsRequest: user.friendsRequest.filter(
             (request) => request !== id
           ),
         };
       return user;
     });
     setUsers(newUsers);
-    setCurrentUser(newUsers.filter((user) => user.id === currentUser.id)[0]);
   };
 
   const handleLogout = () => {
-    setCurrentUser(undefined);
+    setUserLoggedId(undefined);
     setIsAuthentified(false);
   };
 
@@ -135,9 +135,9 @@ const App = () => {
             <Route path="/sign">
               <SignIn
                 users={users}
-                addUser={handleAddUser}
-                onSuccessfulSignIn={(user) => {
-                  setCurrentUser(user);
+                //addUser={handleAddUser}
+                onSuccessfulSignIn={(userId) => {
+                  setUserLoggedId(userId);
                   setIsAuthentified(true);
                 }}
               />
