@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import UserPseudo from "../components/UserPseudo";
 
@@ -14,11 +15,11 @@ const FriendsList = ({
   users,
   sendRequestFriend,
   friendsRequest,
-  acceptFriendRequest,
   rejectFriendRequest,
   currentUser,
   removeFriend,
 }) => {
+  const dispatch = useDispatch();
   const [searchedFriend, setSearchedFriend] = useState("");
   const [usersFound, setUsersFound] = useState([]);
   const [showUsersFound, setShowUsersFound] = useState(false);
@@ -29,6 +30,13 @@ const FriendsList = ({
       e.preventDefault();
       onSubmit(e);
     }
+  };
+
+  const acceptFriendRequest = (id) => {
+    dispatch({
+      type: "ACCEPT_FRIEND_REQUEST",
+      payload: { receiverId: currentUser.id, senderId: id },
+    });
   };
 
   const onSubmit = (e) => {

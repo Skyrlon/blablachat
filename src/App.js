@@ -73,25 +73,7 @@ const App = () => {
     setUsers(newUsers);
   };
 
-  const handleFriendRequestAccepted = (id) => {
-    const newUsers = users.map((user) => {
-      if (user.id === currentUser.id)
-        return {
-          ...user,
-          friendsRequest: user.friendsRequest.filter(
-            (request) => request !== id
-          ),
-          friendsID: [...user.friendsID, id],
-        };
-      if (user.id === id)
-        return {
-          ...user,
-          friendsID: [...user.friendsID, id],
-        };
-      return user;
-    });
-    setUsers([...newUsers]);
-  };
+  
 
   const handleFriendRequestRejected = (id) => {
     const newUsers = users.map((user) => {
@@ -149,7 +131,6 @@ const App = () => {
                 isAuthentified={isAuthentified}
                 sendRequestFriend={handleRequestFriend}
                 friendsRequest={currentUser.friendsRequest}
-                acceptFriendRequest={handleFriendRequestAccepted}
                 rejectFriendRequest={handleFriendRequestRejected}
                 currentUser={currentUser}
                 removeFriend={handleRemoveFriend}
