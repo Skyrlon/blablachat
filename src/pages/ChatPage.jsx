@@ -25,7 +25,6 @@ const ChatPage = ({
   isAuthentified,
   currentUser,
   users,
-  sendRequestFriend,
   removeFriend,
 }) => {
   const dispatch = useDispatch();
@@ -105,7 +104,6 @@ const ChatPage = ({
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           friends={currentUser.friendsID}
-          sendRequestFriend={sendRequestFriend}
           removeFriend={removeFriend}
           currentChatRoom={currentChatroom}
         />
@@ -126,7 +124,6 @@ const ChatPage = ({
         }
         currentUser={currentUser}
         friends={currentUser.friendsID}
-        sendRequestFriend={sendRequestFriend}
         removeFriend={removeFriend}
       />
     </StyledChatPage>
@@ -139,7 +136,6 @@ ChatPage.propTypes = {
   isAuthentified: PropTypes.bool,
   currentUser: PropTypes.object,
   users: PropTypes.array,
-  sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
 };
 

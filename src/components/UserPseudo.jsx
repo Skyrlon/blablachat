@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import { useDispatch } from "react-redux";
 
 const StyledUserPseudo = styled.div`
   position: relative;
@@ -18,14 +19,21 @@ const UserPseudo = ({
   currentUser,
   friends,
   users,
-  sendRequestFriend,
   removeFriend,
 }) => {
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
 
   const contextMenu = (e) => {
     e.preventDefault();
     setShowMenu((v) => !v);
+  };
+
+  const sendFriendRequest = (friendIdToSendRequest) => {
+    dispatch({
+      type: "SEND_FRIEND_REQUEST",
+      payload: { receiverId: friendIdToSendRequest, senderId: currentUser.id },
+    });
   };
 
   const handleClickAwayMenu = () => {
@@ -44,7 +52,7 @@ const UserPseudo = ({
               !(children === currentUser.name) && (
                 <div
                   onClick={() => {
-                    sendRequestFriend(
+                    sendFriendRequest(
                       users.filter((user) => user.name === children)[0].id
                     );
                     setShowMenu(false);
@@ -81,7 +89,6 @@ UserPseudo.propTypes = {
   users: PropTypes.array,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
 };
 

@@ -61,18 +61,6 @@ const App = () => {
     setUsers(newUsers);
   };
 
-  const handleRequestFriend = (friendIdToSendRequest) => {
-    const newUsers = users.map((user) => {
-      if (user.id === friendIdToSendRequest)
-        return {
-          ...user,
-          friendsID: [...user.friendsId, friendIdToSendRequest],
-        };
-      return user;
-    });
-    setUsers(newUsers);
-  };
-
   const handleLogout = () => {
     setUserLoggedId(undefined);
     setIsAuthentified(false);
@@ -113,7 +101,6 @@ const App = () => {
                 friendsID={currentUser.friendsID}
                 users={users}
                 isAuthentified={isAuthentified}
-                sendRequestFriend={handleRequestFriend}
                 friendsRequest={currentUser.friendsRequest}
                 currentUser={currentUser}
                 removeFriend={handleRemoveFriend}
@@ -124,7 +111,6 @@ const App = () => {
                 users={users}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
-                sendRequestFriend={handleRequestFriend}
                 removeFriend={handleRemoveFriend}
               />
             </Route>

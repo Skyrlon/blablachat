@@ -74,7 +74,6 @@ const Chat = ({
   switchShowEmojis,
   currentUser,
   friends,
-  sendRequestFriend,
   removeFriend,
   currentChatRoom,
 }) => {
@@ -169,7 +168,6 @@ const Chat = ({
                   currentUser={currentUser}
                   friends={friends}
                   users={users}
-                  sendRequestFriend={sendRequestFriend}
                   removeFriend={removeFriend}
                 >
                   {users.filter((user) => user.id === message.writerID)[0].name}
@@ -239,7 +237,6 @@ Chat.propTypes = {
   switchShowEmojis: PropTypes.func,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
   currentChatRoom: PropTypes.number,
 };

@@ -13,7 +13,6 @@ const FriendsList = ({
   isAuthentified,
   friendsID,
   users,
-  sendRequestFriend,
   friendsRequest,
   currentUser,
   removeFriend,
@@ -29,6 +28,13 @@ const FriendsList = ({
       e.preventDefault();
       onSubmit(e);
     }
+  };
+
+  const sendFriendRequest = (friendIdToSendRequest) => {
+    dispatch({
+      type: "SEND_FRIEND_REQUEST",
+      payload: { receiverId: friendIdToSendRequest, senderId: currentUser.id },
+    });
   };
 
   const acceptFriendRequest = (id) => {
@@ -97,7 +103,6 @@ const FriendsList = ({
             currentUser={currentUser}
             friends={friendsID}
             users={users}
-            sendRequestFriend={sendRequestFriend}
             removeFriend={removeFriend}
           >
             {users.filter((user) => user.id === id)[0].name}
@@ -126,7 +131,7 @@ const FriendsList = ({
           usersFound.map((user) => (
             <div key={user.id}>
               <div>{user.name}</div>
-              <Button onClick={() => sendRequestFriend(user.id)}>
+              <Button onClick={() => sendFriendRequest(user.id)}>
                 Request
               </Button>
             </div>

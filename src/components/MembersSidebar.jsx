@@ -17,7 +17,6 @@ const MembersSidebar = ({
   users,
   currentUser,
   friends,
-  sendRequestFriend,
   removeFriend,
 }) => {
   return (
@@ -29,7 +28,6 @@ const MembersSidebar = ({
           currentUser={currentUser}
           friends={friends}
           users={users}
-          sendRequestFriend={sendRequestFriend}
           removeFriend={removeFriend}
         >
           {users.filter((user) => user.id === member)[0].name}
@@ -43,7 +41,6 @@ MembersSidebar.propTypes = {
   users: PropTypes.array,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  sendRequestFriend: PropTypes.func,
   removeFriend: PropTypes.func,
 };
 export default MembersSidebar;

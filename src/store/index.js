@@ -6,14 +6,14 @@ const initialState = {
       id: 0,
       name: "SimpleOne",
       password: "Password1@",
-      friendsID: [1, 2],
+      friendsID: [1],
       friendsRequest: [3],
     },
     {
       id: 1,
       name: "Toto1337",
       password: "AVeryDifficultPassword1@",
-      friendsID: [2],
+      friendsID: [0, 3],
       friendsRequest: [],
     },
     {
@@ -27,7 +27,7 @@ const initialState = {
       id: 3,
       name: "Human",
       password: "@!1Az1!@",
-      friendsID: [0, 1],
+      friendsID: [1],
       friendsRequest: [],
     },
   ],
@@ -98,6 +98,8 @@ const LEAVE_CHATROOM = "LEAVE_CHATROOM";
 const ACCEPT_FRIEND_REQUEST = "ACCEPT_FRIEND_REQUEST";
 
 const REJECT_FRIEND_REQUEST = "REJECT_FRIEND_REQUEST";
+
+const SEND_FRIEND_REQUEST = "SEND_FRIEND_REQUEST";
 
 function reducer(state = initialState, action) {
   switch (action.type) {
@@ -248,6 +250,19 @@ function reducer(state = initialState, action) {
               friendsRequest: user.friendsRequest.filter(
                 (request) => request !== action.payload.senderId
               ),
+            };
+          return user;
+        }),
+      };
+
+    case SEND_FRIEND_REQUEST:
+      return {
+        ...state,
+        users: state.users.map((user) => {
+          if (user.id === action.payload.receiverId)
+            return {
+              ...user,
+              friendsRequest: [...user.friendsRequest, action.payload.senderId],
             };
           return user;
         }),
