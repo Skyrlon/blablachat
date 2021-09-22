@@ -97,6 +97,8 @@ const LEAVE_CHATROOM = "LEAVE_CHATROOM";
 
 const ACCEPT_FRIEND_REQUEST = "ACCEPT_FRIEND_REQUEST";
 
+const REJECT_FRIEND_REQUEST = "REJECT_FRIEND_REQUEST";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case MODIFY_MESSAGES:
@@ -231,6 +233,21 @@ function reducer(state = initialState, action) {
             return {
               ...user,
               friendsID: [...user.friendsID, action.payload.receiverId],
+            };
+          return user;
+        }),
+      };
+
+    case REJECT_FRIEND_REQUEST:
+      return {
+        ...state,
+        users: state.users.map((user) => {
+          if (user.id === action.payload.receiverId)
+            return {
+              ...user,
+              friendsRequest: user.friendsRequest.filter(
+                (request) => request !== action.payload.senderId
+              ),
             };
           return user;
         }),

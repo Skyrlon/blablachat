@@ -15,7 +15,6 @@ const FriendsList = ({
   users,
   sendRequestFriend,
   friendsRequest,
-  rejectFriendRequest,
   currentUser,
   removeFriend,
 }) => {
@@ -35,6 +34,13 @@ const FriendsList = ({
   const acceptFriendRequest = (id) => {
     dispatch({
       type: "ACCEPT_FRIEND_REQUEST",
+      payload: { receiverId: currentUser.id, senderId: id },
+    });
+  };
+
+  const rejectFriendRequest = (id) => {
+    dispatch({
+      type: "REJECT_FRIEND_REQUEST",
       payload: { receiverId: currentUser.id, senderId: id },
     });
   };
