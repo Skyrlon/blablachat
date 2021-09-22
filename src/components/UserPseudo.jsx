@@ -14,13 +14,7 @@ const StyledUserPseudo = styled.div`
   }
 `;
 
-const UserPseudo = ({
-  children,
-  currentUser,
-  friends,
-  users,
-  removeFriend,
-}) => {
+const UserPseudo = ({ children, currentUser, friends, users }) => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
 
@@ -33,6 +27,13 @@ const UserPseudo = ({
     dispatch({
       type: "SEND_FRIEND_REQUEST",
       payload: { receiverId: friendIdToSendRequest, senderId: currentUser.id },
+    });
+  };
+
+  const removeFriend = (friendId) => {
+    dispatch({
+      type: "REMOVE_FRIEND",
+      payload: { formerFriends: [currentUser.id, friendId] },
     });
   };
 

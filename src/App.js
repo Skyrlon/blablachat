@@ -12,9 +12,7 @@ import SignIn from "./pages/SignIn.jsx";
 const App = () => {
   const [isAuthentified, setIsAuthentified] = useState(false);
 
-  const storeUsers = useSelector((state) => state.users);
-
-  const [users, setUsers] = useState(storeUsers);
+  const users = useSelector((state) => state.users);
 
   const [userLoggedId, setUserLoggedId] = useState(undefined);
 
@@ -41,25 +39,6 @@ const App = () => {
     setCurrentUser(newUser);
     setIsAuthentified(true);
   }; */
-
-  const handleRemoveFriend = (friendId) => {
-    const newUsers = users.map((user) => {
-      if (user.id === currentUser.id)
-        return {
-          ...user,
-          friendsID: user.friendsID.filter((friend) => friend !== friendId),
-        };
-      if (user.id === friendId)
-        return {
-          ...user,
-          friendsID: user.friendsID.filter(
-            (friend) => friend !== currentUser.id
-          ),
-        };
-      return user;
-    });
-    setUsers(newUsers);
-  };
 
   const handleLogout = () => {
     setUserLoggedId(undefined);
@@ -103,7 +82,6 @@ const App = () => {
                 isAuthentified={isAuthentified}
                 friendsRequest={currentUser.friendsRequest}
                 currentUser={currentUser}
-                removeFriend={handleRemoveFriend}
               />
             </Route>
             <Route path="/">
@@ -111,7 +89,6 @@ const App = () => {
                 users={users}
                 isAuthentified={isAuthentified}
                 currentUser={currentUser}
-                removeFriend={handleRemoveFriend}
               />
             </Route>
           </Switch>

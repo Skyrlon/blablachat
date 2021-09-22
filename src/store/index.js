@@ -101,6 +101,8 @@ const REJECT_FRIEND_REQUEST = "REJECT_FRIEND_REQUEST";
 
 const SEND_FRIEND_REQUEST = "SEND_FRIEND_REQUEST";
 
+const REMOVE_FRIEND = "REMOVE_FRIEND";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case MODIFY_MESSAGES:
@@ -263,6 +265,23 @@ function reducer(state = initialState, action) {
             return {
               ...user,
               friendsRequest: [...user.friendsRequest, action.payload.senderId],
+            };
+          return user;
+        }),
+      };
+
+    case REMOVE_FRIEND:
+      return {
+        ...state,
+        users: state.users.map((user) => {
+          if (action.payload.formerFriends.includes(user.id))
+            return {
+              ...user,
+              friendsID: user.friendsID.filter(
+                (friend) =>
+                  friend !==
+                  action.payload.formerFriends.find((x) => x !== user.id)
+              ),
             };
           return user;
         }),

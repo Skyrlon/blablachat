@@ -17,7 +17,6 @@ const MembersSidebar = ({
   users,
   currentUser,
   friends,
-  removeFriend,
 }) => {
   return (
     <StyledMembersSidebar>
@@ -28,7 +27,6 @@ const MembersSidebar = ({
           currentUser={currentUser}
           friends={friends}
           users={users}
-          removeFriend={removeFriend}
         >
           {users.filter((user) => user.id === member)[0].name}
         </UserPseudo>
@@ -41,6 +39,5 @@ MembersSidebar.propTypes = {
   users: PropTypes.array,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  removeFriend: PropTypes.func,
 };
 export default MembersSidebar;

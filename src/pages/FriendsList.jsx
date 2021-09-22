@@ -15,7 +15,6 @@ const FriendsList = ({
   users,
   friendsRequest,
   currentUser,
-  removeFriend,
 }) => {
   const dispatch = useDispatch();
   const [searchedFriend, setSearchedFriend] = useState("");
@@ -103,7 +102,6 @@ const FriendsList = ({
             currentUser={currentUser}
             friends={friendsID}
             users={users}
-            removeFriend={removeFriend}
           >
             {users.filter((user) => user.id === id)[0].name}
           </UserPseudo>

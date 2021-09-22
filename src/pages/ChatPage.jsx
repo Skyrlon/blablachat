@@ -25,7 +25,6 @@ const ChatPage = ({
   isAuthentified,
   currentUser,
   users,
-  removeFriend,
 }) => {
   const dispatch = useDispatch();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
@@ -104,7 +103,6 @@ const ChatPage = ({
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           friends={currentUser.friendsID}
-          removeFriend={removeFriend}
           currentChatRoom={currentChatroom}
         />
       )}
@@ -124,7 +122,6 @@ const ChatPage = ({
         }
         currentUser={currentUser}
         friends={currentUser.friendsID}
-        removeFriend={removeFriend}
       />
     </StyledChatPage>
   );
@@ -136,7 +133,6 @@ ChatPage.propTypes = {
   isAuthentified: PropTypes.bool,
   currentUser: PropTypes.object,
   users: PropTypes.array,
-  removeFriend: PropTypes.func,
 };
 
 export default ChatPage;
