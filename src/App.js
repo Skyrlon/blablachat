@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getUsers, getCurrentUser } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -12,13 +13,11 @@ import SignIn from "./pages/SignIn.jsx";
 const App = () => {
   const [isAuthentified, setIsAuthentified] = useState(false);
 
-  const users = useSelector((state) => state.users);
+  const users = useSelector(getUsers());
 
   const [userLoggedId, setUserLoggedId] = useState(undefined);
 
-  const currentUser = useSelector((state) =>
-    state.users.find((user) => user.id === userLoggedId)
-  ) || {
+  const currentUser = useSelector(getCurrentUser(userLoggedId)) || {
     id: null,
     name: null,
     password: null,
