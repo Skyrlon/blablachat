@@ -9,6 +9,7 @@ import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import SendMessage from "../components/SendMessage.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import AddMember from "../components/AddMember.jsx";
+import { getChatrooms } from "../store/Selectors.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -21,19 +22,11 @@ const StyledChatPage = styled.div`
     "nav send members" 5% / 10vw auto 7vw;
 `;
 
-const ChatPage = ({
-  isAuthentified,
-  currentUser,
-  users,
-}) => {
+const ChatPage = ({ isAuthentified, currentUser, users }) => {
   const dispatch = useDispatch();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
-  const chatrooms = useSelector((state) =>
-    state.chatrooms.filter((chatroom) =>
-      chatroom.membersID.includes(currentUser.id)
-    )
-  );
+  const chatrooms = useSelector(getChatrooms(currentUser.id));
 
   const [currentChatroom, setCurrentChatroom] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null

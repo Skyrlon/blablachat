@@ -5,3 +5,8 @@ export const getUsers = () => {
 export const getCurrentUser = (id) => {
   return (state) => state.users.find((user) => user.id === id);
 };
+
+export const getChatrooms = (id) => {
+  return (state) =>
+    state.chatrooms.filter((chatroom) => chatroom.membersID.includes(id));
+};
