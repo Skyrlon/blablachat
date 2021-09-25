@@ -32,7 +32,7 @@ const ChatRoomNav = ({
   chatrooms,
   currentUser,
   changeChatRoom,
-  currentChatRoom,
+  currentChatroomId,
   friends,
   users,
   createChatRoom,
@@ -58,7 +58,7 @@ const ChatRoomNav = ({
         (chatroom) =>
           chatroom.membersID.includes(currentUser.id) && (
             <div
-              className={`${chatroom.id === currentChatRoom && "active"}`}
+              className={`${chatroom.id === currentChatroomId && "active"}`}
               key={chatroom.id}
               onClick={(e) => {
                 if (e.buttons !== 2) changeChatRoom(chatroom.id);
@@ -89,7 +89,7 @@ const ChatRoomNav = ({
 ChatRoomNav.propTypes = {
   chatRooms: PropTypes.array,
   changeChatRoom: PropTypes.func,
-  currentChatRoom: PropTypes.number,
+  currentChatroomId: PropTypes.number,
   friends: PropTypes.array,
   users: PropTypes.array,
   createChatRoom: PropTypes.func,

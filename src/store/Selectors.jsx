@@ -10,3 +10,8 @@ export const getChatrooms = (id) => {
   return (state) =>
     state.chatrooms.filter((chatroom) => chatroom.membersID.includes(id));
 };
+
+export const getMessages = (chatroomId) => {
+  return (state) =>
+    state.chatrooms.find((chatroom) => chatroom.id === chatroomId).messages;
+};

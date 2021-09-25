@@ -13,6 +13,7 @@ import Linkify from "react-linkify";
 import TextBox from "./TextBox.jsx";
 import UserPseudo from "./UserPseudo.jsx";
 import { useSelector } from "react-redux";
+import { getMessages } from "../store/Selectors.jsx";
 
 const StyledChat = styled.div`
   height: 100%;
@@ -74,18 +75,14 @@ const Chat = ({
   switchShowEmojis,
   currentUser,
   friends,
-  currentChatRoom,
+  currentChatroomId,
 }) => {
   const dispatch = useDispatch();
 
   const [isEditingMessage, setIsEditingMessage] = useState(false);
   const [textToEdit, setTextToEdit] = useState("");
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
-  const messages = useSelector(
-    (state) =>
-      state.chatrooms.find((chatroom) => chatroom.id === currentChatRoom)
-        .messages
-  );
+  const messages = useSelector(getMessages(currentChatroomId));
 
   const handleOneDigitNumber = (number) => {
     return number < 10 ? `0${number}` : number;
@@ -115,7 +112,7 @@ const Chat = ({
         payload: {
           id: idMessageToEdit,
           message: textEdited,
-          chatroomId: currentChatRoom,
+          chatroomId: currentChatroomId,
         },
       });
   };
@@ -123,7 +120,7 @@ const Chat = ({
   const deleteMessage = (idMsgToDelete) => {
     dispatch({
       type: "DELETE_MESSAGE",
-      payload: { id: idMsgToDelete, chatroomId: currentChatRoom },
+      payload: { id: idMsgToDelete, chatroomId: currentChatroomId },
     });
   };
 
@@ -235,7 +232,7 @@ Chat.propTypes = {
   switchShowEmojis: PropTypes.func,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  currentChatRoom: PropTypes.number,
+  currentChatroomId: PropTypes.number,
 };
 
 export default Chat;

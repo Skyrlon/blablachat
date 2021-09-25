@@ -28,12 +28,12 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
 
   const chatrooms = useSelector(getChatrooms(currentUser.id));
 
-  const [currentChatroom, setCurrentChatroom] = useState(
+  const [currentChatroomId, setCurrentChatroomId] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null
   );
 
   const handleChangeChatroom = (chatroomId) => {
-    setCurrentChatroom(chatroomId);
+    setCurrentChatroomId(chatroomId);
   };
 
   const handleCreateChatroom = (friendsSelected) => {
@@ -55,8 +55,8 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
       type: "LEAVE_CHATROOM",
       payload: { chatroomId, userLeaving: currentUser.id },
     });
-    if (chatroomId === currentChatroom)
-      setCurrentChatroom(
+    if (chatroomId === currentChatroomId)
+      setCurrentChatroomId(
         chatrooms.filter((chatroom) => chatroom.id !== chatroomId)[0].id
       );
   };
@@ -69,10 +69,10 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
     <StyledChatPage>
       {chatrooms.length > 0 && (
         <AddMember
-          addMember={(ids) => handleAddMember(currentChatroom, ids)}
+          addMember={(ids) => handleAddMember(currentChatroomId, ids)}
           friends={currentUser.friendsID}
           members={
-            chatrooms.filter((chatroom) => chatroom.id === currentChatroom)[0]
+            chatrooms.filter((chatroom) => chatroom.id === currentChatroomId)[0]
               .membersID
           }
           users={users}
@@ -85,7 +85,7 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
         users={users}
         chatRooms={chatrooms}
         changeChatRoom={handleChangeChatroom}
-        currentChatRoom={currentChatroom}
+        currentChatroomId={currentChatroomId}
         createChatRoom={handleCreateChatroom}
         leaveChatroom={handleLeaveChatroom}
       />
@@ -96,7 +96,7 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           friends={currentUser.friendsID}
-          currentChatRoom={currentChatroom}
+          currentChatroomId={currentChatroomId}
         />
       )}
       {chatrooms.length > 0 && (
@@ -104,13 +104,13 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
           currentUser={currentUser}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
-          currentChatRoom={currentChatroom}
+          currentChatroomId={currentChatroomId}
         />
       )}
       <MembersSidebar
         users={users}
         members={
-          chatrooms.filter((chatroom) => chatroom.id === currentChatroom)[0]
+          chatrooms.filter((chatroom) => chatroom.id === currentChatroomId)[0]
             .membersID
         }
         currentUser={currentUser}

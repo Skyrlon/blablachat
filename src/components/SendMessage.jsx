@@ -11,7 +11,7 @@ const SendMessage = ({
   currentUser,
   showEmojis,
   switchShowEmojis,
-  currentChatRoom,
+  currentChatroomId,
 }) => {
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ const SendMessage = ({
         writer: currentUser.id,
         time: Date.now(),
         text: message,
-        chatroomId: currentChatRoom,
+        chatroomId: currentChatroomId,
       },
     });
   };
@@ -49,7 +49,7 @@ SendMessage.propTypes = {
   currentUser: PropTypes.object,
   showEmojis: PropTypes.object,
   switchShowEmojis: PropTypes.func,
-  currentChatRoom: PropTypes.number,
+  currentChatroomId: PropTypes.number,
 };
 
 export default SendMessage;
