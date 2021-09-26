@@ -2,6 +2,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import UserPseudo from "./UserPseudo";
+import { getMembers } from "../store/Selectors";
+import { useSelector } from "react-redux";
 
 const StyledMembersSidebar = styled.div`
   grid-area: members;
@@ -12,23 +14,19 @@ const StyledMembersSidebar = styled.div`
   }
 `;
 
-const MembersSidebar = ({
-  members,
-  users,
-  currentUser,
-  friends,
-}) => {
+const MembersSidebar = ({ users, currentUser, friends, currentChatroomId }) => {
+  const members = useSelector(getMembers(currentChatroomId));
   return (
     <StyledMembersSidebar>
       <div className="title">Members</div>
       {members.map((member) => (
         <UserPseudo
-          key={member}
+          key={member.id}
           currentUser={currentUser}
           friends={friends}
           users={users}
         >
-          {users.filter((user) => user.id === member)[0].name}
+          {member.name}
         </UserPseudo>
       ))}
     </StyledMembersSidebar>
@@ -39,5 +37,6 @@ MembersSidebar.propTypes = {
   users: PropTypes.array,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
+  currentChatroomId: PropTypes.number,
 };
 export default MembersSidebar;

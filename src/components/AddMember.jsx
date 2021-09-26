@@ -4,6 +4,8 @@ import styled from "styled-components";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
+import { getMembers } from "../store/Selectors";
+import { useSelector } from "react-redux";
 
 const StyledAddMember = styled.div`
   position: absolute;
@@ -22,7 +24,8 @@ const StyledAddMember = styled.div`
   }
 `;
 
-const AddMember = ({ addMember, friends, members, users }) => {
+const AddMember = ({ addMember, friends, users, currentChatroomId }) => {
+  const members = useSelector(getMembers(currentChatroomId));
   const [showMenu, setShowMenu] = useState(false);
   const handleFriendsSubmitted = (friendsSelected) => {
     addMember(friendsSelected);
@@ -36,7 +39,9 @@ const AddMember = ({ addMember, friends, members, users }) => {
       />
       {showMenu && (
         <SelectFriendsDropdown
-          friends={friends.filter((friend) => !members.includes(friend))}
+          friends={friends.filter(
+            (friend) => !members.map((member) => member.id).includes(friend)
+          )}
           users={users}
           friendsSubmitted={handleFriendsSubmitted}
           closeMenu={() => setShowMenu(false)}
@@ -51,8 +56,8 @@ AddMember.propTypes = {
   friends: PropTypes.array,
   users: PropTypes.array,
   createChatRoom: PropTypes.func,
-  members: PropTypes.array,
   addMember: PropTypes.func,
+  currentChatroomId: PropTypes.number,
 };
 
 export default AddMember;

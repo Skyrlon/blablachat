@@ -71,10 +71,7 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
         <AddMember
           addMember={(ids) => handleAddMember(currentChatroomId, ids)}
           friends={currentUser.friendsID}
-          members={
-            chatrooms.filter((chatroom) => chatroom.id === currentChatroomId)[0]
-              .membersID
-          }
+          currentChatroomId={currentChatroomId}
           users={users}
         />
       )}
@@ -109,12 +106,9 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
       )}
       <MembersSidebar
         users={users}
-        members={
-          chatrooms.filter((chatroom) => chatroom.id === currentChatroomId)[0]
-            .membersID
-        }
         currentUser={currentUser}
         friends={currentUser.friendsID}
+        currentChatroomId={currentChatroomId}
       />
     </StyledChatPage>
   );
