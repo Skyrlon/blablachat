@@ -21,7 +21,6 @@ const StyledSelectFriendsDropdown = styled.form`
 
 const SelectFriendsDropdown = ({
   friends,
-  users,
   friendsSubmitted,
   closeMenu,
   buttonText,
@@ -54,14 +53,12 @@ const SelectFriendsDropdown = ({
     <ClickAwayListener onClickAway={handleClickAway}>
       <StyledSelectFriendsDropdown>
         {friends.length > 0 &&
-          friends.map((id) => (
-            <div className="friend" key={id}>
-              <div className="friend-name">
-                {users.filter((user) => user.id === id)[0].name}
-              </div>
+          friends.map((friend) => (
+            <div className="friend" key={friend.id}>
+              <div className="friend-name">{friend.name}</div>
               <Checkbox
                 className="friend-checkbox"
-                onChange={(e) => handleChange(e, id)}
+                onChange={(e) => handleChange(e, friend.id)}
               />
             </div>
           ))}
@@ -78,7 +75,6 @@ const SelectFriendsDropdown = ({
 
 SelectFriendsDropdown.propTypes = {
   friends: PropTypes.array,
-  users: PropTypes.array,
   friendsSubmitted: PropTypes.func,
   closeMenu: PropTypes.func,
   buttonText: PropTypes.string,

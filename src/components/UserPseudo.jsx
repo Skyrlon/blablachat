@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { getCurrentUserFriends, getUserName } from "../store/Selectors";
 
 const StyledUserPseudo = styled.div`
   position: relative;
@@ -14,8 +16,13 @@ const StyledUserPseudo = styled.div`
   }
 `;
 
-const UserPseudo = ({ children, currentUser, friends, users }) => {
+const UserPseudo = ({ userId, userLoggedId }) => {
   const dispatch = useDispatch();
+
+  const userName = useSelector(getUserName(userId));
+
+  const friends = useSelector(getCurrentUserFriends(userLoggedId));
+
   const [showMenu, setShowMenu] = useState(false);
 
   const contextMenu = (e) => {
@@ -26,14 +33,14 @@ const UserPseudo = ({ children, currentUser, friends, users }) => {
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: currentUser.id },
+      payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
     });
   };
 
   const removeFriend = (friendId) => {
     dispatch({
       type: "REMOVE_FRIEND",
-      payload: { formerFriends: [currentUser.id, friendId] },
+      payload: { formerFriends: [userLoggedId, friendId] },
     });
   };
 
@@ -44,39 +51,31 @@ const UserPseudo = ({ children, currentUser, friends, users }) => {
   return (
     <ClickAwayListener onClickAway={handleClickAwayMenu}>
       <StyledUserPseudo>
-        <div onContextMenu={contextMenu}>{children}</div>
+        <div onContextMenu={contextMenu}>{userName}</div>
         {showMenu && (
           <div className="tooltip">
-            {!friends.includes(
-              users.filter((user) => user.name === children)[0].id
-            ) &&
-              !(children === currentUser.name) && (
+            {!friends.map((friend) => friend.id).includes(userId) &&
+              !(userId === userLoggedId) && (
                 <div
                   onClick={() => {
-                    sendFriendRequest(
-                      users.filter((user) => user.name === children)[0].id
-                    );
+                    sendFriendRequest(userId);
                     setShowMenu(false);
                   }}
                 >
                   Request to be friend
                 </div>
               )}
-            {friends.includes(
-              users.filter((user) => user.name === children)[0].id
-            ) && (
+            {friends.map((friend) => friend.id).includes(userId) && (
               <div
                 onClick={() => {
-                  removeFriend(
-                    users.filter((user) => user.name === children)[0].id
-                  );
+                  removeFriend(userId);
                   setShowMenu(false);
                 }}
               >
                 Unfriend
               </div>
             )}
-            {children === currentUser.name && (
+            {userId === userLoggedId && (
               <div>Can't unfriend or be friend with yourself</div>
             )}
           </div>
@@ -87,10 +86,8 @@ const UserPseudo = ({ children, currentUser, friends, users }) => {
 };
 
 UserPseudo.propTypes = {
-  users: PropTypes.array,
-  currentUser: PropTypes.object,
-  friends: PropTypes.array,
-  removeFriend: PropTypes.func,
+  userLoggedId: PropTypes.number,
+  writerID: PropTypes.number,
 };
 
 export default UserPseudo;

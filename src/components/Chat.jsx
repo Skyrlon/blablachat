@@ -70,18 +70,19 @@ const StyledChat = styled.div`
 `;
 
 const Chat = ({
-  users,
   showEmojis,
   switchShowEmojis,
-  currentUser,
-  friends,
   currentChatroomId,
+  userLoggedId,
 }) => {
   const dispatch = useDispatch();
 
   const [isEditingMessage, setIsEditingMessage] = useState(false);
+
   const [textToEdit, setTextToEdit] = useState("");
+
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
+
   const messages = useSelector(getMessages(currentChatroomId));
 
   const handleOneDigitNumber = (number) => {
@@ -161,12 +162,9 @@ const Chat = ({
               <div className="message" key={message.id}>
                 <UserPseudo
                   className="message-user"
-                  currentUser={currentUser}
-                  friends={friends}
-                  users={users}
-                >
-                  {users.filter((user) => user.id === message.writerID)[0].name}
-                </UserPseudo>
+                  userLoggedId={userLoggedId}
+                  userId={message.writerID}
+                />
                 <div className="message-date">
                   {formatMessageDate(message.time)}
                 </div>
@@ -233,6 +231,7 @@ Chat.propTypes = {
   currentUser: PropTypes.object,
   friends: PropTypes.array,
   currentChatroomId: PropTypes.number,
+  userLoggedId: PropTypes.number,
 };
 
 export default Chat;

@@ -14,17 +14,17 @@ const StyledMembersSidebar = styled.div`
   }
 `;
 
-const MembersSidebar = ({ users, currentUser, friends, currentChatroomId }) => {
+const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
   const members = useSelector(getMembers(currentChatroomId));
+
   return (
     <StyledMembersSidebar>
       <div className="title">Members</div>
       {members.map((member) => (
         <UserPseudo
           key={member.id}
-          currentUser={currentUser}
-          friends={friends}
-          users={users}
+          userId={member.id}
+          userLoggedId={userLoggedId}
         >
           {member.name}
         </UserPseudo>
@@ -33,10 +33,7 @@ const MembersSidebar = ({ users, currentUser, friends, currentChatroomId }) => {
   );
 };
 MembersSidebar.propTypes = {
-  members: PropTypes.array,
-  users: PropTypes.array,
-  currentUser: PropTypes.object,
-  friends: PropTypes.array,
+  userLoggedId: PropTypes.number,
   currentChatroomId: PropTypes.number,
 };
 export default MembersSidebar;

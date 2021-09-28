@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getUsers, getCurrentUser } from "./store/Selectors.jsx";
+import { getUsers } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -16,14 +16,6 @@ const App = () => {
   const users = useSelector(getUsers());
 
   const [userLoggedId, setUserLoggedId] = useState(undefined);
-
-  const currentUser = useSelector(getCurrentUser(userLoggedId)) || {
-    id: null,
-    name: null,
-    password: null,
-    friendsID: [],
-    friendsRequest: [],
-  };
 
   /* const handleAddUser = (signupInfos) => {
     const newUser = {
@@ -76,18 +68,14 @@ const App = () => {
             </Route>
             <Route path="/friends">
               <FriendsList
-                friendsID={currentUser.friendsID}
-                users={users}
+                userLoggedId={userLoggedId}
                 isAuthentified={isAuthentified}
-                friendsRequest={currentUser.friendsRequest}
-                currentUser={currentUser}
               />
             </Route>
             <Route path="/">
               <ChatPage
-                users={users}
                 isAuthentified={isAuthentified}
-                currentUser={currentUser}
+                userLoggedId={userLoggedId}
               />
             </Route>
           </Switch>

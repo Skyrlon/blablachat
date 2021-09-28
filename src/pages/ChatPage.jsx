@@ -22,11 +22,11 @@ const StyledChatPage = styled.div`
     "nav send members" 5% / 10vw auto 7vw;
 `;
 
-const ChatPage = ({ isAuthentified, currentUser, users }) => {
+const ChatPage = ({ isAuthentified, userLoggedId }) => {
   const dispatch = useDispatch();
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
-  const chatrooms = useSelector(getChatrooms(currentUser.id));
+  const chatrooms = useSelector(getChatrooms(userLoggedId));
 
   const [currentChatroomId, setCurrentChatroomId] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null
@@ -39,7 +39,7 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
   const handleCreateChatroom = (friendsSelected) => {
     dispatch({
       type: "CREATE_CHATROOM",
-      payload: { members: [currentUser.id, ...friendsSelected] },
+      payload: { members: [userLoggedId, ...friendsSelected] },
     });
   };
 
@@ -53,7 +53,7 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
   const handleLeaveChatroom = (chatroomId) => {
     dispatch({
       type: "LEAVE_CHATROOM",
-      payload: { chatroomId, userLeaving: currentUser.id },
+      payload: { chatroomId, userLeaving: userLoggedId },
     });
     if (chatroomId === currentChatroomId)
       setCurrentChatroomId(
@@ -70,17 +70,13 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
       {chatrooms.length > 0 && (
         <AddMember
           addMember={(ids) => handleAddMember(currentChatroomId, ids)}
-          friends={currentUser.friendsID}
           currentChatroomId={currentChatroomId}
-          users={users}
+          userLoggedId={userLoggedId}
         />
       )}
       <ChatRoomNav
         chatrooms={chatrooms}
-        friends={currentUser.friendsID}
-        currentUser={currentUser}
-        users={users}
-        chatRooms={chatrooms}
+        userLoggedId={userLoggedId}
         changeChatRoom={handleChangeChatroom}
         currentChatroomId={currentChatroomId}
         createChatRoom={handleCreateChatroom}
@@ -88,26 +84,22 @@ const ChatPage = ({ isAuthentified, currentUser, users }) => {
       />
       {chatrooms.length > 0 && (
         <Chat
-          users={users}
-          currentUser={currentUser}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
-          friends={currentUser.friendsID}
           currentChatroomId={currentChatroomId}
+          userLoggedId={userLoggedId}
         />
       )}
       {chatrooms.length > 0 && (
         <SendMessage
-          currentUser={currentUser}
+          userLoggedId={userLoggedId}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
         />
       )}
       <MembersSidebar
-        users={users}
-        currentUser={currentUser}
-        friends={currentUser.friendsID}
+        userLoggedId={userLoggedId}
         currentChatroomId={currentChatroomId}
       />
     </StyledChatPage>
@@ -118,8 +110,7 @@ ChatPage.defaultProps = { chatRooms: [] };
 
 ChatPage.propTypes = {
   isAuthentified: PropTypes.bool,
-  currentUser: PropTypes.object,
-  users: PropTypes.array,
+  userLoggedId: PropTypes.number,
 };
 
 export default ChatPage;

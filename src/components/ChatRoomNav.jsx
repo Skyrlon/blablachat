@@ -30,11 +30,9 @@ const StyledChatRoomNav = styled.div`
 
 const ChatRoomNav = ({
   chatrooms,
-  currentUser,
+  userLoggedId,
   changeChatRoom,
   currentChatroomId,
-  friends,
-  users,
   createChatRoom,
   leaveChatroom,
 }) => {
@@ -50,48 +48,43 @@ const ChatRoomNav = ({
   return (
     <StyledChatRoomNav>
       <AddChatRoom
-        friends={friends}
-        users={users}
+        userLoggedId={userLoggedId}
         createChatRoom={createChatRoom}
       />
-      {chatrooms.map(
-        (chatroom) =>
-          chatroom.membersID.includes(currentUser.id) && (
-            <div
-              className={`${chatroom.id === currentChatroomId && "active"}`}
-              key={chatroom.id}
-              onClick={(e) => {
-                if (e.buttons !== 2) changeChatRoom(chatroom.id);
-              }}
-              onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
-            >
-              <div>{chatroom.name}</div>
-              {showDropdown && chatroomIdDropdown === chatroom.id && (
-                <div className="dropdown">
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      leaveChatroom(chatroom.id);
-                      setShowDropdown(false);
-                    }}
-                  >
-                    Leave this chatroom
-                  </div>
-                </div>
-              )}
+      {chatrooms.map((chatroom) => (
+        <div
+          className={`${chatroom.id === currentChatroomId && "active"}`}
+          key={chatroom.id}
+          onClick={(e) => {
+            if (e.buttons !== 2) changeChatRoom(chatroom.id);
+          }}
+          onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
+        >
+          <div>{chatroom.name}</div>
+          {showDropdown && chatroomIdDropdown === chatroom.id && (
+            <div className="dropdown">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  leaveChatroom(chatroom.id);
+                  setShowDropdown(false);
+                }}
+              >
+                Leave this chatroom
+              </div>
             </div>
-          )
-      )}
+          )}
+        </div>
+      ))}
     </StyledChatRoomNav>
   );
 };
 
 ChatRoomNav.propTypes = {
-  chatRooms: PropTypes.array,
+  chatrooms: PropTypes.array,
+  userLoggedId: PropTypes.number,
   changeChatRoom: PropTypes.func,
   currentChatroomId: PropTypes.number,
-  friends: PropTypes.array,
-  users: PropTypes.array,
   createChatRoom: PropTypes.func,
   leaveChatroom: PropTypes.func,
 };

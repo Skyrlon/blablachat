@@ -8,7 +8,7 @@ const StyledSendMessage = styled.div`
 `;
 
 const SendMessage = ({
-  currentUser,
+  userLoggedId,
   showEmojis,
   switchShowEmojis,
   currentChatroomId,
@@ -19,7 +19,7 @@ const SendMessage = ({
     dispatch({
       type: "ADD_NEW_MESSAGE",
       payload: {
-        writer: currentUser.id,
+        writer: userLoggedId,
         time: Date.now(),
         text: message,
         chatroomId: currentChatroomId,
@@ -46,7 +46,7 @@ SendMessage.defaultProps = {
 };
 
 SendMessage.propTypes = {
-  currentUser: PropTypes.object,
+  userLoggedId: PropTypes.number,
   showEmojis: PropTypes.object,
   switchShowEmojis: PropTypes.func,
   currentChatroomId: PropTypes.number,

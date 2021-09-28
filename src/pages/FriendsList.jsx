@@ -3,23 +3,31 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import UserPseudo from "../components/UserPseudo";
+import {
+  getCurrentUserFriends,
+  getCurrentUserFriendsRequest,
+} from "../store/Selectors";
 
 const StyledFriendsList = styled.div``;
 
-const FriendsList = ({
-  isAuthentified,
-  friendsID,
-  users,
-  friendsRequest,
-  currentUser,
-}) => {
+const FriendsList = ({ isAuthentified, userLoggedId }) => {
   const dispatch = useDispatch();
+
+  const friends = useSelector(getCurrentUserFriends(userLoggedId));
+
+  const friendsRequest = useSelector(
+    getCurrentUserFriendsRequest(userLoggedId)
+  );
+
   const [searchedFriend, setSearchedFriend] = useState("");
+
   const [usersFound, setUsersFound] = useState([]);
+
   const [showUsersFound, setShowUsersFound] = useState(false);
+
   const [categoryToShow, setCategoryToShow] = useState("all");
 
   const handleInputSubmit = (e) => {
@@ -32,32 +40,32 @@ const FriendsList = ({
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: currentUser.id },
+      payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
     });
   };
 
   const acceptFriendRequest = (id) => {
     dispatch({
       type: "ACCEPT_FRIEND_REQUEST",
-      payload: { receiverId: currentUser.id, senderId: id },
+      payload: { receiverId: userLoggedId, senderId: id },
     });
   };
 
   const rejectFriendRequest = (id) => {
     dispatch({
       type: "REJECT_FRIEND_REQUEST",
-      payload: { receiverId: currentUser.id, senderId: id },
+      payload: { receiverId: userLoggedId, senderId: id },
     });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setUsersFound(
+    /* setUsersFound(
       users.filter(
         (user) =>
           user.name.includes(searchedFriend) && !friendsID.includes(user.id)
       )
-    );
+    ); */
     setShowUsersFound(true);
   };
 
@@ -95,18 +103,15 @@ const FriendsList = ({
       </Button>
 
       {categoryToShow === "all" &&
-        friendsID.length > 0 &&
-        friendsID.map((id) => (
+        friends.length > 0 &&
+        friends.map((friend) => (
           <UserPseudo
-            key={id}
-            currentUser={currentUser}
-            friends={friendsID}
-            users={users}
-          >
-            {users.filter((user) => user.id === id)[0].name}
-          </UserPseudo>
+            key={friend.id}
+            userId={friend.id}
+            userLoggedId={userLoggedId}
+          />
         ))}
-      {categoryToShow === "all" && friendsID.length === 0 && (
+      {categoryToShow === "all" && friends.length === 0 && (
         <div>You have no friends yet</div>
       )}
 
@@ -141,13 +146,15 @@ const FriendsList = ({
       {categoryToShow === "requests" && (
         <div>
           {friendsRequest.length > 0 &&
-            friendsRequest.map((id) => (
-              <div key={id}>
-                <div className="pseudo">
-                  {users.filter((user) => user.id === id)[0].name}
-                </div>
-                <Button onClick={() => acceptFriendRequest(id)}>Accept</Button>
-                <Button onClick={() => rejectFriendRequest(id)}>Reject</Button>
+            friendsRequest.map((sender) => (
+              <div key={sender.id}>
+                <div className="pseudo">{sender.name}</div>
+                <Button onClick={() => acceptFriendRequest(sender.id)}>
+                  Accept
+                </Button>
+                <Button onClick={() => rejectFriendRequest(sender.id)}>
+                  Reject
+                </Button>
               </div>
             ))}
           {friendsRequest.length === 0 && <div>No requests yet</div>}
@@ -159,14 +166,7 @@ const FriendsList = ({
 
 FriendsList.propTypes = {
   isAuthentified: PropTypes.bool,
-  friendsID: PropTypes.array,
-  users: PropTypes.array,
-  sendRequestFriend: PropTypes.func,
-  friendsRequest: PropTypes.array,
-  acceptFriendRequest: PropTypes.func,
-  rejectFriendRequest: PropTypes.func,
-  currentUser: PropTypes.object,
-  removeFriend: PropTypes.func,
+  userLoggedId: PropTypes.number,
 };
 
 export default FriendsList;
