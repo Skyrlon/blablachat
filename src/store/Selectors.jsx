@@ -32,8 +32,10 @@ export const getMembers = (chatroomId) => {
 
 export const getCurrentUserFriends = (id) => {
   return (state) => {
-    const friendsID = state.users.find((user) => user.id === id).friendsID;
-    return friendsID.map((friendID) => {
+    if (!id) return undefined;
+
+    const currentUser = state.users.find((user) => user.id === id);
+    return currentUser.friendsID.map((friendID) => {
       return {
         id: friendID,
         name: state.users.find((user) => user.id === friendID).name,
@@ -48,10 +50,10 @@ export const getUserName = (id) => {
 
 export const getCurrentUserFriendsRequest = (id) => {
   return (state) => {
-    const friendsRequest = state.users.find(
-      (user) => user.id === id
-    ).friendsRequest;
-    return friendsRequest.map((requestId) => {
+    if (!id) return undefined;
+
+    const currentUser = state.users.find((user) => user.id === id);
+    return currentUser.friendsRequest.map((requestId) => {
       return {
         id: requestId,
         name: state.users.find((user) => user.id === requestId).name,
