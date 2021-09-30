@@ -168,70 +168,50 @@ function reducer(state = initialState, action) {
       });
 
     case ACCEPT_FRIEND_REQUEST:
-      return {
-        ...state,
-        users: state.users.map((user) => {
-          if (user.id === action.payload.receiverId)
-            return {
-              ...user,
-              friendsRequest: user.friendsRequest.filter(
-                (request) => request !== action.payload.senderId
-              ),
-              friendsID: [...user.friendsID, action.payload.senderId],
-            };
-          if (user.id === action.payload.senderId)
-            return {
-              ...user,
-              friendsID: [...user.friendsID, action.payload.receiverId],
-            };
-          return user;
-        }),
-      };
+      return produce(state, (draft) => {
+        const sender = draft.users.find(
+          (user) => user.id === action.payload.senderId
+        );
+        const receiver = draft.users.find(
+          (user) => user.id === action.payload.receiverId
+        );
+        sender.friendsID.push(action.payload.receiverId);
+        receiver.friendsID.push(action.payload.senderId);
+        receiver.friendsRequest = receiver.friendsRequest.filter(
+          (request) => request !== action.payload.senderId
+        );
+      });
 
     case REJECT_FRIEND_REQUEST:
-      return {
-        ...state,
-        users: state.users.map((user) => {
-          if (user.id === action.payload.receiverId)
-            return {
-              ...user,
-              friendsRequest: user.friendsRequest.filter(
-                (request) => request !== action.payload.senderId
-              ),
-            };
-          return user;
-        }),
-      };
+      return produce(state, (draft) => {
+        const receiver = draft.users.find(
+          (user) => user.id === action.payload.receiverId
+        );
+        receiver.friendsRequest = receiver.friendsRequest.filter(
+          (request) => request !== action.payload.senderId
+        );
+      });
 
     case SEND_FRIEND_REQUEST:
-      return {
-        ...state,
-        users: state.users.map((user) => {
-          if (user.id === action.payload.receiverId)
-            return {
-              ...user,
-              friendsRequest: [...user.friendsRequest, action.payload.senderId],
-            };
-          return user;
-        }),
-      };
+      return produce(state, (draft) => {
+        const receiver = draft.users.find(
+          (user) => user.id === action.payload.receiverId
+        );
+        receiver.friendsRequest.push(action.payload.senderId);
+      });
 
     case REMOVE_FRIEND:
-      return {
-        ...state,
-        users: state.users.map((user) => {
+      return produce(state, (draft) => {
+        draft.users.map((user) => {
           if (action.payload.formerFriends.includes(user.id))
-            return {
-              ...user,
-              friendsID: user.friendsID.filter(
-                (friend) =>
-                  friend !==
-                  action.payload.formerFriends.find((x) => x !== user.id)
-              ),
-            };
+            user.friendsID = user.friendsID.filter(
+              (friend) =>
+                friend !==
+                action.payload.formerFriends.find((x) => x !== user.id)
+            );
           return user;
-        }),
-      };
+        });
+      });
 
     default:
       return state;
