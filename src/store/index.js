@@ -1,4 +1,5 @@
 import { createStore } from "redux";
+import produce from "immer";
 
 const initialState = {
   users: [
@@ -81,8 +82,6 @@ const initialState = {
   ],
 };
 
-const MODIFY_MESSAGES = "MODIFY_MESSAGES";
-
 const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 
 const EDIT_MESSAGE = "EDIT_MESSAGE";
@@ -105,80 +104,39 @@ const REMOVE_FRIEND = "REMOVE_FRIEND";
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case MODIFY_MESSAGES:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              messages: action.payload.messages,
-            };
-          return chatroom;
-        }),
-      };
     case EDIT_MESSAGE:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              messages: chatroom.messages.map((message) => {
-                if (message.id === action.payload.id)
-                  return {
-                    ...message,
-                    text: action.payload.message,
-                    edited: true,
-                  };
-                return message;
-              }),
-            };
-          return chatroom;
-        }),
-      };
+      return produce(state, (draft) => {
+        const messageToEdit = draft.chatrooms
+          .find((chatroom) => chatroom.id === action.payload.chatroomId)
+          .messages.find((message) => message.id === action.payload.id);
+        messageToEdit.text = action.payload.message;
+        messageToEdit.modified = true;
+      });
+
     case ADD_NEW_MESSAGE:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              messages: [
-                ...chatroom.messages,
-                {
-                  id: chatroom.messages.length,
-                  writerID: action.payload.writer,
-                  time: action.payload.time,
-                  text: action.payload.text,
-                  modified: false,
-                  deleted: false,
-                },
-              ],
-            };
-          return chatroom;
-        }),
-      };
+      return produce(state, (draft) => {
+        const messages = draft.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload.chatroomId
+        ).messages;
+        messages.push({
+          id: messages.length,
+          writerID: action.payload.writer,
+          time: action.payload.time,
+          text: action.payload.text,
+          modified: false,
+          deleted: false,
+        });
+      });
+
     case DELETE_MESSAGE:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              messages: chatroom.messages.map((message) => {
-                if (message.id === action.payload.id)
-                  return {
-                    ...message,
-                    text: "",
-                    deleted: true,
-                  };
-                return message;
-              }),
-            };
-          return chatroom;
-        }),
-      };
+      return produce(state, (draft) => {
+        const messageToDelete = draft.chatrooms
+          .find((chatroom) => chatroom.id === action.payload.chatroomId)
+          .messages.find((message) => message.id === action.payload.id);
+        messageToDelete.text = "";
+        messageToDelete.deleted = true;
+      });
+
     case CREATE_CHATROOM:
       return {
         ...state,
