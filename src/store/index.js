@@ -138,46 +138,34 @@ function reducer(state = initialState, action) {
       });
 
     case CREATE_CHATROOM:
-      return {
-        ...state,
-        chatrooms: [
-          ...state.chatrooms,
-          {
-            id: state.chatrooms.length,
-            name: `Chatroom ${state.chatrooms.length}`,
-            membersID: action.payload.members,
-            messages: [],
-          },
-        ],
-      };
+      return produce(state, (draft) => {
+        draft.chatrooms.push({
+          id: draft.chatrooms.length,
+          name: `Chatroom ${draft.chatrooms.length}`,
+          membersID: action.payload.members,
+          messages: [],
+        });
+      });
 
     case ADD_MEMBER:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              membersID: [...chatroom.membersID, ...action.payload.newMember],
-            };
-          return chatroom;
-        }),
-      };
+      return produce(state, (draft) => {
+        const chatroomToEdit = draft.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload.chatroomId
+        );
+        chatroomToEdit.membersID = chatroomToEdit.membersID.concat(
+          action.payload.newMember
+        );
+      });
 
     case LEAVE_CHATROOM:
-      return {
-        ...state,
-        chatrooms: state.chatrooms.map((chatroom) => {
-          if (chatroom.id === action.payload.chatroomId)
-            return {
-              ...chatroom,
-              membersID: chatroom.membersID.filter(
-                (member) => member !== action.payload.userLeaving
-              ),
-            };
-          return chatroom;
-        }),
-      };
+      return produce(state, (draft) => {
+        const chatroomToLeave = draft.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload.chatroomId
+        );
+        chatroomToLeave.membersID = chatroomToLeave.membersID.filter(
+          (member) => member !== action.payload.userLeaving
+        );
+      });
 
     case ACCEPT_FRIEND_REQUEST:
       return {
