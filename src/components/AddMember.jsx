@@ -44,7 +44,7 @@ const AddMember = ({ addMember, currentChatroomId, userLoggedId }) => {
       {showMenu && (
         <SelectFriendsDropdown
           friends={friends.filter(
-            (friend) => !members.map((member) => member.id).includes(friend)
+            (friend) => !members.map((member) => member.id).includes(friend.id)
           )}
           friendsSubmitted={handleFriendsSubmitted}
           closeMenu={() => setShowMenu(false)}

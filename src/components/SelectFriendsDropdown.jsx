@@ -16,6 +16,10 @@ const StyledSelectFriendsDropdown = styled.form`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    &-name {
+      cursor: pointer;
+      user-select: none;
+    }
   }
 `;
 
@@ -26,6 +30,14 @@ const SelectFriendsDropdown = ({
   buttonText,
 }) => {
   const [friendsSelected, setFriendsSelected] = useState([]);
+
+  const onFriendNameClick = (id) => {
+    if (friendsSelected.includes(id)) {
+      setFriendsSelected((prev) => prev.filter((element) => element !== id));
+    } else {
+      setFriendsSelected((prev) => [...prev, id]);
+    }
+  };
 
   const handleChange = (e, id) => {
     if (e.target.checked) {
@@ -55,9 +67,15 @@ const SelectFriendsDropdown = ({
         {friends.length > 0 &&
           friends.map((friend) => (
             <div className="friend" key={friend.id}>
-              <div className="friend-name">{friend.name}</div>
+              <div
+                onClick={() => onFriendNameClick(friend.id)}
+                className="friend-name"
+              >
+                {friend.name}
+              </div>
               <Checkbox
                 className="friend-checkbox"
+                checked={friendsSelected.includes(friend.id)}
                 onChange={(e) => handleChange(e, friend.id)}
               />
             </div>
