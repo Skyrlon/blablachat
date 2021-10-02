@@ -7,7 +7,7 @@ import { getUsers } from "./store/Selectors.jsx";
 import Logout from "./components/Logout.jsx";
 import "./App.css";
 import ChatPage from "./pages/ChatPage.jsx";
-import FriendsList from "./pages/FriendsList";
+import FriendsPage from "./pages/FriendsPage";
 import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
@@ -49,7 +49,7 @@ const App = () => {
                   <Link to="/">Chat</Link>
                 </li>
                 <li>
-                  <Link to="/friends">FriendsList</Link>
+                  <Link to="/friends">Friends</Link>
                 </li>
               </ul>
             </nav>
@@ -67,7 +67,7 @@ const App = () => {
               />
             </Route>
             <Route path="/friends">
-              <FriendsList
+              <FriendsPage
                 userLoggedId={userLoggedId}
                 isAuthentified={isAuthentified}
               />

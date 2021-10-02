@@ -11,9 +11,9 @@ import {
   getCurrentUserFriendsRequest,
 } from "../store/Selectors";
 
-const StyledFriendsList = styled.div``;
+const StyledFriendsPage = styled.div``;
 
-const FriendsList = ({ isAuthentified, userLoggedId }) => {
+const FriendsPage = ({ isAuthentified, userLoggedId }) => {
   const dispatch = useDispatch();
 
   const friends = useSelector(getCurrentUserFriends(userLoggedId));
@@ -79,7 +79,7 @@ const FriendsList = ({ isAuthentified, userLoggedId }) => {
     return <Redirect to="/sign" />;
   }
   return (
-    <StyledFriendsList>
+    <StyledFriendsPage>
       <Button
         color="primary"
         variant={categoryToShow === "all" ? "contained" : "outlined"}
@@ -160,13 +160,13 @@ const FriendsList = ({ isAuthentified, userLoggedId }) => {
           {friendsRequest.length === 0 && <div>No requests yet</div>}
         </div>
       )}
-    </StyledFriendsList>
+    </StyledFriendsPage>
   );
 };
 
-FriendsList.propTypes = {
+FriendsPage.propTypes = {
   isAuthentified: PropTypes.bool,
   userLoggedId: PropTypes.number,
 };
 
-export default FriendsList;
+export default FriendsPage;
