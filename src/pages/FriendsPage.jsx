@@ -4,19 +4,14 @@ import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUserFriendsRequest } from "../store/Selectors";
 
-import UserPseudo from "../components/UserPseudo";
-import {
-  getCurrentUserFriends,
-  getCurrentUserFriendsRequest,
-} from "../store/Selectors";
+import AllFriendsTab from "../components/AllFriendsTab";
 
 const StyledFriendsPage = styled.div``;
 
 const FriendsPage = ({ isAuthentified, userLoggedId }) => {
   const dispatch = useDispatch();
-
-  const friends = useSelector(getCurrentUserFriends(userLoggedId));
 
   const friendsRequest = useSelector(
     getCurrentUserFriendsRequest(userLoggedId)
@@ -102,17 +97,8 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         Add Friend
       </Button>
 
-      {categoryToShow === "all" &&
-        friends.length > 0 &&
-        friends.map((friend) => (
-          <UserPseudo
-            key={friend.id}
-            userId={friend.id}
-            userLoggedId={userLoggedId}
-          />
-        ))}
-      {categoryToShow === "all" && friends.length === 0 && (
-        <div>You have no friends yet</div>
+      {categoryToShow === "all" && (
+        <AllFriendsTab userLoggedId={userLoggedId} />
       )}
 
       {categoryToShow === "add" && (
