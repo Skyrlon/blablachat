@@ -3,19 +3,15 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUserFriendsRequest } from "../store/Selectors";
+import { useDispatch } from "react-redux";
 
 import AllFriendsTab from "../components/AllFriendsTab";
+import FriendsRequestsTab from "../components/FriendsRequestsTab";
 
 const StyledFriendsPage = styled.div``;
 
 const FriendsPage = ({ isAuthentified, userLoggedId }) => {
   const dispatch = useDispatch();
-
-  const friendsRequest = useSelector(
-    getCurrentUserFriendsRequest(userLoggedId)
-  );
 
   const [searchedFriend, setSearchedFriend] = useState("");
 
@@ -36,20 +32,6 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
       payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
-    });
-  };
-
-  const acceptFriendRequest = (id) => {
-    dispatch({
-      type: "ACCEPT_FRIEND_REQUEST",
-      payload: { receiverId: userLoggedId, senderId: id },
-    });
-  };
-
-  const rejectFriendRequest = (id) => {
-    dispatch({
-      type: "REJECT_FRIEND_REQUEST",
-      payload: { receiverId: userLoggedId, senderId: id },
     });
   };
 
@@ -101,6 +83,10 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         <AllFriendsTab userLoggedId={userLoggedId} />
       )}
 
+      {categoryToShow === "requests" && (
+        <FriendsRequestsTab userLoggedId={userLoggedId} />
+      )}
+
       {categoryToShow === "add" && (
         <form onSubmit={onSubmit}>
           <TextField
@@ -128,24 +114,6 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         ) : (
           <div>No users found</div>
         ))}
-
-      {categoryToShow === "requests" && (
-        <div>
-          {friendsRequest.length > 0 &&
-            friendsRequest.map((sender) => (
-              <div key={sender.id}>
-                <div className="pseudo">{sender.name}</div>
-                <Button onClick={() => acceptFriendRequest(sender.id)}>
-                  Accept
-                </Button>
-                <Button onClick={() => rejectFriendRequest(sender.id)}>
-                  Reject
-                </Button>
-              </div>
-            ))}
-          {friendsRequest.length === 0 && <div>No requests yet</div>}
-        </div>
-      )}
     </StyledFriendsPage>
   );
 };

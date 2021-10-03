@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 import UserPseudo from "./UserPseudo";
 import { getCurrentUserFriends } from "../store/Selectors";
@@ -22,6 +23,10 @@ const AllFriendsTab = ({ userLoggedId }) => {
       {friends.length === 0 && <div>You have no friends yet</div>}
     </StyledAllFriendsTab>
   );
+};
+
+AllFriendsTab.propTypes = {
+  userLoggedId: PropTypes.number,
 };
 
 export default AllFriendsTab;
