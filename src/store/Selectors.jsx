@@ -59,3 +59,17 @@ export const getCurrentUserFriendsRequest = (id) => {
     });
   };
 };
+
+export const getUsersFound = (text, currentUserId) => {
+  return (state) => {
+    if (text.length === 0) return [];
+    const currentUser = state.users.find((user) => user.id === currentUserId);
+    const usersFound = state.users.filter(
+      (user) =>
+        user.name.includes(text) && !currentUser.friendsID.includes(user.id)
+    );
+    return usersFound.map((user) => {
+      return { id: user.id, name: user.name };
+    });
+  };
+};

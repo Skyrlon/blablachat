@@ -1,56 +1,17 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router";
-import { Button, TextField } from "@material-ui/core";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { Button } from "@material-ui/core";
+import { useState } from "react";
 
 import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
+import AddFriendTab from "../components/AddFriendTab";
 
 const StyledFriendsPage = styled.div``;
 
 const FriendsPage = ({ isAuthentified, userLoggedId }) => {
-  const dispatch = useDispatch();
-
-  const [searchedFriend, setSearchedFriend] = useState("");
-
-  const [usersFound, setUsersFound] = useState([]);
-
-  const [showUsersFound, setShowUsersFound] = useState(false);
-
   const [categoryToShow, setCategoryToShow] = useState("all");
-
-  const handleInputSubmit = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      onSubmit(e);
-    }
-  };
-
-  const sendFriendRequest = (friendIdToSendRequest) => {
-    dispatch({
-      type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
-    });
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    /* setUsersFound(
-      users.filter(
-        (user) =>
-          user.name.includes(searchedFriend) && !friendsID.includes(user.id)
-      )
-    ); */
-    setShowUsersFound(true);
-  };
-
-  useEffect(() => {
-    setShowUsersFound(false);
-    setSearchedFriend("");
-    setUsersFound([]);
-  }, [categoryToShow]);
 
   if (!isAuthentified) {
     return <Redirect to="/sign" />;
@@ -87,33 +48,7 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         <FriendsRequestsTab userLoggedId={userLoggedId} />
       )}
 
-      {categoryToShow === "add" && (
-        <form onSubmit={onSubmit}>
-          <TextField
-            type="text"
-            label="Add friend"
-            onChange={(e) => setSearchedFriend(e.target.value)}
-            onKeyPress={(e) => handleInputSubmit(e)}
-            value={searchedFriend}
-          />
-          <Button onClick={onSubmit}>Search</Button>
-        </form>
-      )}
-
-      {categoryToShow === "add" &&
-        showUsersFound &&
-        (usersFound.length > 0 ? (
-          usersFound.map((user) => (
-            <div key={user.id}>
-              <div>{user.name}</div>
-              <Button onClick={() => sendFriendRequest(user.id)}>
-                Request
-              </Button>
-            </div>
-          ))
-        ) : (
-          <div>No users found</div>
-        ))}
+      {categoryToShow === "add" && <AddFriendTab userLoggedId={userLoggedId} />}
     </StyledFriendsPage>
   );
 };
