@@ -13,32 +13,27 @@ const StyledFriendsPage = styled.div``;
 const FriendsPage = ({ isAuthentified, userLoggedId }) => {
   const [categoryToShow, setCategoryToShow] = useState("all");
 
+  const buttonsTab = [
+    { category: "all", title: "All" },
+    { category: "requests", title: "Requests" },
+    { category: "add friend", title: "Add Friend" },
+  ];
+
   if (!isAuthentified) {
     return <Redirect to="/sign" />;
   }
   return (
     <StyledFriendsPage>
-      <Button
-        color="primary"
-        variant={categoryToShow === "all" ? "contained" : "outlined"}
-        onClick={() => setCategoryToShow("all")}
-      >
-        All
-      </Button>
-      <Button
-        color="primary"
-        variant={categoryToShow === "requests" ? "contained" : "outlined"}
-        onClick={() => setCategoryToShow("requests")}
-      >
-        Requests
-      </Button>
-      <Button
-        color="primary"
-        variant={categoryToShow === "add" ? "contained" : "outlined"}
-        onClick={() => setCategoryToShow("add")}
-      >
-        Add Friend
-      </Button>
+      {buttonsTab.map((tab) => (
+        <Button
+          key={tab.category}
+          color="primary"
+          variant={categoryToShow === tab.category ? "contained" : "outlined"}
+          onClick={() => setCategoryToShow(tab.category)}
+        >
+          {tab.title}
+        </Button>
+      ))}
 
       {categoryToShow === "all" && (
         <AllFriendsTab userLoggedId={userLoggedId} />
@@ -48,7 +43,9 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         <FriendsRequestsTab userLoggedId={userLoggedId} />
       )}
 
-      {categoryToShow === "add" && <AddFriendTab userLoggedId={userLoggedId} />}
+      {categoryToShow === "add friend" && (
+        <AddFriendTab userLoggedId={userLoggedId} />
+      )}
     </StyledFriendsPage>
   );
 };
