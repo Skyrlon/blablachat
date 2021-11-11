@@ -27,15 +27,15 @@ const StyledTextBox = styled.form`
   border-radius: 0.5em;
   align-items: center;
 
+  & .emoji-mart-container {
+    position: absolute;
+    ${(props) => (props.position > 0.5 ? "bottom:100%" : "top:100%")};
+    right: 0px;
+  }
+
   & .emoji-button {
     position: absolute;
     right: 1%;
-  }
-
-  & .emoji-mart {
-    position: absolute;
-    top: -25em;
-    left: 80%;
   }
 
   & .emoji-mart-preview {
@@ -65,6 +65,8 @@ const TextBox = ({
 }) => {
   const [message, setMessage] = useState(text);
 
+  const [messagePosition, setMessagePosition] = useState(null);
+
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
@@ -93,7 +95,7 @@ const TextBox = ({
 
   return (
     <StyledTextBoxContainer>
-      <StyledTextBox onSubmit={onSubmit}>
+      <StyledTextBox onSubmit={onSubmit} position={messagePosition}>
         <StyledTextArea
           rowsMin={1}
           rowsMax={3}
@@ -104,13 +106,14 @@ const TextBox = ({
 
         <div
           className="emoji-button"
-          onClick={() => {
+          onClick={(e) => {
             onEmojiButtonClick({
               show:
                 showEmojis.input !== type ||
                 (showEmojis.input === type && !showEmojis.show),
               input: type,
             });
+            setMessagePosition(e.pageY / window.innerHeight);
           }}
         >
           Emoji
@@ -123,7 +126,7 @@ const TextBox = ({
                 onEmojiClickAway({ show: false, input: "" });
             }}
           >
-            <div>
+            <div className="emoji-mart-container">
               <Picker onSelect={addEmoji} emojiTooltip={true} />
             </div>
           </ClickAwayListener>
