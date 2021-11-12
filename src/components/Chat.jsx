@@ -66,6 +66,9 @@ const StyledChat = styled.div`
       flex-direction: column;
       width: 100%;
     }
+    &-editing {
+      width: 100%;
+    }
   }
 `;
 
@@ -202,15 +205,17 @@ const Chat = ({
                     </div>
                   )}
                 {isEditingMessage && message.id === idMessageToEdit && (
-                  <TextBox
-                    type="edit"
-                    showEmojis={showEmojis}
-                    onEmojiButtonClick={switchShowEmojis}
-                    onEmojiClickAway={switchShowEmojis}
-                    submitMessage={handleEditedMessage}
-                    text={textToEdit}
-                    cancelEdit={handleCancelEdit}
-                  />
+                  <div className="message-editing">
+                    <TextBox
+                      type="edit"
+                      showEmojis={showEmojis}
+                      onEmojiButtonClick={switchShowEmojis}
+                      onEmojiClickAway={switchShowEmojis}
+                      submitMessage={handleEditedMessage}
+                      text={textToEdit}
+                      cancelEdit={handleCancelEdit}
+                    />
+                  </div>
                 )}
               </div>
             ))}
