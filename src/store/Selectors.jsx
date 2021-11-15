@@ -30,6 +30,27 @@ export const getMembers = (chatroomId) => {
   };
 };
 
+export const getChatroomsNames = (chatrooms, currentUserId) => {
+  return (state) => {
+    const chatroomsToLookAt = state.chatrooms.filter((chatroom) =>
+      chatrooms.some((x) => x.id === chatroom.id)
+    );
+    return chatroomsToLookAt.map((chatroom) => {
+      if (chatroom.name.length > 0) {
+        return { id: chatroom.id, name: chatroom.name };
+      } else {
+        const membersNames = chatroom.membersID
+          .filter((member) => member !== currentUserId)
+          .map((member) => state.users.find((user) => member === user.id).name);
+        return {
+          id: chatroom.id,
+          name: membersNames.join(", "),
+        };
+      }
+    });
+  };
+};
+
 export const getCurrentUserFriends = (id) => {
   return (state) => {
     const currentUser = state.users.find((user) => user.id === id);

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import AddChatRoom from "./AddChatRoom";
 import { useState } from "react";
+import { getChatroomsNames } from "../store/Selectors.jsx";
+import { useSelector } from "react-redux";
 
 const StyledChatRoomNav = styled.div`
   grid-area: nav;
@@ -45,6 +47,10 @@ const ChatRoomNav = ({
     setChatroomIdDropdown(id);
   };
 
+  const chatroomsNames = useSelector(
+    getChatroomsNames(chatrooms, userLoggedId)
+  );
+
   return (
     <StyledChatRoomNav>
       <AddChatRoom
@@ -60,7 +66,13 @@ const ChatRoomNav = ({
           }}
           onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
         >
-          <div>{chatroom.name}</div>
+          <div>
+            {
+              chatroomsNames.find(
+                (chatroomName) => chatroomName.id === chatroom.id
+              ).name
+            }
+          </div>
           {showDropdown && chatroomIdDropdown === chatroom.id && (
             <div className="dropdown">
               <div

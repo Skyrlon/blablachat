@@ -197,7 +197,7 @@ function reducer(state = initialState, action) {
       return produce(state, (draft) => {
         draft.chatrooms.push({
           id: draft.chatrooms.length,
-          name: `Chatroom ${draft.chatrooms.length}`,
+          name: "",
           membersID: action.payload.members,
           messages: [],
         });
