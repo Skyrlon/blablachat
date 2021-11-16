@@ -37,6 +37,7 @@ const initialState = {
       id: 0,
       name: "Discussion with friends",
       membersID: [0, 1, 3],
+      ownerID: 0,
       messages: [
         {
           id: 0,
@@ -116,6 +117,7 @@ const initialState = {
       id: 1,
       name: "Work room",
       membersID: [0, 2],
+      ownerID: 2,
       messages: [
         {
           id: 0,
@@ -198,6 +200,7 @@ function reducer(state = initialState, action) {
         draft.chatrooms.push({
           id: draft.chatrooms.length,
           name: "",
+          ownerID: action.payload.creator,
           membersID: action.payload.members,
           messages: [],
         });

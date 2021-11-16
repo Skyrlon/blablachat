@@ -39,7 +39,10 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
   const handleCreateChatroom = (friendsSelected) => {
     dispatch({
       type: "CREATE_CHATROOM",
-      payload: { members: [userLoggedId, ...friendsSelected] },
+      payload: {
+        creator: userLoggedId,
+        members: [userLoggedId, ...friendsSelected],
+      },
     });
   };
 

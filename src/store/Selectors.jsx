@@ -51,6 +51,11 @@ export const getChatroomsNames = (chatrooms, currentUserId) => {
   };
 };
 
+export const getCharoomOwnerId = (chatroomId) => {
+  return (state) =>
+    state.chatrooms.find((chatroom) => chatroom.id === chatroomId).ownerID;
+};
+
 export const getCurrentUserFriends = (id) => {
   return (state) => {
     const currentUser = state.users.find((user) => user.id === id);
