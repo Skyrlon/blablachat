@@ -160,6 +160,8 @@ const SEND_FRIEND_REQUEST = "SEND_FRIEND_REQUEST";
 
 const REMOVE_FRIEND = "REMOVE_FRIEND";
 
+const SWITCH_CHATROOM_OWNER = "SWITCH_CHATROOM_OWNER";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case EDIT_MESSAGE:
@@ -224,6 +226,13 @@ function reducer(state = initialState, action) {
         chatroomToLeave.membersID = chatroomToLeave.membersID.filter(
           (member) => member !== action.payload.userLeaving
         );
+      });
+
+    case SWITCH_CHATROOM_OWNER:
+      return produce(state, (draft) => {
+        draft.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload.chatroomId
+        ).ownerID = action.payload.userId;
       });
 
     case ACCEPT_FRIEND_REQUEST:

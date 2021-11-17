@@ -4,7 +4,12 @@ import styled from "styled-components";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getCurrentUserFriends, getUserName } from "../store/Selectors";
+import {
+  getCurrentUserFriends,
+  getUserName,
+  getChatroomsWhoUserIsOwner,
+  getChatroomsNames,
+} from "../store/Selectors";
 
 const StyledUserPseudo = styled.div`
   position: relative;
@@ -14,6 +19,23 @@ const StyledUserPseudo = styled.div`
     background-color: grey;
     z-index: 100;
   }
+  & .chatrooms-owned {
+    position: relative;
+    &-list {
+      display: none;
+      position: absolute;
+      background-color: pink;
+      right: 100%;
+      top: 0;
+      margin: 0;
+      list-style: none;
+    }
+    &:hover {
+      & .chatrooms-owned-list {
+        display: block;
+      }
+    }
+  }
 `;
 
 const UserPseudo = ({ userId, userLoggedId }) => {
@@ -22,6 +44,14 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   const userName = useSelector(getUserName(userId));
 
   const friends = useSelector(getCurrentUserFriends(userLoggedId));
+
+  const chatroomsWhoUserIsOwner = useSelector(
+    getChatroomsWhoUserIsOwner(userLoggedId)
+  );
+
+  const chatroomsNames = useSelector(
+    getChatroomsNames(chatroomsWhoUserIsOwner, userLoggedId)
+  );
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -46,6 +76,13 @@ const UserPseudo = ({ userId, userLoggedId }) => {
 
   const handleClickAwayMenu = () => {
     setShowMenu(false);
+  };
+
+  const giveChatroomOwnership = (chatroomId) => {
+    dispatch({
+      type: "SWITCH_CHATROOM_OWNER",
+      payload: { chatroomId, userId },
+    });
   };
 
   return (
@@ -77,6 +114,28 @@ const UserPseudo = ({ userId, userLoggedId }) => {
             )}
             {userId === userLoggedId && (
               <div>Can't unfriend or be friend with yourself</div>
+            )}
+            {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
+              <div className="chatrooms-owned">
+                <span>Give ownership to chatroom :</span>
+                <ul className="chatrooms-owned-list">
+                  {chatroomsWhoUserIsOwner.map(
+                    (chatroom) =>
+                      chatroom.membersID.includes(userId) && (
+                        <li
+                          onClick={() => giveChatroomOwnership(chatroom.id)}
+                          key={chatroom.id}
+                        >
+                          {
+                            chatroomsNames.find(
+                              (chatroomName) => chatroomName.id === chatroom.id
+                            ).name
+                          }
+                        </li>
+                      )
+                  )}
+                </ul>
+              </div>
             )}
           </div>
         )}

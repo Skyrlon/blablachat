@@ -100,3 +100,8 @@ export const getUsersFound = (text, currentUserId) => {
     });
   };
 };
+
+export const getChatroomsWhoUserIsOwner = (userId) => {
+  return (state) =>
+    state.chatrooms.filter((chatroom) => chatroom.ownerID === userId);
+};

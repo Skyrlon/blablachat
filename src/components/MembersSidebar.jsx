@@ -28,12 +28,8 @@ const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
     <StyledMembersSidebar>
       <div className="title">Members</div>
       {members.map((member) => (
-        <div className="member">
-          <UserPseudo
-            key={member.id}
-            userId={member.id}
-            userLoggedId={userLoggedId}
-          >
+        <div className="member" key={member.id}>
+          <UserPseudo userId={member.id} userLoggedId={userLoggedId}>
             {member.name}
           </UserPseudo>
           {member.id === ownerID && <FontAwesomeIcon icon={faCrown} />}
