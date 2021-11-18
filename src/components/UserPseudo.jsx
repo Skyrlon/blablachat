@@ -2,8 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentUserFriends,
   getUserName,

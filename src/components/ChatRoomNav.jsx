@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import AddChatRoom from "./AddChatRoom";
 import { useState } from "react";
 import { getChatroomsNames } from "../store/Selectors.jsx";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Button, TextField } from "@material-ui/core";
 
 const StyledChatRoomNav = styled.div`
   grid-area: nav;
+  position: relative;
   margin: 0;
   padding: 0;
   border: 1px solid black;
@@ -20,13 +22,33 @@ const StyledChatRoomNav = styled.div`
       background-color: lightblue;
     }
   }
+
+  & .chatroom-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
   & .dropdown {
     position: absolute;
+    margin: 0;
+    list-style: none;
     background-color: blue;
     z-index: 100;
     border: 1px solid;
     left: 100%;
     top: 0;
+  }
+  & .rename-chatroom {
+    position: absolute;
+    z-index: 100;
+    background-color: lightcoral;
+    left: 100%;
+    width: 15rem;
+    &-input {
+      width: 100%;
+    }
   }
 `;
 
@@ -38,8 +60,24 @@ const ChatRoomNav = ({
   createChatRoom,
   leaveChatroom,
 }) => {
+  const dispatch = useDispatch();
+
   const [showDropdown, setShowDropdown] = useState(false);
+
   const [chatroomIdDropdown, setChatroomIdDropdown] = useState(null);
+
+  const [showRenameInput, setShowRenameInput] = useState(false);
+
+  const [chatroomToEdit, setChatroomToEdit] = useState({
+    id: null,
+    name: null,
+  });
+
+  const [newChatroomName, setNewChatroomName] = useState(null);
+
+  const chatroomsNames = useSelector(
+    getChatroomsNames(chatrooms, userLoggedId)
+  );
 
   const handleContextMenu = (e, id) => {
     e.preventDefault();
@@ -47,16 +85,63 @@ const ChatRoomNav = ({
     setChatroomIdDropdown(id);
   };
 
-  const chatroomsNames = useSelector(
-    getChatroomsNames(chatrooms, userLoggedId)
-  );
+  const renameChatroomName = () => {
+    dispatch({
+      type: "RENAME_CHATROOM",
+      payload: { newName: newChatroomName, chatroomId: chatroomToEdit.id },
+    });
+    setChatroomToEdit({
+      id: null,
+      name: null,
+    });
+    setNewChatroomName(null);
+    setShowRenameInput(false);
+  };
+
+  const cancelRenameChatroom = () => {
+    setChatroomToEdit({
+      id: null,
+      name: null,
+    });
+    setNewChatroomName(null);
+    setShowRenameInput(false);
+  };
+
+  const onClickRenameChatroom = (e, chatroomId) => {
+    e.stopPropagation();
+    setChatroomToEdit({
+      id: chatroomId,
+      name: chatroomsNames.find(
+        (chatroomName) => chatroomName.id === chatroomId
+      ).name,
+    });
+    setNewChatroomName(
+      chatroomsNames.find((chatroomName) => chatroomName.id === chatroomId).name
+    );
+    setShowDropdown(false);
+    setShowRenameInput(true);
+  };
 
   return (
     <StyledChatRoomNav>
+      {showRenameInput && (
+        <form onSubmit={renameChatroomName} className="rename-chatroom">
+          <TextField
+            className="rename-chatroom-input"
+            value={newChatroomName}
+            onChange={(e) => setNewChatroomName(e.target.value)}
+            variant="outlined"
+          />
+          <Button onClick={cancelRenameChatroom}>Cancel</Button>
+          <Button onClick={renameChatroomName}>Rename</Button>
+        </form>
+      )}
+
       <AddChatRoom
         userLoggedId={userLoggedId}
         createChatRoom={createChatRoom}
       />
+
       {chatrooms.map((chatroom) => (
         <div
           className={`${chatroom.id === currentChatroomId && "active"}`}
@@ -66,7 +151,7 @@ const ChatRoomNav = ({
           }}
           onContextMenu={(e) => handleContextMenu(e, chatroom.id)}
         >
-          <div>
+          <div className="chatroom-name">
             {
               chatroomsNames.find(
                 (chatroomName) => chatroomName.id === chatroom.id
@@ -74,8 +159,8 @@ const ChatRoomNav = ({
             }
           </div>
           {showDropdown && chatroomIdDropdown === chatroom.id && (
-            <div className="dropdown">
-              <div
+            <ul className="dropdown">
+              <li
                 onClick={(e) => {
                   e.stopPropagation();
                   leaveChatroom(chatroom.id);
@@ -83,8 +168,11 @@ const ChatRoomNav = ({
                 }}
               >
                 Leave this chatroom
-              </div>
-            </div>
+              </li>
+              <li onClick={(e) => onClickRenameChatroom(e, chatroom.id)}>
+                Change Chatroom name
+              </li>
+            </ul>
           )}
         </div>
       ))}
