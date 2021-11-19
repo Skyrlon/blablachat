@@ -164,6 +164,8 @@ const SWITCH_CHATROOM_OWNER = "SWITCH_CHATROOM_OWNER";
 
 const RENAME_CHATROOM = "RENAME_CHATROOM";
 
+const EJECT_MEMBER = "EJECT_MEMBER";
+
 function reducer(state = initialState, action) {
   switch (action.type) {
     case EDIT_MESSAGE:
@@ -224,6 +226,16 @@ function reducer(state = initialState, action) {
         );
         chatroomToEdit.membersID = chatroomToEdit.membersID.concat(
           action.payload.newMember
+        );
+      });
+
+    case EJECT_MEMBER:
+      return produce(state, (draft) => {
+        const chatroomToEdit = draft.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload.chatroomId
+        );
+        chatroomToEdit.membersID = chatroomToEdit.membersID.filter(
+          (member) => member !== action.payload.userId
         );
       });
 
