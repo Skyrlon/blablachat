@@ -169,9 +169,11 @@ const ChatRoomNav = ({
               >
                 Leave this chatroom
               </li>
-              <li onClick={(e) => onClickRenameChatroom(e, chatroom.id)}>
-                Change Chatroom name
-              </li>
+              {chatroom.ownerID === userLoggedId && (
+                <li onClick={(e) => onClickRenameChatroom(e, chatroom.id)}>
+                  Change Chatroom name
+                </li>
+              )}
             </ul>
           )}
         </div>
