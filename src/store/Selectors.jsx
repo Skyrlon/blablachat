@@ -51,6 +51,23 @@ export const getChatroomsNames = (chatrooms, currentUserId) => {
   };
 };
 
+export const getChatroomName = (chatroomId, currentUserId) => {
+  return (state) => {
+    const chatroomToLookAt = state.chatrooms.find(
+      (chatroom) => chatroom.id === chatroomId
+    );
+
+    if (chatroomToLookAt.name.length > 0) {
+      return chatroomToLookAt.name;
+    } else {
+      const membersNames = chatroomToLookAt.membersID
+        .filter((member) => member !== currentUserId)
+        .map((member) => state.users.find((user) => member === user.id).name);
+      return membersNames.join(", ");
+    }
+  };
+};
+
 export const getCharoomOwnerId = (chatroomId) => {
   return (state) =>
     state.chatrooms.find((chatroom) => chatroom.id === chatroomId).ownerID;
