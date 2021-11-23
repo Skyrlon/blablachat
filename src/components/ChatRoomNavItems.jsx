@@ -47,7 +47,7 @@ const ChatRoomNavItems = ({
   userLoggedId,
   changeChatRoom,
   currentChatroomId,
-  leaveChatroom,
+  leaveCurrentChatroom,
 }) => {
   const dispatch = useDispatch();
 
@@ -64,6 +64,16 @@ const ChatRoomNavItems = ({
   const handleContextMenu = (e) => {
     e.preventDefault();
     setShowDropdown((v) => !v);
+  };
+
+  const onClickLeaveChatroom = (e) => {
+    e.stopPropagation();
+    setShowDropdown(false);
+    dispatch({
+      type: "LEAVE_CHATROOM",
+      payload: { chatroomId, userLeaving: userLoggedId },
+    });
+    if (chatroomId === currentChatroomId) leaveCurrentChatroom(chatroomId);
   };
 
   const renameChatroomName = () => {
@@ -106,7 +116,7 @@ const ChatRoomNavItems = ({
 
   return (
     <StyledChatRoomNavItems
-      isActive={!!(chatroomId === currentChatroomId)}
+      isActive={chatroomId === currentChatroomId}
       key={chatroomId}
       ref={chatroomRef}
       onClick={() => changeChatRoom(chatroomId)}
@@ -115,15 +125,7 @@ const ChatRoomNavItems = ({
       <div className="chatroom-name">{chatroomName}</div>
       {showDropdown && (
         <ul className="dropdown">
-          <li
-            onClick={(e) => {
-              e.stopPropagation();
-              leaveChatroom(chatroomId);
-              setShowDropdown(false);
-            }}
-          >
-            Leave this chatroom
-          </li>
+          <li onClick={onClickLeaveChatroom}>Leave this chatroom</li>
           {chatroomOwnerId === userLoggedId && (
             <li onClick={onClickRenameChatroom}>Change Chatroom name</li>
           )}
@@ -151,7 +153,7 @@ ChatRoomNavItems.propTypes = {
   userLoggedId: PropTypes.number,
   changeChatRoom: PropTypes.func,
   currentChatroomId: PropTypes.number,
-  leaveChatroom: PropTypes.func,
+  leaveCurrentChatroom: PropTypes.func,
 };
 
 export default ChatRoomNavItems;

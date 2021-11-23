@@ -16,15 +16,11 @@ const ChatRoomNav = ({
   userLoggedId,
   changeChatRoom,
   currentChatroomId,
-  createChatRoom,
-  leaveChatroom,
+  leaveCurrentChatroom,
 }) => {
   return (
     <StyledChatRoomNav>
-      <AddChatRoom
-        userLoggedId={userLoggedId}
-        createChatRoom={createChatRoom}
-      />
+      <AddChatRoom userLoggedId={userLoggedId} />
 
       {chatrooms.map((chatroom) => (
         <ChatRoomNavItems
@@ -34,7 +30,7 @@ const ChatRoomNav = ({
           userLoggedId={userLoggedId}
           changeChatRoom={changeChatRoom}
           currentChatroomId={currentChatroomId}
-          leaveChatroom={leaveChatroom}
+          leaveCurrentChatroom={leaveCurrentChatroom}
         />
       ))}
     </StyledChatRoomNav>
@@ -47,7 +43,7 @@ ChatRoomNav.propTypes = {
   changeChatRoom: PropTypes.func,
   currentChatroomId: PropTypes.number,
   createChatRoom: PropTypes.func,
-  leaveChatroom: PropTypes.func,
+  leaveCurrentChatroom: PropTypes.func,
 };
 
 export default ChatRoomNav;

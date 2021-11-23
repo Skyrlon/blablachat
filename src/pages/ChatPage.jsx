@@ -36,16 +36,6 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
     setCurrentChatroomId(chatroomId);
   };
 
-  const handleCreateChatroom = (friendsSelected) => {
-    dispatch({
-      type: "CREATE_CHATROOM",
-      payload: {
-        creator: userLoggedId,
-        members: [userLoggedId, ...friendsSelected],
-      },
-    });
-  };
-
   const handleAddMember = (chatroomId, friendsSelected) => {
     dispatch({
       type: "ADD_MEMBER",
@@ -53,15 +43,10 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
     });
   };
 
-  const handleLeaveChatroom = (chatroomId) => {
-    dispatch({
-      type: "LEAVE_CHATROOM",
-      payload: { chatroomId, userLeaving: userLoggedId },
-    });
-    if (chatroomId === currentChatroomId)
-      setCurrentChatroomId(
-        chatrooms.filter((chatroom) => chatroom.id !== chatroomId)[0].id
-      );
+  const handleLeaveCurrentChatroom = (chatroomId) => {
+    setCurrentChatroomId(
+      chatrooms.find((chatroom) => chatroom.id !== chatroomId).id
+    );
   };
 
   if (!isAuthentified) {
@@ -82,8 +67,7 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
         userLoggedId={userLoggedId}
         changeChatRoom={handleChangeChatroom}
         currentChatroomId={currentChatroomId}
-        createChatRoom={handleCreateChatroom}
-        leaveChatroom={handleLeaveChatroom}
+        leaveCurrentChatroom={handleLeaveCurrentChatroom}
       />
       {chatrooms.length > 0 && (
         <Chat
