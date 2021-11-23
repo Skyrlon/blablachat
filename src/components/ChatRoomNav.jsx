@@ -30,7 +30,7 @@ const ChatRoomNav = ({
         <ChatRoomNavItems
           key={chatroom.id}
           chatroomId={chatroom.id}
-          chatroomOwner={chatroom.ownerID}
+          chatroomOwnerId={chatroom.ownerID}
           userLoggedId={userLoggedId}
           changeChatRoom={changeChatRoom}
           currentChatroomId={currentChatroomId}

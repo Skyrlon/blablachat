@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
 
 const StyledChatRoomNavItems = styled.div`
-  background-color: ${(props) => (props.active ? "lightblue" : "")};
+  background-color: ${(props) => (props.isActive ? "lightblue" : "")};
   position: relative;
   box-sizing: border-box;
   width: 100%;
@@ -51,6 +51,8 @@ const ChatRoomNavItems = ({
 }) => {
   const dispatch = useDispatch();
 
+  const chatroomRef = useRef(null);
+
   const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -78,17 +80,35 @@ const ChatRoomNavItems = ({
     setShowRenameInput(false);
   };
 
-  const onClickRenameChatroom = (e, chatroomId) => {
+  const onClickRenameChatroom = (e) => {
     e.stopPropagation();
     setNewChatroomName(chatroomName);
     setShowDropdown(false);
     setShowRenameInput(true);
   };
 
+  const handleClickOutside = (e) => {
+    if (chatroomRef.current && !chatroomRef.current.contains(e.target)) {
+      setShowDropdown(false);
+      setShowRenameInput(false);
+    }
+  };
+
+  useEffect(
+    () => {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, // eslint-disable-next-line
+    [chatroomRef]
+  );
+
   return (
     <StyledChatRoomNavItems
-      active={!!(chatroomId === currentChatroomId)}
+      isActive={!!(chatroomId === currentChatroomId)}
       key={chatroomId}
+      ref={chatroomRef}
       onClick={() => changeChatRoom(chatroomId)}
       onContextMenu={(e) => handleContextMenu(e, chatroomId)}
     >
@@ -105,9 +125,7 @@ const ChatRoomNavItems = ({
             Leave this chatroom
           </li>
           {chatroomOwnerId === userLoggedId && (
-            <li onClick={(e) => onClickRenameChatroom(e, chatroomId)}>
-              Change Chatroom name
-            </li>
+            <li onClick={onClickRenameChatroom}>Change Chatroom name</li>
           )}
         </ul>
       )}
