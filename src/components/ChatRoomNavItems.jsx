@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
+import ClickOutsideListener from "./ClickOutsideListener.jsx";
 
 const StyledChatRoomNavItems = styled.div`
   background-color: ${(props) => (props.isActive ? "lightblue" : "")};
@@ -97,53 +98,50 @@ const ChatRoomNavItems = ({
     setShowRenameInput(true);
   };
 
-  const handleClickOutside = (e) => {
-    if (chatroomRef.current && !chatroomRef.current.contains(e.target)) {
-      setShowDropdown(false);
-      setShowRenameInput(false);
-    }
+  const handleClickOutside = () => {
+    setShowDropdown(false);
+    setShowRenameInput(false);
   };
 
-  useEffect(
-    () => {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, // eslint-disable-next-line
-    [chatroomRef]
-  );
-
   return (
-    <StyledChatRoomNavItems
-      isActive={chatroomId === currentChatroomId}
-      key={chatroomId}
-      ref={chatroomRef}
-      onClick={() => changeChatRoom(chatroomId)}
-      onContextMenu={(e) => handleContextMenu(e, chatroomId)}
+    <ClickOutsideListener
+      nodeRef={chatroomRef}
+      clickedOutside={handleClickOutside}
     >
-      <div className="chatroom-name">{chatroomName}</div>
-      {showDropdown && (
-        <ul className="dropdown">
-          <li onClick={onClickLeaveChatroom}>Leave this chatroom</li>
-          {chatroomOwnerId === userLoggedId && (
-            <li onClick={onClickRenameChatroom}>Change Chatroom name</li>
-          )}
-        </ul>
-      )}
-      {showRenameInput && (
-        <form onSubmit={renameChatroomName} className="rename-chatroom">
-          <TextField
-            className="rename-chatroom-input"
-            value={newChatroomName}
-            onChange={(e) => setNewChatroomName(e.target.value)}
-            variant="outlined"
-          />
-          <Button onClick={cancelRenameChatroom}>Cancel</Button>
-          <Button onClick={renameChatroomName}>Rename</Button>
-        </form>
-      )}
-    </StyledChatRoomNavItems>
+      <StyledChatRoomNavItems
+        isActive={chatroomId === currentChatroomId}
+        key={chatroomId}
+        onClick={() => changeChatRoom(chatroomId)}
+        onContextMenu={(e) => handleContextMenu(e, chatroomId)}
+      >
+        <span className="chatroom-name">{chatroomName}</span>
+
+        {(showDropdown || showRenameInput) && (
+          <div className="menu" ref={chatroomRef}>
+            {showDropdown && (
+              <ul className="dropdown">
+                <li onClick={onClickLeaveChatroom}>Leave this chatroom</li>
+                {chatroomOwnerId === userLoggedId && (
+                  <li onClick={onClickRenameChatroom}>Change Chatroom name</li>
+                )}
+              </ul>
+            )}
+            {showRenameInput && (
+              <form onSubmit={renameChatroomName} className="rename-chatroom">
+                <TextField
+                  className="rename-chatroom-input"
+                  value={newChatroomName}
+                  onChange={(e) => setNewChatroomName(e.target.value)}
+                  variant="outlined"
+                />
+                <Button onClick={cancelRenameChatroom}>Cancel</Button>
+                <Button onClick={renameChatroomName}>Rename</Button>
+              </form>
+            )}
+          </div>
+        )}
+      </StyledChatRoomNavItems>
+    </ClickOutsideListener>
   );
 };
 

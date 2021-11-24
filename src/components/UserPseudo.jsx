@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +8,11 @@ import {
   getChatroomsWhoUserIsOwner,
   getChatroomsNames,
 } from "../store/Selectors";
+import ClickOutsideListener from "./ClickOutsideListener";
 
 const StyledUserPseudo = styled.div`
   position: relative;
-  & .tooltip {
+  & .menu {
     position: absolute;
     border: 1px solid black;
     background-color: grey;
@@ -53,7 +54,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
 
   const [showMenu, setShowMenu] = useState(false);
 
-  let userPseudoRef = useRef(null);
+  let userPseudoMenuRef = useRef(null);
 
   const contextMenu = (e) => {
     e.preventDefault();
@@ -93,101 +94,96 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   };
 
   const handleClickOutside = (e) => {
-    if (userPseudoRef.current && !userPseudoRef.current.contains(e.target)) {
-      setShowMenu(false);
-    }
+    setShowMenu(false);
   };
 
-  useEffect(
-    () => {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, // eslint-disable-next-line
-    [userPseudoRef]
-  );
-
   return (
-    <StyledUserPseudo ref={userPseudoRef} onContextMenu={contextMenu}>
-      {userName}
+    <ClickOutsideListener
+      nodeRef={userPseudoMenuRef}
+      clickedOutside={handleClickOutside}
+    >
+      <StyledUserPseudo onContextMenu={contextMenu}>
+        {userName}
 
-      {showMenu && (
-        <div className="tooltip">
-          {!friends.map((friend) => friend.id).includes(userId) &&
-            !(userId === userLoggedId) && (
+        {showMenu && (
+          <div className="menu" ref={userPseudoMenuRef}>
+            {!friends.map((friend) => friend.id).includes(userId) &&
+              !(userId === userLoggedId) && (
+                <div
+                  onClick={() => {
+                    sendFriendRequest(userId);
+                    setShowMenu(false);
+                  }}
+                >
+                  Request to be friend
+                </div>
+              )}
+
+            {friends.map((friend) => friend.id).includes(userId) && (
               <div
                 onClick={() => {
-                  sendFriendRequest(userId);
+                  removeFriend(userId);
                   setShowMenu(false);
                 }}
               >
-                Request to be friend
+                Unfriend
               </div>
             )}
 
-          {friends.map((friend) => friend.id).includes(userId) && (
-            <div
-              onClick={() => {
-                removeFriend(userId);
-                setShowMenu(false);
-              }}
-            >
-              Unfriend
-            </div>
-          )}
+            {userId === userLoggedId && (
+              <div>Can't unfriend or be friend with yourself</div>
+            )}
 
-          {userId === userLoggedId && (
-            <div>Can't unfriend or be friend with yourself</div>
-          )}
-
-          {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
-            <>
-              <div className="chatrooms-owned">
-                <span>Give ownership to chatroom :</span>
-                <ul className="chatrooms-owned-list">
-                  {chatroomsWhoUserIsOwner.map(
-                    (chatroom) =>
-                      chatroom.membersID.includes(userId) && (
-                        <li
-                          onClick={() => giveChatroomOwnership(chatroom.id)}
-                          key={chatroom.id}
-                        >
-                          {
-                            chatroomsNames.find(
-                              (chatroomName) => chatroomName.id === chatroom.id
-                            ).name
-                          }
-                        </li>
-                      )
-                  )}
-                </ul>
-              </div>
-              <div className="chatrooms-owned">
-                <span>Eject user from chatroom :</span>
-                <ul className="chatrooms-owned-list">
-                  {chatroomsWhoUserIsOwner.map(
-                    (chatroom) =>
-                      chatroom.membersID.includes(userId) && (
-                        <li
-                          onClick={() => ejectMember(chatroom.id)}
-                          key={chatroom.id}
-                        >
-                          {
-                            chatroomsNames.find(
-                              (chatroomName) => chatroomName.id === chatroom.id
-                            ).name
-                          }
-                        </li>
-                      )
-                  )}
-                </ul>
-              </div>
-            </>
-          )}
-        </div>
-      )}
-    </StyledUserPseudo>
+            {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
+              <>
+                <div className="chatrooms-owned">
+                  <span>Give ownership to chatroom :</span>
+                  <ul className="chatrooms-owned-list">
+                    {chatroomsWhoUserIsOwner.map(
+                      (chatroom) =>
+                        chatroom.membersID.includes(userId) && (
+                          <li
+                            onClick={() => giveChatroomOwnership(chatroom.id)}
+                            key={chatroom.id}
+                          >
+                            {
+                              chatroomsNames.find(
+                                (chatroomName) =>
+                                  chatroomName.id === chatroom.id
+                              ).name
+                            }
+                          </li>
+                        )
+                    )}
+                  </ul>
+                </div>
+                <div className="chatrooms-owned">
+                  <span>Eject user from chatroom :</span>
+                  <ul className="chatrooms-owned-list">
+                    {chatroomsWhoUserIsOwner.map(
+                      (chatroom) =>
+                        chatroom.membersID.includes(userId) && (
+                          <li
+                            onClick={() => ejectMember(chatroom.id)}
+                            key={chatroom.id}
+                          >
+                            {
+                              chatroomsNames.find(
+                                (chatroomName) =>
+                                  chatroomName.id === chatroom.id
+                              ).name
+                            }
+                          </li>
+                        )
+                    )}
+                  </ul>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </StyledUserPseudo>
+    </ClickOutsideListener>
   );
 };
 
