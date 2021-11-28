@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const ClickOutsideListener = ({ nodeRef, clickedOutside, children }) => {
   const handleMouseDown = (e) => {
-    if (nodeRef.current && !nodeRef.current.contains(e.target)) {
+    if (nodeRef.current && nodeRef.current !== e.target) {
       clickedOutside();
     }
   };

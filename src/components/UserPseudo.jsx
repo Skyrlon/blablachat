@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,31 +8,15 @@ import {
   getChatroomsWhoUserIsOwner,
   getChatroomsNames,
 } from "../store/Selectors";
-import Menu from "./Menu";
+import { Menu, MenuItem } from "@material-ui/core";
+import NestedMenuItem from "material-ui-nested-menu-item";
 
-const StyledUserPseudo = styled.div`
-  position: relative;
-  & .chatrooms-owned {
-    position: relative;
-    &-list {
-      display: none;
-      position: absolute;
-      background-color: pink;
-      right: 100%;
-      top: 0;
-      margin: 0;
-      list-style: none;
-    }
-    &:hover {
-      & .chatrooms-owned-list {
-        display: block;
-      }
-    }
-  }
-`;
+const StyledUserPseudo = styled.div``;
 
 const UserPseudo = ({ userId, userLoggedId }) => {
   const dispatch = useDispatch();
+
+  const userPseudoRef = useRef(null);
 
   const userName = useSelector(getUserName(userId));
 
@@ -53,7 +37,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   const onContextMenu = (e) => {
     e.preventDefault();
     setShowMenu((v) => !v);
-    setPositionData(e);
+    setPositionData({ x: e.pageX, y: e.pageY });
   };
 
   const sendFriendRequest = (friendIdToSendRequest) => {
@@ -89,84 +73,84 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   };
 
   return (
-    <StyledUserPseudo onContextMenu={onContextMenu}>
+    <StyledUserPseudo onContextMenu={onContextMenu} ref={userPseudoRef}>
       {userName}
 
       {showMenu && (
         <Menu
-          positionData={positionData}
-          clickedOutside={() => setShowMenu(false)}
+          anchorEl={userPseudoRef.current}
+          anchorReference="anchorPosition"
+          open={showMenu}
+          onClose={() => setShowMenu(false)}
+          anchorPosition={{ top: positionData.y, left: positionData.x }}
         >
           {!friends.map((friend) => friend.id).includes(userId) &&
             !(userId === userLoggedId) && (
-              <div
+              <MenuItem
                 onClick={() => {
                   sendFriendRequest(userId);
                   setShowMenu(false);
                 }}
               >
                 Request to be friend
-              </div>
+              </MenuItem>
             )}
-
           {friends.map((friend) => friend.id).includes(userId) && (
-            <div
+            <MenuItem
               onClick={() => {
                 removeFriend(userId);
                 setShowMenu(false);
               }}
             >
               Unfriend
-            </div>
+            </MenuItem>
           )}
-
           {userId === userLoggedId && (
-            <div>Can't unfriend or be friend with yourself</div>
+            <MenuItem>Can't unfriend or be friend with yourself</MenuItem>
           )}
-
           {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
-            <>
-              <div className="chatrooms-owned">
-                <span>Give ownership to chatroom :</span>
-                <ul className="chatrooms-owned-list">
-                  {chatroomsWhoUserIsOwner.map(
-                    (chatroom) =>
-                      chatroom.membersID.includes(userId) && (
-                        <li
-                          onClick={() => giveChatroomOwnership(chatroom.id)}
-                          key={chatroom.id}
-                        >
-                          {
-                            chatroomsNames.find(
-                              (chatroomName) => chatroomName.id === chatroom.id
-                            ).name
-                          }
-                        </li>
-                      )
-                  )}
-                </ul>
-              </div>
-              <div className="chatrooms-owned">
-                <span>Eject user from chatroom :</span>
-                <ul className="chatrooms-owned-list">
-                  {chatroomsWhoUserIsOwner.map(
-                    (chatroom) =>
-                      chatroom.membersID.includes(userId) && (
-                        <li
-                          onClick={() => ejectMember(chatroom.id)}
-                          key={chatroom.id}
-                        >
-                          {
-                            chatroomsNames.find(
-                              (chatroomName) => chatroomName.id === chatroom.id
-                            ).name
-                          }
-                        </li>
-                      )
-                  )}
-                </ul>
-              </div>
-            </>
+            <NestedMenuItem
+              label="Give ownership to chatroom :"
+              parentMenuOpen={showMenu}
+            >
+              {chatroomsWhoUserIsOwner.map(
+                (chatroom) =>
+                  chatroom.membersID.includes(userId) && (
+                    <MenuItem
+                      onClick={() => giveChatroomOwnership(chatroom.id)}
+                      key={chatroom.id}
+                    >
+                      {
+                        chatroomsNames.find(
+                          (chatroomName) => chatroomName.id === chatroom.id
+                        ).name
+                      }
+                    </MenuItem>
+                  )
+              )}
+            </NestedMenuItem>
+          )}
+          {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
+            <NestedMenuItem
+              label="Eject user from chatroom :"
+              parentMenuOpen={showMenu}
+            >
+              {chatroomsWhoUserIsOwner.map(
+                (chatroom) =>
+                  chatroom.membersID.includes(userId) && (
+                    <MenuItem
+                      onClick={() => ejectMember(chatroom.id)}
+                      key={chatroom.id}
+                    >
+                      {
+                        chatroomsNames.find(
+                          (chatroomName) => chatroomName.id === chatroom.id
+                        ).name
+                      }
+                    </MenuItem>
+                  )
+              )}
+            </NestedMenuItem>
           )}
         </Menu>
       )}
