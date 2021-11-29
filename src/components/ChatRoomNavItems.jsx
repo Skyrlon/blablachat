@@ -110,15 +110,16 @@ const ChatRoomNavItems = ({
   const renameFormRef = useRef(null);
 
   return (
-    <StyledChatRoomNavItems
-      ref={chatroomItemRef}
-      isActive={chatroomId === currentChatroomId}
-      key={chatroomId}
-      onClick={() => changeChatRoom(chatroomId)}
-      onContextMenu={(e) => handleContextMenu(e, chatroomId)}
-    >
-      <span className="chatroom-name">{chatroomName}</span>
-
+    <>
+      <StyledChatRoomNavItems
+        ref={chatroomItemRef}
+        isActive={chatroomId === currentChatroomId}
+        key={chatroomId}
+        onClick={() => changeChatRoom(chatroomId)}
+        onContextMenu={(e) => handleContextMenu(e, chatroomId)}
+      >
+        <span className="chatroom-name">{chatroomName}</span>
+      </StyledChatRoomNavItems>
       {showMenu && (
         <Menu
           anchorEl={chatroomItemRef.current}
@@ -158,7 +159,7 @@ const ChatRoomNavItems = ({
           </form>
         </ClickOutsideListener>
       )}
-    </StyledChatRoomNavItems>
+    </>
   );
 };
 
