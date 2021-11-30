@@ -4,8 +4,12 @@ import { Button, TextField } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
-import { Menu, MenuItem } from "@material-ui/core";
-import ClickOutsideListener from "./ClickOutsideListener.jsx";
+import {
+  Menu,
+  MenuItem,
+  ClickAwayListener,
+  makeStyles,
+} from "@material-ui/core";
 
 const StyledChatRoomNavItems = styled.div`
   background-color: ${(props) => (props.isActive ? "lightblue" : "")};
@@ -43,6 +47,11 @@ const StyledChatRoomNavItems = styled.div`
   }
 `;
 
+const useStyles = makeStyles({
+  contextMenu: { pointerEvents: "none" },
+  contextMenuPaper: { pointerEvents: "auto" },
+});
+
 const ChatRoomNavItems = ({
   chatroomId,
   chatroomOwnerId,
@@ -51,6 +60,8 @@ const ChatRoomNavItems = ({
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
@@ -121,27 +132,36 @@ const ChatRoomNavItems = ({
         <span className="chatroom-name">{chatroomName}</span>
       </StyledChatRoomNavItems>
       {showMenu && (
-        <Menu
-          anchorEl={chatroomItemRef.current}
-          anchorReference="anchorEl"
-          open={showMenu}
-          anchorPosition={{ top: positionData.y, left: positionData.x }}
-          onClose={() => setShowMenu(false)}
+        <ClickAwayListener
+          mouseEvent="onMouseDown"
+          onClickAway={handleClickOutside}
         >
-          <MenuItem onClick={onClickLeaveChatroom}>
-            Leave this chatroom
-          </MenuItem>
-          {chatroomOwnerId === userLoggedId && (
-            <MenuItem onClick={onClickRenameChatroom}>
-              Change Chatroom name
+          <Menu
+            PopoverClasses={{
+              root: classes.contextMenu,
+              paper: classes.contextMenuPaper,
+            }}
+            anchorEl={chatroomItemRef.current}
+            anchorReference="anchorPosition"
+            open={showMenu}
+            anchorPosition={{ top: positionData.y, left: positionData.x }}
+            onClose={() => setShowMenu(false)}
+          >
+            <MenuItem onClick={onClickLeaveChatroom}>
+              Leave this chatroom
             </MenuItem>
-          )}
-        </Menu>
+            {chatroomOwnerId === userLoggedId && (
+              <MenuItem onClick={onClickRenameChatroom}>
+                Change Chatroom name
+              </MenuItem>
+            )}
+          </Menu>
+        </ClickAwayListener>
       )}
       {showRenameInput && (
-        <ClickOutsideListener
-          nodeRef={renameFormRef}
-          clickedOutside={handleClickOutside}
+        <ClickAwayListener
+          mouseEvent="onMouseDown"
+          onClickAway={handleClickOutside}
         >
           <form
             ref={renameFormRef}
@@ -157,7 +177,7 @@ const ChatRoomNavItems = ({
             <Button onClick={cancelRenameChatroom}>Cancel</Button>
             <Button onClick={renameChatroomName}>Rename</Button>
           </form>
-        </ClickOutsideListener>
+        </ClickAwayListener>
       )}
     </>
   );
