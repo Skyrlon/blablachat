@@ -11,7 +11,7 @@ const StyledAddChatRoom = styled.div`
   position: relative;
 `;
 
-const AddChatRoom = ({ userLoggedId }) => {
+const AddChatRoom = ({ userLoggedId, chatrooms, changeCurrentChatroom }) => {
   const dispatch = useDispatch();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -19,13 +19,27 @@ const AddChatRoom = ({ userLoggedId }) => {
   const friends = useSelector(getCurrentUserFriends(userLoggedId));
 
   const handleFriendsSubmitted = (friendsSelected) => {
-    dispatch({
-      type: "CREATE_CHATROOM",
-      payload: {
-        creator: userLoggedId,
-        members: [userLoggedId, ...friendsSelected],
-      },
-    });
+    const newChatroomMembers = [userLoggedId, ...friendsSelected];
+
+    const chatroomWithSameMembers = chatrooms.find(
+      (chatroom) =>
+        chatroom.membersID.length === newChatroomMembers.length &&
+        chatroom.membersID.every((member) =>
+          newChatroomMembers.includes(member)
+        )
+    );
+
+    if (!!chatroomWithSameMembers) {
+      changeCurrentChatroom(chatroomWithSameMembers.id);
+    } else {
+      dispatch({
+        type: "CREATE_CHATROOM",
+        payload: {
+          creator: userLoggedId,
+          members: newChatroomMembers,
+        },
+      });
+    }
     setShowMenu(false);
   };
 
@@ -46,6 +60,8 @@ const AddChatRoom = ({ userLoggedId }) => {
 
 AddChatRoom.propTypes = {
   userLoggedId: PropTypes.number,
+  chatrooms: PropTypes.array,
+  changeCurrentChatroom: PropTypes.func,
 };
 
 export default AddChatRoom;

@@ -32,7 +32,7 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
     chatrooms.length > 0 ? chatrooms[0].id : null
   );
 
-  const handleChangeChatroom = (chatroomId) => {
+  const handleChangeCurrentChatroom = (chatroomId) => {
     setCurrentChatroomId(chatroomId);
   };
 
@@ -65,7 +65,7 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
       <ChatRoomNav
         chatrooms={chatrooms}
         userLoggedId={userLoggedId}
-        changeChatRoom={handleChangeChatroom}
+        changeCurrentChatroom={handleChangeCurrentChatroom}
         currentChatroomId={currentChatroomId}
         leaveCurrentChatroom={handleLeaveCurrentChatroom}
       />

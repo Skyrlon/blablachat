@@ -56,7 +56,7 @@ const ChatRoomNavItems = ({
   chatroomId,
   chatroomOwnerId,
   userLoggedId,
-  changeChatRoom,
+  changeCurrentChatroom,
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
@@ -126,7 +126,7 @@ const ChatRoomNavItems = ({
         ref={chatroomItemRef}
         isActive={chatroomId === currentChatroomId}
         key={chatroomId}
-        onClick={() => changeChatRoom(chatroomId)}
+        onClick={() => changeCurrentChatroom(chatroomId)}
         onContextMenu={(e) => handleContextMenu(e, chatroomId)}
       >
         <span className="chatroom-name">{chatroomName}</span>
@@ -187,7 +187,7 @@ ChatRoomNavItems.propTypes = {
   chatroomId: PropTypes.number,
   chatroomOwnerId: PropTypes.number,
   userLoggedId: PropTypes.number,
-  changeChatRoom: PropTypes.func,
+  changeCurrentChatroom: PropTypes.func,
   currentChatroomId: PropTypes.number,
   leaveCurrentChatroom: PropTypes.func,
 };

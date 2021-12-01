@@ -14,13 +14,17 @@ const StyledChatRoomNav = styled.div`
 const ChatRoomNav = ({
   chatrooms,
   userLoggedId,
-  changeChatRoom,
+  changeCurrentChatroom,
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
   return (
     <StyledChatRoomNav>
-      <AddChatRoom userLoggedId={userLoggedId} />
+      <AddChatRoom
+        userLoggedId={userLoggedId}
+        chatrooms={chatrooms}
+        changeCurrentChatroom={changeCurrentChatroom}
+      />
 
       {chatrooms.map((chatroom) => (
         <ChatRoomNavItems
@@ -28,7 +32,7 @@ const ChatRoomNav = ({
           chatroomId={chatroom.id}
           chatroomOwnerId={chatroom.ownerID}
           userLoggedId={userLoggedId}
-          changeChatRoom={changeChatRoom}
+          changeCurrentChatroom={changeCurrentChatroom}
           currentChatroomId={currentChatroomId}
           leaveCurrentChatroom={leaveCurrentChatroom}
         />
@@ -40,7 +44,7 @@ const ChatRoomNav = ({
 ChatRoomNav.propTypes = {
   chatrooms: PropTypes.array,
   userLoggedId: PropTypes.number,
-  changeChatRoom: PropTypes.func,
+  changeCurrentChatroom: PropTypes.func,
   currentChatroomId: PropTypes.number,
   createChatRoom: PropTypes.func,
   leaveCurrentChatroom: PropTypes.func,
