@@ -188,7 +188,8 @@ const Chat = ({
                   </div>
                 )}
                 {!(isEditingMessage && message.id === idMessageToEdit) &&
-                  !message.deleted && (
+                  !message.deleted &&
+                  message.writerID === userLoggedId && (
                     <div className="message-buttons">
                       <div
                         className="edit-icon"
