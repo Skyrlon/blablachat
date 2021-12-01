@@ -26,7 +26,7 @@ const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
 
   return (
     <StyledMembersSidebar>
-      <div className="title">Members</div>
+      <div className="title">Members ({members.length})</div>
       {members.map((member) => (
         <div className="member" key={member.id}>
           <UserPseudo userId={member.id} userLoggedId={userLoggedId}>
