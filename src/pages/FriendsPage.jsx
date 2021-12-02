@@ -7,11 +7,33 @@ import { useState } from "react";
 import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
 import AddFriendTab from "../components/AddFriendTab";
+import { useSelector } from "react-redux";
+import { getCurrentUserFriendsRequest } from "../store/Selectors";
 
-const StyledFriendsPage = styled.div``;
+const StyledFriendsPage = styled.div`
+  & .requests-number {
+    margin-left: 0.1rem;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f51b5;
+    color: white;
+    &.active {
+      color: #3f51b5;
+      background-color: white;
+    }
+  }
+`;
 
 const FriendsPage = ({ isAuthentified, userLoggedId }) => {
   const [categoryToShow, setCategoryToShow] = useState("all");
+
+  const friendsRequest = useSelector(
+    getCurrentUserFriendsRequest(userLoggedId)
+  );
 
   const buttonsTab = [
     { category: "all", title: "All" },
@@ -32,6 +54,15 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
           onClick={() => setCategoryToShow(tab.category)}
         >
           {tab.title}
+          {tab.category === "requests" && friendsRequest.length > 0 && (
+            <span
+              className={`requests-number${
+                categoryToShow === tab.category ? " active" : ""
+              }`}
+            >
+              {friendsRequest.length}
+            </span>
+          )}
         </Button>
       ))}
 
