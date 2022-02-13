@@ -125,13 +125,12 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
           `http://localhost:3004/users?name=${username}&password=${password}`
         )
         .then((response) => {
-          if (response.data.length > 0) {
-            alert(`Welcome Back ${response.data[0].name}`);
-            onSuccessfulSignIn(response.data[0].id);
-            history.push("/chat");
-          } else {
-            alert("No account found");
-          }
+          alert(`Welcome Back ${response.data[0].name}`);
+          onSuccessfulSignIn(response.data[0].id);
+          history.push("/chat");
+        })
+        .catch(() => {
+          alert("No account found");
         });
     }
   };
