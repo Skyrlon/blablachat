@@ -8,8 +8,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const axios = require("axios");
 
@@ -42,6 +42,8 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
   const [isPasswordConfirmSame, setIsPasswordConfirmSame] = useState(undefined);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnChangeUserName = (e) => {
     if (!signIn) {
@@ -97,6 +99,7 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (!signIn) {
       if (
         [
@@ -121,18 +124,22 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         history.push("/chat");
       }
     } else {
-      axios
-        .get(
-          `http://localhost:3004/users?name=${username}&password=${password}`
-        )
-        .then((response) => {
-          alert(`Welcome Back ${response.data[0].name}`);
-          onSuccessfulSignIn(response.data[0].id);
-          history.push("/chat");
-        })
-        .catch(() => {
-          alert("No account found");
-        });
+      setTimeout(() => {
+        axios
+          .get(
+            `http://localhost:3004/users?name=${username}&password=${password}`
+          )
+          .then((response) => {
+            setIsLoading(false);
+            alert(`Welcome Back ${response.data[0].name}`);
+            onSuccessfulSignIn(response.data[0].id);
+            history.push("/chat");
+          })
+          .catch(() => {
+            setIsLoading(false);
+            alert("No account found");
+          });
+      }, 1000);
     }
   };
 
@@ -221,9 +228,14 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
           />
         </>
       )}
-      <Button onClick={handleSubmit} variant="contained" color="primary">
+      <LoadingButton
+        loading={isLoading}
+        onClick={handleSubmit}
+        variant="contained"
+        color="primary"
+      >
         Submit
-      </Button>
+      </LoadingButton>
       <div onClick={() => setSignIn(!signIn)}>
         {signIn
           ? "Don't have an account yet ? Sign Up !"
