@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import { useState, useRef } from "react";
-import { Button, TextField } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
-import {
-  Menu,
-  MenuItem,
-  ClickAwayListener,
-  makeStyles,
-} from "@material-ui/core";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const StyledChatRoomNavItems = styled.div`
   background-color: ${(props) => (props.isActive ? "lightblue" : "")};
@@ -47,11 +45,6 @@ const StyledChatRoomNavItems = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
-  contextMenu: { pointerEvents: "none" },
-  contextMenuPaper: { pointerEvents: "auto" },
-});
-
 const ChatRoomNavItems = ({
   chatroomId,
   chatroomOwnerId,
@@ -60,8 +53,6 @@ const ChatRoomNavItems = ({
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
@@ -138,8 +129,8 @@ const ChatRoomNavItems = ({
         >
           <Menu
             PopoverClasses={{
-              root: classes.contextMenu,
-              paper: classes.contextMenuPaper,
+              root: { pointerEvents: "none" },
+              paper: { pointerEvents: "auto" },
             }}
             anchorEl={chatroomItemRef.current}
             anchorReference="anchorPosition"

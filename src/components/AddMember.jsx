@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
 import { getCurrentUserFriends, getMembers } from "../store/Selectors";

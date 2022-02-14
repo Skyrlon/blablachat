@@ -1,14 +1,8 @@
 import { useState, useRef } from "react";
-import { Menu, MenuItem, makeStyles } from "@material-ui/core";
-
-const useStyles = makeStyles({
-  contextMenu: { pointerEvents: "none" },
-  contextMenuPaper: { pointerEvents: "auto" },
-});
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const NestedMenuItem = ({ children, label, left }) => {
-  const classes = useStyles();
-
   const [showSubMenu, setShowSubMenu] = useState(false);
 
   const nestedMenuRef = useRef(null);
@@ -33,8 +27,8 @@ const NestedMenuItem = ({ children, label, left }) => {
             horizontal: left ? "right" : "left",
           }}
           PopoverClasses={{
-            root: classes.contextMenu,
-            paper: classes.contextMenuPaper,
+            root: { pointerEvents: "none" },
+            paper: { pointerEvents: "auto" },
           }}
           open={showSubMenu}
         >

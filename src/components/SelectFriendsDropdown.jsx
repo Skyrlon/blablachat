@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Checkbox from "@material-ui/core/Checkbox";
-import { Button } from "@material-ui/core";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const StyledSelectFriendsDropdown = styled.form`
   position: absolute;

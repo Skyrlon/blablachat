@@ -8,24 +8,14 @@ import {
   getChatroomsWhoUserIsOwner,
   getChatroomsNames,
 } from "../store/Selectors";
-import {
-  Menu,
-  MenuItem,
-  makeStyles,
-  ClickAwayListener,
-} from "@material-ui/core";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import NestedMenuItem from "./NestedMenuItem";
 
 const StyledUserPseudo = styled.div``;
 
-const useStyles = makeStyles({
-  contextMenu: { pointerEvents: "none" },
-  contextMenuPaper: { pointerEvents: "auto" },
-});
-
 const UserPseudo = ({ userId, userLoggedId }) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const userPseudoRef = useRef(null);
@@ -96,8 +86,8 @@ const UserPseudo = ({ userId, userLoggedId }) => {
         >
           <Menu
             PopoverClasses={{
-              root: classes.contextMenu,
-              paper: classes.contextMenuPaper,
+              root: { pointerEvents: "none" },
+              paper: { pointerEvents: "auto" },
             }}
             onContextMenu={(e) => {
               setShowMenu(false);

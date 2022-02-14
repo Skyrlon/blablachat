@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { TextareaAutosize } from "@material-ui/core";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
 
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
@@ -97,8 +97,8 @@ const TextBox = ({
     <StyledTextBoxContainer>
       <StyledTextBox onSubmit={onSubmit} position={messagePosition}>
         <StyledTextArea
-          rowsMin={1}
-          rowsMax={3}
+          minRows={1}
+          maxRows={3}
           value={message}
           onKeyDown={handleKeyDown}
           onChange={(e) => handleChange(e)}

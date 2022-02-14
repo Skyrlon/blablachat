@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import { useState } from "react";
 
 import AllFriendsTab from "../components/AllFriendsTab";

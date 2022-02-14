@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { ExitToApp } from "@material-ui/icons";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const StyledLogout = styled.div`
   position: absolute;
@@ -14,7 +14,7 @@ const StyledLogout = styled.div`
 const Logout = ({ onLogoutClick }) => {
   return (
     <StyledLogout onClick={onLogoutClick}>
-      <ExitToApp />
+      <ExitToAppIcon />
       <div>Logout</div>
     </StyledLogout>
   );

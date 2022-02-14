@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
+import  Button  from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserFriendsRequest } from "../store/Selectors";
 
