@@ -12,10 +12,18 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import NestedMenuItem from "./NestedMenuItem";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  contextMenu: { pointerEvents: "none" },
+  contextMenuPaper: { pointerEvents: "auto" },
+});
 
 const StyledUserPseudo = styled.div``;
 
 const UserPseudo = ({ userId, userLoggedId }) => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const userPseudoRef = useRef(null);
@@ -86,8 +94,8 @@ const UserPseudo = ({ userId, userLoggedId }) => {
         >
           <Menu
             PopoverClasses={{
-              root: { pointerEvents: "none" },
-              paper: { pointerEvents: "auto" },
+              root: classes.contextMenu,
+              paper: classes.contextMenuPaper,
             }}
             onContextMenu={(e) => {
               setShowMenu(false);

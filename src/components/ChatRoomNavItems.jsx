@@ -8,6 +8,12 @@ import TextField from "@mui/material/TextField";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  contextMenu: { pointerEvents: "none" },
+  contextMenuPaper: { pointerEvents: "auto" },
+});
 
 const StyledChatRoomNavItems = styled.div`
   background-color: ${(props) => (props.isActive ? "lightblue" : "")};
@@ -53,6 +59,8 @@ const ChatRoomNavItems = ({
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
@@ -129,8 +137,8 @@ const ChatRoomNavItems = ({
         >
           <Menu
             PopoverClasses={{
-              root: { pointerEvents: "none" },
-              paper: { pointerEvents: "auto" },
+              root: classes.contextMenu,
+              paper: classes.contextMenuPaper,
             }}
             anchorEl={chatroomItemRef.current}
             anchorReference="anchorPosition"
