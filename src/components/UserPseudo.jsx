@@ -106,6 +106,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
             open={showMenu}
             onClose={() => setShowMenu(false)}
             anchorPosition={{ top: positionData.y, left: positionData.x }}
+            autoFocus={false}
           >
             {!friends.map((friend) => friend.id).includes(userId) &&
               !(userId === userLoggedId) && (
@@ -114,6 +115,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
                     sendFriendRequest(userId);
                     setShowMenu(false);
                   }}
+                  autoFocus={false}
                 >
                   Request to be friend
                 </MenuItem>
@@ -124,12 +126,15 @@ const UserPseudo = ({ userId, userLoggedId }) => {
                   removeFriend(userId);
                   setShowMenu(false);
                 }}
+                autoFocus={false}
               >
                 Unfriend
               </MenuItem>
             )}
             {userId === userLoggedId && (
-              <MenuItem>Can't unfriend or be friend with yourself</MenuItem>
+              <MenuItem autoFocus={false}>
+                Can't unfriend or be friend with yourself
+              </MenuItem>
             )}
             {chatroomsWhoUserIsOwner.length > 0 && userId !== userLoggedId && (
               <NestedMenuItem label="Give ownership to chatroom :" left={true}>
@@ -139,6 +144,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
                       <MenuItem
                         onClick={() => giveChatroomOwnership(chatroom.id)}
                         key={chatroom.id}
+                        autoFocus={false}
                       >
                         {
                           chatroomsNames.find(
@@ -158,6 +164,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
                       <MenuItem
                         onClick={() => ejectMember(chatroom.id)}
                         key={chatroom.id}
+                        autoFocus={false}
                       >
                         {
                           chatroomsNames.find(

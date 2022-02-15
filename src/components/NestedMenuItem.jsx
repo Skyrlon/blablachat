@@ -19,6 +19,7 @@ const NestedMenuItem = ({ children, label, left }) => {
       ref={nestedMenuRef}
       onMouseEnter={() => setShowSubMenu(true)}
       onMouseLeave={() => setShowSubMenu(false)}
+      autoFocus={false}
     >
       {label}
       {showSubMenu && (
@@ -38,6 +39,7 @@ const NestedMenuItem = ({ children, label, left }) => {
             paper: classes.contextMenuPaper,
           }}
           open={showSubMenu}
+          autoFocus={false}
         >
           {children}
         </Menu>

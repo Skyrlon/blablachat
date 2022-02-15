@@ -145,6 +145,7 @@ const ChatRoomNavItems = ({
             open={showMenu}
             anchorPosition={{ top: positionData.y, left: positionData.x }}
             onClose={() => setShowMenu(false)}
+            autoFocus={false}
           >
             <MenuItem onClick={onClickLeaveChatroom}>
               Leave this chatroom
