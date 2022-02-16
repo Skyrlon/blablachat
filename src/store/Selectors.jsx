@@ -122,3 +122,11 @@ export const getChatroomsWhoUserIsOwner = (userId) => {
   return (state) =>
     state.chatrooms.filter((chatroom) => chatroom.ownerID === userId);
 };
+
+export const getChatroomsToModifyMembers = (ownerId, userId) => {
+  return (state) =>
+    state.chatrooms.filter(
+      (chatroom) =>
+        chatroom.ownerID === ownerId && chatroom.membersID.includes(userId)
+    );
+};
