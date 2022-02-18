@@ -1,12 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentUserFriends,
   getUserName,
-  getChatroomsWhoUserIsOwner,
-  getChatroomsNames,
   getChatroomsToModifyMembers,
 } from "../store/Selectors";
 import Menu from "@mui/material/Menu";
@@ -33,21 +31,15 @@ const UserPseudo = ({ userId, userLoggedId }) => {
 
   const friends = useSelector(getCurrentUserFriends(userLoggedId));
 
-  const chatroomsWhoUserIsOwner = useSelector(
-    getChatroomsWhoUserIsOwner(userLoggedId)
-  );
-
   const chatroomsToModifyMembers = useSelector(
     getChatroomsToModifyMembers(userLoggedId, userId)
-  );
-
-  const chatroomsNames = useSelector(
-    getChatroomsNames(chatroomsWhoUserIsOwner, userLoggedId)
   );
 
   const [showMenu, setShowMenu] = useState(false);
 
   const [positionData, setPositionData] = useState(null);
+
+  const contextMenuContent = useRef(null);
 
   const onContextMenu = (e) => {
     e.preventDefault();
@@ -87,6 +79,64 @@ const UserPseudo = ({ userId, userLoggedId }) => {
     setShowMenu(false);
   };
 
+  const fillContextMenu = () => {
+    const requestFriend = {
+      available:
+        !friends.map((friend) => friend.id).includes(userId) &&
+        !(userId === userLoggedId),
+      clickEvent: () => sendFriendRequest(userId),
+      label: "Request to be friend",
+      children: null,
+    };
+    const unfriend = {
+      available: friends.map((friend) => friend.id).includes(userId),
+      clickEvent: () => removeFriend(userId),
+      label: "Unfriend",
+      children: null,
+    };
+    const actualUserPseudo = {
+      available: userId === userLoggedId,
+      clickEvent: null,
+      label: "Can't unfriend or be friend with yourself",
+      children: null,
+    };
+    const giveOwnership = {
+      available: chatroomsToModifyMembers.length > 0 && userId !== userLoggedId,
+      clickEvent: null,
+      label: "Give ownership to chatroom :",
+      children: chatroomsToModifyMembers.map((chatroom) => ({
+        id: chatroom.id,
+        label: chatroom.name,
+        clickEvent: () => giveChatroomOwnership(chatroom.id),
+      })),
+    };
+    const ejectUser = {
+      available: chatroomsToModifyMembers.length > 0 && userId !== userLoggedId,
+      clickEvent: null,
+      label: "Eject user from chatroom :",
+      children: chatroomsToModifyMembers.map((chatroom) => ({
+        id: chatroom.id,
+        label: chatroom.name,
+        clickEvent: () => ejectMember(chatroom.id),
+      })),
+    };
+    contextMenuContent.current = [
+      requestFriend,
+      unfriend,
+      actualUserPseudo,
+      giveOwnership,
+      ejectUser,
+    ];
+  };
+
+  useEffect(
+    () => {
+      fillContextMenu();
+    },
+    // eslint-disable-next-line
+    [friends, chatroomsToModifyMembers]
+  );
+
   return (
     <>
       <StyledUserPseudo onContextMenu={onContextMenu} ref={userPseudoRef}>
@@ -113,63 +163,37 @@ const UserPseudo = ({ userId, userLoggedId }) => {
             anchorPosition={{ top: positionData.y, left: positionData.x }}
             autoFocus={false}
           >
-            {!friends.map((friend) => friend.id).includes(userId) &&
-              !(userId === userLoggedId) && (
-                <MenuItem
-                  onClick={() => {
-                    sendFriendRequest(userId);
-                    setShowMenu(false);
-                  }}
-                  autoFocus={false}
-                >
-                  Request to be friend
-                </MenuItem>
-              )}
-            {friends.map((friend) => friend.id).includes(userId) && (
-              <MenuItem
-                onClick={() => {
-                  removeFriend(userId);
-                  setShowMenu(false);
-                }}
-                autoFocus={false}
-              >
-                Unfriend
-              </MenuItem>
-            )}
-            {userId === userLoggedId && (
-              <MenuItem autoFocus={false}>
-                Can't unfriend or be friend with yourself
-              </MenuItem>
-            )}
-            {chatroomsToModifyMembers.length > 0 && userId !== userLoggedId && (
-              <NestedMenuItem label="Give ownership to chatroom :" left={true}>
-                {chatroomsToModifyMembers.map((chatroom) => (
+            {contextMenuContent.current.map(
+              (content) =>
+                (content.available && !content.children && (
                   <MenuItem
-                    onClick={() => giveChatroomOwnership(chatroom.id)}
-                    key={chatroom.id}
-                    autoFocus={false}
-                  >
-                    {chatroom.name}
-                  </MenuItem>
-                ))}
-              </NestedMenuItem>
-            )}
-            {chatroomsToModifyMembers.length > 0 && userId !== userLoggedId && (
-              <NestedMenuItem label="Eject user from chatroom :" left={true}>
-                {chatroomsToModifyMembers.map((chatroom) => (
-                  <MenuItem
-                    onClick={() => ejectMember(chatroom.id)}
-                    key={chatroom.id}
-                    autoFocus={false}
-                  >
-                    {
-                      chatroomsNames.find(
-                        (chatroomName) => chatroomName.id === chatroom.id
-                      ).name
+                    key={content.label}
+                    onClick={() =>
+                      content.clickEvent && content.clickEvent(userId)
                     }
+                    autoFocus={false}
+                  >
+                    {content.label}
                   </MenuItem>
-                ))}
-              </NestedMenuItem>
+                )) ||
+                (content.available && content.children && (
+                  <NestedMenuItem
+                    key={content.label}
+                    label={content.label}
+                    left={true}
+                    autoFocus={false}
+                  >
+                    {content.children.map((child) => (
+                      <MenuItem
+                        onClick={() => child.clickEvent(child.id)}
+                        key={child.id}
+                        autoFocus={false}
+                      >
+                        {child.label}
+                      </MenuItem>
+                    ))}
+                  </NestedMenuItem>
+                ))
             )}
           </Menu>
         </ClickAwayListener>

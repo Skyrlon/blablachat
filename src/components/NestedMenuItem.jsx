@@ -19,7 +19,6 @@ const NestedMenuItem = ({ children, label, left }) => {
       ref={nestedMenuRef}
       onMouseEnter={() => setShowSubMenu(true)}
       onMouseLeave={() => setShowSubMenu(false)}
-      autoFocus={false}
     >
       {label}
       {showSubMenu && (
