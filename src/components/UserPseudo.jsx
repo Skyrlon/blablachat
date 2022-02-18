@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +42,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   const contextMenuContent = useRef(null);
 
   const onContextMenu = (e) => {
+    fillContextMenu();
     e.preventDefault();
     setShowMenu((v) => !v);
     setPositionData({ x: e.pageX, y: e.pageY });
@@ -128,14 +129,6 @@ const UserPseudo = ({ userId, userLoggedId }) => {
       ejectUser,
     ];
   };
-
-  useEffect(
-    () => {
-      fillContextMenu();
-    },
-    // eslint-disable-next-line
-    [friends, chatroomsToModifyMembers]
-  );
 
   return (
     <>
