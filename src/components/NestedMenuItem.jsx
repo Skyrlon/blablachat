@@ -17,8 +17,15 @@ const NestedMenuItem = ({ children, label, left }) => {
   return (
     <MenuItem
       ref={nestedMenuRef}
-      onMouseEnter={() => setShowSubMenu(true)}
-      onMouseLeave={() => setShowSubMenu(false)}
+      onMouseEnter={(e) => {
+        setShowSubMenu(true);
+        e.target.style.backgroundColor = "lightgrey";
+      }}
+      onMouseLeave={(e) => {
+        setShowSubMenu(false);
+        e.target.style.backgroundColor = "white";
+      }}
+      autoFocus={false}
     >
       {label}
       {showSubMenu && (
