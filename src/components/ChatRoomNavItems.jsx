@@ -144,6 +144,11 @@ const ChatRoomNavItems = ({
             anchorReference="anchorPosition"
             open={showMenu}
             anchorPosition={{ top: positionData.y, left: positionData.x }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal:
+                positionData.x > window.innerWidth / 2 ? "right" : "left",
+            }}
             onClose={() => setShowMenu(false)}
             autoFocus={false}
           >

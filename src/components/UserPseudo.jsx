@@ -151,9 +151,14 @@ const UserPseudo = ({ userId, userLoggedId }) => {
             }}
             anchorEl={userPseudoRef.current}
             anchorReference="anchorPosition"
+            anchorPosition={{ top: positionData.y, left: positionData.x }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal:
+                positionData.x > window.innerWidth / 2 ? "right" : "left",
+            }}
             open={showMenu}
             onClose={() => setShowMenu(false)}
-            anchorPosition={{ top: positionData.y, left: positionData.x }}
             autoFocus={false}
           >
             {contextMenuContent.current.map(
