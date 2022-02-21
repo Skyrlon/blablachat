@@ -5,15 +5,8 @@ import { getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-  contextMenu: { pointerEvents: "none" },
-  contextMenuPaper: { pointerEvents: "auto" },
-});
+import ContextMenu from "./ContextMenu";
 
 const StyledChatRoomNavItems = styled.div`
   background-color: ${(props) => (props.isActive ? "lightblue" : "")};
@@ -59,8 +52,6 @@ const ChatRoomNavItems = ({
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
@@ -73,16 +64,34 @@ const ChatRoomNavItems = ({
 
   const chatroomItemRef = useRef(null);
 
-  const [positionData, setPositionData] = useState(null);
+  const [mousePosition, setMousePosition] = useState(null);
+
+  const contextMenuContent = useRef(null);
 
   const handleContextMenu = (e) => {
     e.preventDefault();
     setShowMenu((v) => !v);
-    setPositionData({ x: e.pageX, y: e.pageY });
+    setMousePosition({ x: e.pageX, y: e.pageY });
+    fillContextMenu();
   };
 
-  const onClickLeaveChatroom = (e) => {
-    e.stopPropagation();
+  const fillContextMenu = () => {
+    const leaveChatroom = {
+      available: true,
+      clickEvent: () => onClickLeaveChatroom(),
+      label: "Leave this chatroom",
+      children: null,
+    };
+    const renameChatroom = {
+      available: chatroomOwnerId === userLoggedId,
+      clickEvent: () => onClickRenameChatroom(),
+      label: "Rename chatroom",
+      children: null,
+    };
+    contextMenuContent.current = [leaveChatroom, renameChatroom];
+  };
+
+  const onClickLeaveChatroom = () => {
     setShowMenu(false);
     dispatch({
       type: "LEAVE_CHATROOM",
@@ -106,7 +115,6 @@ const ChatRoomNavItems = ({
   };
 
   const onClickRenameChatroom = (e) => {
-    e.stopPropagation();
     setNewChatroomName(chatroomName);
     setShowMenu(false);
     setShowRenameInput(true);
@@ -131,37 +139,14 @@ const ChatRoomNavItems = ({
         <span className="chatroom-name">{chatroomName}</span>
       </StyledChatRoomNavItems>
       {showMenu && (
-        <ClickAwayListener
-          mouseEvent="onMouseDown"
-          onClickAway={handleClickOutside}
-        >
-          <Menu
-            PopoverClasses={{
-              root: classes.contextMenu,
-              paper: classes.contextMenuPaper,
-            }}
-            anchorEl={chatroomItemRef.current}
-            anchorReference="anchorPosition"
-            open={showMenu}
-            anchorPosition={{ top: positionData.y, left: positionData.x }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal:
-                positionData.x > window.innerWidth / 2 ? "right" : "left",
-            }}
-            onClose={() => setShowMenu(false)}
-            autoFocus={false}
-          >
-            <MenuItem onClick={onClickLeaveChatroom}>
-              Leave this chatroom
-            </MenuItem>
-            {chatroomOwnerId === userLoggedId && (
-              <MenuItem onClick={onClickRenameChatroom}>
-                Change Chatroom name
-              </MenuItem>
-            )}
-          </Menu>
-        </ClickAwayListener>
+        <ContextMenu
+          showMenu={showMenu}
+          anchorEl={chatroomItemRef.current}
+          position={mousePosition}
+          closeMenu={() => setShowMenu(false)}
+          menuContent={contextMenuContent.current}
+          menuEvent={(menuEvent) => menuEvent}
+        />
       )}
       {showRenameInput && (
         <ClickAwayListener

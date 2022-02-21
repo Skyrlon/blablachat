@@ -7,22 +7,11 @@ import {
   getUserName,
   getChatroomsToModifyMembers,
 } from "../store/Selectors";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import NestedMenuItem from "./NestedMenuItem";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-  contextMenu: { pointerEvents: "none" },
-  contextMenuPaper: { pointerEvents: "auto" },
-});
+import ContextMenu from "./ContextMenu";
 
 const StyledUserPseudo = styled.div``;
 
 const UserPseudo = ({ userId, userLoggedId }) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const userPseudoRef = useRef(null);
@@ -37,7 +26,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const [positionData, setPositionData] = useState(null);
+  const [mousePosition, setMousePosition] = useState(null);
 
   const contextMenuContent = useRef(null);
 
@@ -45,7 +34,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
     fillContextMenu();
     e.preventDefault();
     setShowMenu((v) => !v);
-    setPositionData({ x: e.pageX, y: e.pageY });
+    setMousePosition({ x: e.pageX, y: e.pageY });
   };
 
   const sendFriendRequest = (friendIdToSendRequest) => {
@@ -136,65 +125,14 @@ const UserPseudo = ({ userId, userLoggedId }) => {
         {userName}
       </StyledUserPseudo>
       {showMenu && (
-        <ClickAwayListener
-          mouseEvent="onMouseDown"
-          onClickAway={() => setShowMenu(false)}
-        >
-          <Menu
-            PopoverClasses={{
-              root: classes.contextMenu,
-              paper: classes.contextMenuPaper,
-            }}
-            onContextMenu={(e) => {
-              setShowMenu(false);
-              e.preventDefault();
-            }}
-            anchorEl={userPseudoRef.current}
-            anchorReference="anchorPosition"
-            anchorPosition={{ top: positionData.y, left: positionData.x }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal:
-                positionData.x > window.innerWidth / 2 ? "right" : "left",
-            }}
-            open={showMenu}
-            onClose={() => setShowMenu(false)}
-            autoFocus={false}
-          >
-            {contextMenuContent.current.map(
-              (content) =>
-                (content.available && !content.children && (
-                  <MenuItem
-                    key={content.label}
-                    onClick={() =>
-                      content.clickEvent && content.clickEvent(userId)
-                    }
-                    autoFocus={false}
-                  >
-                    {content.label}
-                  </MenuItem>
-                )) ||
-                (content.available && content.children && (
-                  <NestedMenuItem
-                    key={content.label}
-                    label={content.label}
-                    left={true}
-                    autoFocus={false}
-                  >
-                    {content.children.map((child) => (
-                      <MenuItem
-                        onClick={() => child.clickEvent(child.id)}
-                        key={child.id}
-                        autoFocus={false}
-                      >
-                        {child.label}
-                      </MenuItem>
-                    ))}
-                  </NestedMenuItem>
-                ))
-            )}
-          </Menu>
-        </ClickAwayListener>
+        <ContextMenu
+          showMenu={showMenu}
+          anchorEl={userPseudoRef.current}
+          position={mousePosition}
+          closeMenu={() => setShowMenu(false)}
+          menuContent={contextMenuContent.current}
+          menuEvent={(menuEvent) => menuEvent}
+        />
       )}
     </>
   );
