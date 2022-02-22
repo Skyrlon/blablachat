@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   contextMenuPaper: { pointerEvents: "auto" },
 });
 
-const NestedMenuItem = ({ children, label, left }) => {
+const NestedMenuItem = ({ children, label, showOnLeft }) => {
   const classes = useStyles();
   const [showSubMenu, setShowSubMenu] = useState(false);
 
@@ -34,11 +34,11 @@ const NestedMenuItem = ({ children, label, left }) => {
           anchorReference="anchorEl"
           anchorOrigin={{
             vertical: "top",
-            horizontal: left ? "left" : "right",
+            horizontal: showOnLeft ? "left" : "right",
           }}
           transformOrigin={{
             vertical: "top",
-            horizontal: left ? "right" : "left",
+            horizontal: showOnLeft ? "right" : "left",
           }}
           PopoverClasses={{
             root: classes.contextMenu,

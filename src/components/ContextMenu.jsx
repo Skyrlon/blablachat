@@ -55,7 +55,7 @@ const ContextMenu = ({
               <NestedMenuItem
                 key={content.label}
                 label={content.label}
-                left={true}
+                showOnLeft={position.x > window.innerWidth / 2}
                 autoFocus={false}
               >
                 {content.children.map((child) => (
