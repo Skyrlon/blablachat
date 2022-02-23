@@ -34,13 +34,27 @@ const StyledChat = styled.div`
   }
 
   & .message {
+    position: relative;
     display: flex;
-    flex-direction: row;
-    width: 99%;
+    flex-direction: column;
+    width: 98%;
+    margin: 1rem;
+
+    &-user {
+      font-weight: bold;
+    }
+
+    &-data {
+      display: flex;
+      flex-direction: row;
+    }
 
     &-date {
       white-space: nowrap;
-      margin-right: 1em;
+      margin-left: 0.5rem;
+      font-style: italic;
+      font-size: 0.75rem;
+      padding-top: 0.25rem;
     }
 
     &-text {
@@ -52,6 +66,9 @@ const StyledChat = styled.div`
     }
 
     &-buttons {
+      position: absolute;
+      top: 0;
+      right: 0;
       display: flex;
       flex-direction: row;
     }
@@ -163,13 +180,16 @@ const Chat = ({
           {messages.length > 0 &&
             messages.map((message) => (
               <div className="message" key={message.id}>
-                <UserPseudo
-                  className="message-user"
-                  userLoggedId={userLoggedId}
-                  userId={message.writerID}
-                />
-                <div className="message-date">
-                  {formatMessageDate(message.time)}
+                <div className="message-data">
+                  <div className="message-user">
+                    <UserPseudo
+                      userLoggedId={userLoggedId}
+                      userId={message.writerID}
+                    />
+                  </div>
+                  <div className="message-date">
+                    {formatMessageDate(message.time)}
+                  </div>
                 </div>
                 {!(isEditingMessage && message.id === idMessageToEdit) && (
                   <div className="message-text-container">
