@@ -1,8 +1,7 @@
-//import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getUsers } from "./store/Selectors.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { getUsers, getCurrentUserId } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -11,30 +10,37 @@ import FriendsPage from "./pages/FriendsPage";
 import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  const currentUserId = useSelector(getCurrentUserId());
+
   const [isAuthentified, setIsAuthentified] = useState(false);
 
   const users = useSelector(getUsers());
 
   const [userLoggedId, setUserLoggedId] = useState(undefined);
 
-  /* const handleAddUser = (signupInfos) => {
-    const newUser = {
-      id: users.length,
-      name: signupInfos.name,
-      password: signupInfos.password,
-      friendsID: [],
-      friendsRequest: [],
-    };
-    axios.post("http://localhost:3004/users", { newUser });
-    setUsers([...users, newUser]);
-    setCurrentUser(newUser);
-    setIsAuthentified(true);
-  }; */
+  const handleAddUser = (signupInfos) => {
+    dispatch({
+      type: "CREATE_NEW_USER",
+      payload: { name: signupInfos.name, password: signupInfos.password },
+    });
+  };
 
   const handleLogout = () => {
     setUserLoggedId(undefined);
     setIsAuthentified(false);
   };
+
+  useEffect(() => {
+    if (currentUserId) {
+      setUserLoggedId(currentUserId);
+    }
+  }, [currentUserId]);
+
+  useEffect(() => {
+    if (userLoggedId) setIsAuthentified(true);
+  }, [userLoggedId]);
 
   return (
     <div className="App">
@@ -59,7 +65,7 @@ const App = () => {
             <Route path="/sign">
               <SignIn
                 users={users}
-                //addUser={handleAddUser}
+                addUser={handleAddUser}
                 onSuccessfulSignIn={(userId) => {
                   setUserLoggedId(userId);
                   setIsAuthentified(true);

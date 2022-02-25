@@ -62,13 +62,15 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
           userLoggedId={userLoggedId}
         />
       )}
-      <ChatRoomNav
-        chatrooms={chatrooms}
-        userLoggedId={userLoggedId}
-        changeCurrentChatroom={handleChangeCurrentChatroom}
-        currentChatroomId={currentChatroomId}
-        leaveCurrentChatroom={handleLeaveCurrentChatroom}
-      />
+      {chatrooms.length > 0 && (
+        <ChatRoomNav
+          chatrooms={chatrooms}
+          userLoggedId={userLoggedId}
+          changeCurrentChatroom={handleChangeCurrentChatroom}
+          currentChatroomId={currentChatroomId}
+          leaveCurrentChatroom={handleLeaveCurrentChatroom}
+        />
+      )}
       {chatrooms.length > 0 && (
         <Chat
           showEmojis={showEmojis}
@@ -85,10 +87,12 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
-      <MembersSidebar
-        userLoggedId={userLoggedId}
-        currentChatroomId={currentChatroomId}
-      />
+      {chatrooms.length > 0 && (
+        <MembersSidebar
+          userLoggedId={userLoggedId}
+          currentChatroomId={currentChatroomId}
+        />
+      )}
     </StyledChatPage>
   );
 };

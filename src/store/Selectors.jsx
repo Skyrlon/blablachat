@@ -1,3 +1,5 @@
+export const getCurrentUserId = () => (state) => state.currentUser.id;
+
 export const getUsers = () => {
   return (state) => state.users;
 };

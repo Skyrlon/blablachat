@@ -2,6 +2,14 @@ import { createStore } from "redux";
 import produce from "immer";
 
 const initialState = {
+  currentUser: {
+    id: undefined,
+    name: undefined,
+    password: undefined,
+    friendsID: undefined,
+    friendsRequest: undefined,
+  },
+
   users: [
     {
       id: 0,
@@ -140,6 +148,8 @@ const initialState = {
   ],
 };
 
+const CREATE_NEW_USER = "CREATE_NEW_USER";
+
 const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 
 const EDIT_MESSAGE = "EDIT_MESSAGE";
@@ -168,6 +178,19 @@ const EJECT_MEMBER = "EJECT_MEMBER";
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case CREATE_NEW_USER:
+      return produce(state, (draft) => {
+        const newUser = {
+          id: state.users.length,
+          name: action.payload.name,
+          password: action.payload.password,
+          friendsID: [],
+          friendsRequest: [],
+        };
+        draft.users.push(newUser);
+        draft.currentUser = newUser;
+      });
+
     case EDIT_MESSAGE:
       return produce(state, (draft) => {
         const messageToEdit = draft.chatrooms

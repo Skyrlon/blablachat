@@ -22,6 +22,7 @@ const StyledSignIn = styled.form`
 
 const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
   let history = useHistory();
+  
 
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
@@ -117,9 +118,11 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
           ? setIsUsernameTaken(true)
           : setIsUsernameTaken(false);
         setIsSubmitCorrect(false);
+        setIsLoading(false);
       } else {
         setIsSubmitCorrect(undefined);
         addUser({ name: username, password: password });
+        setIsLoading(false);
         alert("Account Created");
         history.push("/chat");
       }
