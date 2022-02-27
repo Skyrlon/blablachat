@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router";
+import { Redirect } from "react-router";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
@@ -20,10 +20,7 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
-  let history = useHistory();
-  
-
+const SignIn = ({ users, addUser, onSuccessfulSignIn, isAuthentified }) => {
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -124,7 +121,6 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
         addUser({ name: username, password: password });
         setIsLoading(false);
         alert("Account Created");
-        history.push("/chat");
       }
     } else {
       setTimeout(() => {
@@ -133,10 +129,7 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
             `http://localhost:3004/users?name=${username}&password=${password}`
           )
           .then((response) => {
-            setIsLoading(false);
-            alert(`Welcome Back ${response.data[0].name}`);
             onSuccessfulSignIn(response.data[0].id);
-            history.push("/chat");
           })
           .catch(() => {
             setIsLoading(false);
@@ -145,6 +138,10 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn }) => {
       }, 1000);
     }
   };
+
+  if (isAuthentified) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <StyledSignIn onSubmit={handleSubmit}>

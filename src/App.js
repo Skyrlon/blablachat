@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUsers, getCurrentUserId } from "./store/Selectors.jsx";
 
@@ -27,20 +33,31 @@ const App = () => {
     });
   };
 
+  const handleSignIn = (userId) => {
+    dispatch({ type: "LOAD_USER", payload: { id: userId } });
+  };
+
   const handleLogout = () => {
     setUserLoggedId(undefined);
     setIsAuthentified(false);
   };
 
   useEffect(() => {
-    if (currentUserId) {
+    if (currentUserId !== undefined) {
       setUserLoggedId(currentUserId);
+      setIsAuthentified(true);
     }
   }, [currentUserId]);
 
-  useEffect(() => {
-    if (userLoggedId) setIsAuthentified(true);
-  }, [userLoggedId]);
+  useEffect(
+    () => {
+      if (userLoggedId !== undefined && isAuthentified) {
+        return <Redirect to="/" />;
+      }
+    },
+    // eslint-disable-next-line
+    [userLoggedId]
+  );
 
   return (
     <div className="App">
@@ -66,12 +83,11 @@ const App = () => {
               <SignIn
                 users={users}
                 addUser={handleAddUser}
-                onSuccessfulSignIn={(userId) => {
-                  setUserLoggedId(userId);
-                  setIsAuthentified(true);
-                }}
+                onSuccessfulSignIn={handleSignIn}
+                isAuthentified={isAuthentified}
               />
             </Route>
+
             <Route path="/friends">
               <FriendsPage
                 userLoggedId={userLoggedId}

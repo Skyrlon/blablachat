@@ -150,6 +150,8 @@ const initialState = {
 
 const CREATE_NEW_USER = "CREATE_NEW_USER";
 
+const LOAD_USER = "LOAD_USER";
+
 const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 
 const EDIT_MESSAGE = "EDIT_MESSAGE";
@@ -189,6 +191,13 @@ function reducer(state = initialState, action) {
         };
         draft.users.push(newUser);
         draft.currentUser = newUser;
+      });
+
+    case LOAD_USER:
+      return produce(state, (draft) => {
+        draft.currentUser = state.users.find(
+          (user) => user.id === action.payload.id
+        );
       });
 
     case EDIT_MESSAGE:
