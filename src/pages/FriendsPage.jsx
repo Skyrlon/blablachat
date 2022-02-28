@@ -8,7 +8,10 @@ import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
 import AddFriendTab from "../components/AddFriendTab";
 import { useSelector } from "react-redux";
-import { getCurrentUserFriendsRequest } from "../store/Selectors";
+import {
+  getCurrentUserFriendsRequest,
+  getCurrentUserId,
+} from "../store/Selectors";
 
 const StyledFriendsPage = styled.div`
   & .requests-number {
@@ -28,11 +31,13 @@ const StyledFriendsPage = styled.div`
   }
 `;
 
-const FriendsPage = ({ isAuthentified, userLoggedId }) => {
+const FriendsPage = ({ isAuthentified }) => {
   const [categoryToShow, setCategoryToShow] = useState("all");
 
+  const currentUserId = useSelector(getCurrentUserId());
+
   const friendsRequest = useSelector(
-    getCurrentUserFriendsRequest(userLoggedId)
+    getCurrentUserFriendsRequest(currentUserId)
   );
 
   const buttonsTab = [
@@ -66,24 +71,17 @@ const FriendsPage = ({ isAuthentified, userLoggedId }) => {
         </Button>
       ))}
 
-      {categoryToShow === "all" && (
-        <AllFriendsTab userLoggedId={userLoggedId} />
-      )}
+      {categoryToShow === "all" && <AllFriendsTab />}
 
-      {categoryToShow === "requests" && (
-        <FriendsRequestsTab userLoggedId={userLoggedId} />
-      )}
+      {categoryToShow === "requests" && <FriendsRequestsTab />}
 
-      {categoryToShow === "add friend" && (
-        <AddFriendTab userLoggedId={userLoggedId} />
-      )}
+      {categoryToShow === "add friend" && <AddFriendTab />}
     </StyledFriendsPage>
   );
 };
 
 FriendsPage.propTypes = {
   isAuthentified: PropTypes.bool,
-  userLoggedId: PropTypes.number,
 };
 
 export default FriendsPage;

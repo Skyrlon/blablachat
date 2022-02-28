@@ -6,22 +6,25 @@ import {
   getCurrentUserFriends,
   getUserName,
   getChatroomsToModifyMembers,
+  getCurrentUserId,
 } from "../store/Selectors";
 import ContextMenu from "./ContextMenu";
 
 const StyledUserPseudo = styled.div``;
 
-const UserPseudo = ({ userId, userLoggedId }) => {
+const UserPseudo = ({ userId }) => {
   const dispatch = useDispatch();
+
+  const currentUserId = useSelector(getCurrentUserId());
 
   const userPseudoRef = useRef(null);
 
   const userName = useSelector(getUserName(userId));
 
-  const friends = useSelector(getCurrentUserFriends(userLoggedId));
+  const friends = useSelector(getCurrentUserFriends(currentUserId));
 
   const chatroomsToModifyMembers = useSelector(
-    getChatroomsToModifyMembers(userLoggedId, userId)
+    getChatroomsToModifyMembers(currentUserId, userId)
   );
 
   const [showMenu, setShowMenu] = useState(false);
@@ -40,7 +43,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
+      payload: { receiverId: friendIdToSendRequest, senderId: currentUserId },
     });
     setShowMenu(false);
   };
@@ -48,7 +51,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
   const removeFriend = (friendId) => {
     dispatch({
       type: "REMOVE_FRIEND",
-      payload: { formerFriends: [userLoggedId, friendId] },
+      payload: { formerFriends: [currentUserId, friendId] },
     });
     setShowMenu(false);
   };
@@ -73,7 +76,7 @@ const UserPseudo = ({ userId, userLoggedId }) => {
     const requestFriend = {
       available:
         !friends.map((friend) => friend.id).includes(userId) &&
-        !(userId === userLoggedId),
+        !(userId === currentUserId),
       clickEvent: () => sendFriendRequest(userId),
       label: "Request to be friend",
       children: null,
@@ -85,13 +88,14 @@ const UserPseudo = ({ userId, userLoggedId }) => {
       children: null,
     };
     const actualUserPseudo = {
-      available: userId === userLoggedId,
+      available: userId === currentUserId,
       clickEvent: null,
       label: "Can't unfriend or be friend with yourself",
       children: null,
     };
     const giveOwnership = {
-      available: chatroomsToModifyMembers.length > 0 && userId !== userLoggedId,
+      available:
+        chatroomsToModifyMembers.length > 0 && userId !== currentUserId,
       clickEvent: null,
       label: "Give ownership to chatroom :",
       children: chatroomsToModifyMembers.map((chatroom) => ({
@@ -101,7 +105,8 @@ const UserPseudo = ({ userId, userLoggedId }) => {
       })),
     };
     const ejectUser = {
-      available: chatroomsToModifyMembers.length > 0 && userId !== userLoggedId,
+      available:
+        chatroomsToModifyMembers.length > 0 && userId !== currentUserId,
       clickEvent: null,
       label: "Eject user from chatroom :",
       children: chatroomsToModifyMembers.map((chatroom) => ({
@@ -139,7 +144,6 @@ const UserPseudo = ({ userId, userLoggedId }) => {
 };
 
 UserPseudo.propTypes = {
-  userLoggedId: PropTypes.number,
   writerID: PropTypes.number,
 };
 

@@ -13,7 +13,7 @@ import Linkify from "react-linkify";
 import TextBox from "./TextBox.jsx";
 import UserPseudo from "./UserPseudo.jsx";
 import { useSelector } from "react-redux";
-import { getMessages } from "../store/Selectors.jsx";
+import { getCurrentUserId, getMessages } from "../store/Selectors.jsx";
 
 const StyledChat = styled.div`
   height: 100%;
@@ -89,12 +89,7 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({
-  showEmojis,
-  switchShowEmojis,
-  currentChatroomId,
-  userLoggedId,
-}) => {
+const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
   const dispatch = useDispatch();
 
   const [isEditingMessage, setIsEditingMessage] = useState(false);
@@ -104,6 +99,8 @@ const Chat = ({
   const [idMessageToEdit, setIdMessageToEdit] = useState(undefined);
 
   const messages = useSelector(getMessages(currentChatroomId));
+
+  const currentUserId = useSelector(getCurrentUserId());
 
   const handleOneDigitNumber = (number) => {
     return number < 10 ? `0${number}` : number;
@@ -182,10 +179,7 @@ const Chat = ({
               <div className="message" key={message.id}>
                 <div className="message-data">
                   <div className="message-user">
-                    <UserPseudo
-                      userLoggedId={userLoggedId}
-                      userId={message.writerID}
-                    />
+                    <UserPseudo userId={message.writerID} />
                   </div>
                   <div className="message-date">
                     {formatMessageDate(message.time)}
@@ -209,7 +203,7 @@ const Chat = ({
                 )}
                 {!(isEditingMessage && message.id === idMessageToEdit) &&
                   !message.deleted &&
-                  message.writerID === userLoggedId && (
+                  message.writerID === currentUserId && (
                     <div className="message-buttons">
                       <div
                         className="edit-icon"
@@ -257,7 +251,6 @@ Chat.propTypes = {
   currentUser: PropTypes.object,
   friends: PropTypes.array,
   currentChatroomId: PropTypes.number,
-  userLoggedId: PropTypes.number,
 };
 
 export default Chat;

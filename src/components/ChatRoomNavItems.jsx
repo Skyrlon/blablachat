@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getChatroomName } from "../store/Selectors.jsx";
+import { getCurrentUserId, getChatroomName } from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -47,14 +47,15 @@ const StyledChatRoomNavItems = styled.div`
 const ChatRoomNavItems = ({
   chatroomId,
   chatroomOwnerId,
-  userLoggedId,
   changeCurrentChatroom,
   currentChatroomId,
   leaveCurrentChatroom,
 }) => {
   const dispatch = useDispatch();
 
-  const chatroomName = useSelector(getChatroomName(chatroomId, userLoggedId));
+  const currentUserId = useSelector(getCurrentUserId());
+
+  const chatroomName = useSelector(getChatroomName(chatroomId, currentUserId));
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -83,7 +84,7 @@ const ChatRoomNavItems = ({
       children: null,
     };
     const renameChatroom = {
-      available: chatroomOwnerId === userLoggedId,
+      available: chatroomOwnerId === currentUserId,
       clickEvent: () => onClickRenameChatroom(),
       label: "Rename chatroom",
       children: null,
@@ -95,7 +96,7 @@ const ChatRoomNavItems = ({
     setShowMenu(false);
     dispatch({
       type: "LEAVE_CHATROOM",
-      payload: { chatroomId, userLeaving: userLoggedId },
+      payload: { chatroomId, userLeaving: currentUserId },
     });
     if (chatroomId === currentChatroomId) leaveCurrentChatroom(chatroomId);
   };
@@ -176,7 +177,6 @@ const ChatRoomNavItems = ({
 ChatRoomNavItems.propTypes = {
   chatroomId: PropTypes.number,
   chatroomOwnerId: PropTypes.number,
-  userLoggedId: PropTypes.number,
   changeCurrentChatroom: PropTypes.func,
   currentChatroomId: PropTypes.number,
   leaveCurrentChatroom: PropTypes.func,

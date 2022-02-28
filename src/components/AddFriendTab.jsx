@@ -1,15 +1,16 @@
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersFound } from "../store/Selectors";
+import { getCurrentUserId, getUsersFound } from "../store/Selectors";
 
 const StyledAddFriendTab = styled.div``;
 
-const AddFriendTab = ({ userLoggedId }) => {
+const AddFriendTab = () => {
   const dispatch = useDispatch();
+
+  const currentUserId = useSelector(getCurrentUserId());
 
   const [showUsersFound, setShowUsersFound] = useState(false);
 
@@ -17,7 +18,7 @@ const AddFriendTab = ({ userLoggedId }) => {
 
   const [textSubmitted, setTextSubmitted] = useState("");
 
-  const usersFound = useSelector(getUsersFound(textSubmitted, userLoggedId));
+  const usersFound = useSelector(getUsersFound(textSubmitted, currentUserId));
 
   const handleInputSubmit = (e) => {
     if (e.key === "Enter") {
@@ -35,7 +36,7 @@ const AddFriendTab = ({ userLoggedId }) => {
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: userLoggedId },
+      payload: { receiverId: friendIdToSendRequest, senderId: currentUserId },
     });
   };
 
@@ -67,10 +68,6 @@ const AddFriendTab = ({ userLoggedId }) => {
         ))}
     </StyledAddFriendTab>
   );
-};
-
-AddFriendTab.propTypes = {
-  userLoggedId: PropTypes.number,
 };
 
 export default AddFriendTab;

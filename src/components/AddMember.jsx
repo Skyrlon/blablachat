@@ -4,7 +4,11 @@ import styled from "styled-components";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
-import { getCurrentUserFriends, getMembers } from "../store/Selectors";
+import {
+  getCurrentUserId,
+  getCurrentUserFriends,
+  getMembers,
+} from "../store/Selectors";
 import { useSelector } from "react-redux";
 
 const StyledAddMember = styled.div`
@@ -24,10 +28,12 @@ const StyledAddMember = styled.div`
   }
 `;
 
-const AddMember = ({ addMember, currentChatroomId, userLoggedId }) => {
+const AddMember = ({ addMember, currentChatroomId }) => {
+  const currentUserId = useSelector(getCurrentUserId());
+
   const members = useSelector(getMembers(currentChatroomId));
 
-  const friends = useSelector(getCurrentUserFriends(userLoggedId));
+  const friends = useSelector(getCurrentUserFriends(currentUserId));
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -58,7 +64,6 @@ const AddMember = ({ addMember, currentChatroomId, userLoggedId }) => {
 AddMember.propTypes = {
   addMember: PropTypes.func,
   currentChatroomId: PropTypes.number,
-  userLoggedId: PropTypes.number,
 };
 
 export default AddMember;

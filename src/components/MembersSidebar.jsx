@@ -2,7 +2,11 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import UserPseudo from "./UserPseudo";
-import { getMembers, getCharoomOwnerId } from "../store/Selectors";
+import {
+  getMembers,
+  getCharoomOwnerId,
+  getCurrentUserId,
+} from "../store/Selectors";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown } from "@fortawesome/free-solid-svg-icons";
@@ -20,8 +24,11 @@ const StyledMembersSidebar = styled.div`
   }
 `;
 
-const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
+const MembersSidebar = ({ currentChatroomId }) => {
+  const currentUserId = useSelector(getCurrentUserId());
+
   const members = useSelector(getMembers(currentChatroomId));
+
   const ownerID = useSelector(getCharoomOwnerId(currentChatroomId));
 
   return (
@@ -29,7 +36,7 @@ const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
       <div className="title">Members ({members.length})</div>
       {members.map((member) => (
         <div className="member" key={member.id}>
-          <UserPseudo userId={member.id} userLoggedId={userLoggedId}>
+          <UserPseudo userId={member.id} currentUserId={currentUserId}>
             {member.name}
           </UserPseudo>
           {member.id === ownerID && <FontAwesomeIcon icon={faCrown} />}
@@ -39,7 +46,6 @@ const MembersSidebar = ({ userLoggedId, currentChatroomId }) => {
   );
 };
 MembersSidebar.propTypes = {
-  userLoggedId: PropTypes.number,
   currentChatroomId: PropTypes.number,
 };
 export default MembersSidebar;

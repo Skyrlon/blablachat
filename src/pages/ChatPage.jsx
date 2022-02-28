@@ -9,7 +9,7 @@ import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import SendMessage from "../components/SendMessage.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import AddMember from "../components/AddMember.jsx";
-import { getChatrooms } from "../store/Selectors.jsx";
+import { getChatrooms, getCurrentUserId } from "../store/Selectors.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -22,11 +22,14 @@ const StyledChatPage = styled.div`
     "nav send members" 5% / 10vw auto 7vw;
 `;
 
-const ChatPage = ({ isAuthentified, userLoggedId }) => {
+const ChatPage = ({ isAuthentified }) => {
   const dispatch = useDispatch();
+
+  const currentUserId = useSelector(getCurrentUserId());
+
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
-  const chatrooms = useSelector(getChatrooms(userLoggedId));
+  const chatrooms = useSelector(getChatrooms(currentUserId));
 
   const [currentChatroomId, setCurrentChatroomId] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null
@@ -59,13 +62,13 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
         <AddMember
           addMember={(ids) => handleAddMember(currentChatroomId, ids)}
           currentChatroomId={currentChatroomId}
-          userLoggedId={userLoggedId}
+          currentUserId={currentUserId}
         />
       )}
       {chatrooms.length > 0 && (
         <ChatRoomNav
           chatrooms={chatrooms}
-          userLoggedId={userLoggedId}
+          currentUserId={currentUserId}
           changeCurrentChatroom={handleChangeCurrentChatroom}
           currentChatroomId={currentChatroomId}
           leaveCurrentChatroom={handleLeaveCurrentChatroom}
@@ -76,12 +79,12 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
-          userLoggedId={userLoggedId}
+          currentUserId={currentUserId}
         />
       )}
       {chatrooms.length > 0 && (
         <SendMessage
-          userLoggedId={userLoggedId}
+          currentUserId={currentUserId}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
@@ -89,7 +92,7 @@ const ChatPage = ({ isAuthentified, userLoggedId }) => {
       )}
       {chatrooms.length > 0 && (
         <MembersSidebar
-          userLoggedId={userLoggedId}
+          currentUserId={currentUserId}
           currentChatroomId={currentChatroomId}
         />
       )}
@@ -101,7 +104,6 @@ ChatPage.defaultProps = { chatRooms: [] };
 
 ChatPage.propTypes = {
   isAuthentified: PropTypes.bool,
-  userLoggedId: PropTypes.number,
 };
 
 export default ChatPage;

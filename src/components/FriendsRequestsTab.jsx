@@ -1,29 +1,33 @@
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import  Button  from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUserFriendsRequest } from "../store/Selectors";
+import {
+  getCurrentUserId,
+  getCurrentUserFriendsRequest,
+} from "../store/Selectors";
 
 const StyledFriendsRequestsTab = styled.div``;
 
-const FriendsRequestsTab = ({ userLoggedId }) => {
+const FriendsRequestsTab = () => {
   const dispatch = useDispatch();
 
+  const currentUserId = useSelector(getCurrentUserId());
+
   const friendsRequest = useSelector(
-    getCurrentUserFriendsRequest(userLoggedId)
+    getCurrentUserFriendsRequest(currentUserId)
   );
 
   const acceptFriendRequest = (id) => {
     dispatch({
       type: "ACCEPT_FRIEND_REQUEST",
-      payload: { receiverId: userLoggedId, senderId: id },
+      payload: { receiverId: currentUserId, senderId: id },
     });
   };
 
   const rejectFriendRequest = (id) => {
     dispatch({
       type: "REJECT_FRIEND_REQUEST",
-      payload: { receiverId: userLoggedId, senderId: id },
+      payload: { receiverId: currentUserId, senderId: id },
     });
   };
 
@@ -44,10 +48,6 @@ const FriendsRequestsTab = ({ userLoggedId }) => {
       {friendsRequest.length === 0 && <div>No requests yet</div>}
     </StyledFriendsRequestsTab>
   );
-};
-
-FriendsRequestsTab.propTypes = {
-  userLoggedId: PropTypes.number,
 };
 
 export default FriendsRequestsTab;

@@ -5,21 +5,23 @@ import AddIcon from "@mui/icons-material/Add";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { getCurrentUserFriends } from "../store/Selectors";
+import { getCurrentUserId, getCurrentUserFriends } from "../store/Selectors";
 
 const StyledAddChatRoom = styled.div`
   position: relative;
 `;
 
-const AddChatRoom = ({ userLoggedId, chatrooms, changeCurrentChatroom }) => {
+const AddChatRoom = ({ chatrooms, changeCurrentChatroom }) => {
   const dispatch = useDispatch();
+
+  const currentUserId = useSelector(getCurrentUserId());
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const friends = useSelector(getCurrentUserFriends(userLoggedId));
+  const friends = useSelector(getCurrentUserFriends(currentUserId));
 
   const handleFriendsSubmitted = (friendsSelected) => {
-    const newChatroomMembers = [userLoggedId, ...friendsSelected];
+    const newChatroomMembers = [currentUserId, ...friendsSelected];
 
     const chatroomWithSameMembers = chatrooms.find(
       (chatroom) =>
@@ -35,7 +37,7 @@ const AddChatRoom = ({ userLoggedId, chatrooms, changeCurrentChatroom }) => {
       dispatch({
         type: "CREATE_CHATROOM",
         payload: {
-          creator: userLoggedId,
+          creator: currentUserId,
           members: newChatroomMembers,
         },
       });
@@ -59,7 +61,6 @@ const AddChatRoom = ({ userLoggedId, chatrooms, changeCurrentChatroom }) => {
 };
 
 AddChatRoom.propTypes = {
-  userLoggedId: PropTypes.number,
   chatrooms: PropTypes.array,
   changeCurrentChatroom: PropTypes.func,
 };
