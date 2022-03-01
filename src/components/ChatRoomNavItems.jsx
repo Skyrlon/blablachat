@@ -55,7 +55,7 @@ const ChatRoomNavItems = ({
 
   const currentUserId = useSelector(getCurrentUserId());
 
-  const chatroomName = useSelector(getChatroomName(chatroomId, currentUserId));
+  const chatroomName = useSelector(getChatroomName(chatroomId));
 
   const [showMenu, setShowMenu] = useState(false);
 

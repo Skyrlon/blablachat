@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getUsers, getCurrentUserId } from "./store/Selectors.jsx";
+import { getCurrentUserId } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -21,8 +21,6 @@ const App = () => {
   const currentUserId = useSelector(getCurrentUserId());
 
   const [isAuthentified, setIsAuthentified] = useState(false);
-
-  const users = useSelector(getUsers());
 
   const handleAddUser = (signupInfos) => {
     dispatch({
@@ -75,7 +73,6 @@ const App = () => {
           <Switch>
             <Route path="/sign">
               <SignIn
-                users={users}
                 addUser={handleAddUser}
                 onSuccessfulSignIn={handleSignIn}
                 isAuthentified={isAuthentified}

@@ -18,7 +18,7 @@ const AddFriendTab = () => {
 
   const [textSubmitted, setTextSubmitted] = useState("");
 
-  const usersFound = useSelector(getUsersFound(textSubmitted, currentUserId));
+  const usersFound = useSelector(getUsersFound(textSubmitted));
 
   const handleInputSubmit = (e) => {
     if (e.key === "Enter") {

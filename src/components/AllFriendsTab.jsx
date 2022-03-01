@@ -2,14 +2,12 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 
 import UserPseudo from "./UserPseudo";
-import { getCurrentUserId, getCurrentUserFriends } from "../store/Selectors";
+import { getCurrentUserFriends } from "../store/Selectors";
 
 const StyledAllFriendsTab = styled.div``;
 
 const AllFriendsTab = () => {
-  const currentUserId = useSelector(getCurrentUserId());
-
-  const friends = useSelector(getCurrentUserFriends(currentUserId));
+  const friends = useSelector(getCurrentUserFriends());
 
   return (
     <StyledAllFriendsTab>

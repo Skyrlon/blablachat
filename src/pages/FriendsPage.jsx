@@ -8,10 +8,7 @@ import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
 import AddFriendTab from "../components/AddFriendTab";
 import { useSelector } from "react-redux";
-import {
-  getCurrentUserFriendsRequest,
-  getCurrentUserId,
-} from "../store/Selectors";
+import { getCurrentUserFriendsRequest } from "../store/Selectors";
 
 const StyledFriendsPage = styled.div`
   & .requests-number {
@@ -34,11 +31,7 @@ const StyledFriendsPage = styled.div`
 const FriendsPage = ({ isAuthentified }) => {
   const [categoryToShow, setCategoryToShow] = useState("all");
 
-  const currentUserId = useSelector(getCurrentUserId());
-
-  const friendsRequest = useSelector(
-    getCurrentUserFriendsRequest(currentUserId)
-  );
+  const friendsRequest = useSelector(getCurrentUserFriendsRequest());
 
   const buttonsTab = [
     { category: "all", title: "All" },

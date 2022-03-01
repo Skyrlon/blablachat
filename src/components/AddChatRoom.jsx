@@ -18,7 +18,7 @@ const AddChatRoom = ({ chatrooms, changeCurrentChatroom }) => {
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const friends = useSelector(getCurrentUserFriends(currentUserId));
+  const friends = useSelector(getCurrentUserFriends());
 
   const handleFriendsSubmitted = (friendsSelected) => {
     const newChatroomMembers = [currentUserId, ...friendsSelected];

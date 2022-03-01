@@ -9,7 +9,7 @@ import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import SendMessage from "../components/SendMessage.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import AddMember from "../components/AddMember.jsx";
-import { getChatrooms, getCurrentUserId } from "../store/Selectors.jsx";
+import { getChatrooms } from "../store/Selectors.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -25,11 +25,9 @@ const StyledChatPage = styled.div`
 const ChatPage = ({ isAuthentified }) => {
   const dispatch = useDispatch();
 
-  const currentUserId = useSelector(getCurrentUserId());
-
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
-  const chatrooms = useSelector(getChatrooms(currentUserId));
+  const chatrooms = useSelector(getChatrooms());
 
   const [currentChatroomId, setCurrentChatroomId] = useState(
     chatrooms.length > 0 ? chatrooms[0].id : null
@@ -62,13 +60,11 @@ const ChatPage = ({ isAuthentified }) => {
         <AddMember
           addMember={(ids) => handleAddMember(currentChatroomId, ids)}
           currentChatroomId={currentChatroomId}
-          currentUserId={currentUserId}
         />
       )}
       {chatrooms.length > 0 && (
         <ChatRoomNav
           chatrooms={chatrooms}
-          currentUserId={currentUserId}
           changeCurrentChatroom={handleChangeCurrentChatroom}
           currentChatroomId={currentChatroomId}
           leaveCurrentChatroom={handleLeaveCurrentChatroom}
@@ -79,22 +75,17 @@ const ChatPage = ({ isAuthentified }) => {
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
-          currentUserId={currentUserId}
         />
       )}
       {chatrooms.length > 0 && (
         <SendMessage
-          currentUserId={currentUserId}
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
         />
       )}
       {chatrooms.length > 0 && (
-        <MembersSidebar
-          currentUserId={currentUserId}
-          currentChatroomId={currentChatroomId}
-        />
+        <MembersSidebar currentChatroomId={currentChatroomId} />
       )}
     </StyledChatPage>
   );

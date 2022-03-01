@@ -21,10 +21,10 @@ const UserPseudo = ({ userId }) => {
 
   const userName = useSelector(getUserName(userId));
 
-  const friends = useSelector(getCurrentUserFriends(currentUserId));
+  const friends = useSelector(getCurrentUserFriends());
 
   const chatroomsToModifyMembers = useSelector(
-    getChatroomsToModifyMembers(currentUserId, userId)
+    getChatroomsToModifyMembers(userId)
   );
 
   const [showMenu, setShowMenu] = useState(false);

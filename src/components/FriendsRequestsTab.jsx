@@ -13,9 +13,7 @@ const FriendsRequestsTab = () => {
 
   const currentUserId = useSelector(getCurrentUserId());
 
-  const friendsRequest = useSelector(
-    getCurrentUserFriendsRequest(currentUserId)
-  );
+  const friendsRequest = useSelector(getCurrentUserFriendsRequest());
 
   const acceptFriendRequest = (id) => {
     dispatch({

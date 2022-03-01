@@ -10,6 +10,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useSelector } from "react-redux";
+import { getUsers } from "../store/Selectors";
 
 const axios = require("axios");
 
@@ -20,7 +22,9 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = ({ users, addUser, onSuccessfulSignIn, isAuthentified }) => {
+const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
+  const users = useSelector(getUsers());
+
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -246,7 +250,6 @@ const SignIn = ({ users, addUser, onSuccessfulSignIn, isAuthentified }) => {
 };
 
 SignIn.propTypes = {
-  users: PropTypes.array,
   addUser: PropTypes.func,
   onSuccessfulSignIn: PropTypes.func,
 };

@@ -4,11 +4,7 @@ import styled from "styled-components";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
-import {
-  getCurrentUserId,
-  getCurrentUserFriends,
-  getMembers,
-} from "../store/Selectors";
+import { getCurrentUserFriends, getMembers } from "../store/Selectors";
 import { useSelector } from "react-redux";
 
 const StyledAddMember = styled.div`
@@ -29,11 +25,9 @@ const StyledAddMember = styled.div`
 `;
 
 const AddMember = ({ addMember, currentChatroomId }) => {
-  const currentUserId = useSelector(getCurrentUserId());
-
   const members = useSelector(getMembers(currentChatroomId));
 
-  const friends = useSelector(getCurrentUserFriends(currentUserId));
+  const friends = useSelector(getCurrentUserFriends());
 
   const [showMenu, setShowMenu] = useState(false);
 
