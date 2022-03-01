@@ -24,8 +24,6 @@ const App = () => {
 
   const users = useSelector(getUsers());
 
-  const [userLoggedId, setUserLoggedId] = useState(undefined);
-
   const handleAddUser = (signupInfos) => {
     dispatch({
       type: "CREATE_NEW_USER",
@@ -38,26 +36,22 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setUserLoggedId(undefined);
-    setIsAuthentified(false);
+    dispatch({ type: "LOG_OUT" });
   };
 
   useEffect(() => {
     if (currentUserId !== undefined) {
-      setUserLoggedId(currentUserId);
       setIsAuthentified(true);
+    } else {
+      setIsAuthentified(false);
     }
   }, [currentUserId]);
 
-  useEffect(
-    () => {
-      if (userLoggedId !== undefined && isAuthentified) {
-        return <Redirect to="/" />;
-      }
-    },
-    // eslint-disable-next-line
-    [userLoggedId]
-  );
+  useEffect(() => {
+    if (isAuthentified) {
+      return <Redirect to="/" />;
+    }
+  }, [isAuthentified]);
 
   return (
     <div className="App">
@@ -89,16 +83,10 @@ const App = () => {
             </Route>
 
             <Route path="/friends">
-              <FriendsPage
-                userLoggedId={userLoggedId}
-                isAuthentified={isAuthentified}
-              />
+              <FriendsPage isAuthentified={isAuthentified} />
             </Route>
             <Route path="/">
-              <ChatPage
-                isAuthentified={isAuthentified}
-                userLoggedId={userLoggedId}
-              />
+              <ChatPage isAuthentified={isAuthentified} />
             </Route>
           </Switch>
         </div>

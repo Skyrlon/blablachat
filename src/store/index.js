@@ -152,6 +152,8 @@ const CREATE_NEW_USER = "CREATE_NEW_USER";
 
 const LOAD_USER = "LOAD_USER";
 
+const LOG_OUT = "LOG_OUT";
+
 const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 
 const EDIT_MESSAGE = "EDIT_MESSAGE";
@@ -198,6 +200,17 @@ function reducer(state = initialState, action) {
         draft.currentUser = state.users.find(
           (user) => user.id === action.payload.id
         );
+      });
+
+    case LOG_OUT:
+      return produce(state, (draft) => {
+        draft.currentUser = {
+          id: undefined,
+          name: undefined,
+          password: undefined,
+          friendsID: undefined,
+          friendsRequest: undefined,
+        };
       });
 
     case EDIT_MESSAGE:
