@@ -314,6 +314,10 @@ function reducer(state = initialState, action) {
         receiver.friendsRequest = receiver.friendsRequest.filter(
           (request) => request !== action.payload.senderId
         );
+        draft.currentUser.friendsID.push(action.payload.senderId);
+        draft.currentUser.friendsRequest = receiver.friendsRequest.filter(
+          (request) => request !== action.payload.senderId
+        );
       });
 
     case REJECT_FRIEND_REQUEST:
