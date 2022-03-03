@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,7 @@ import TextBox from "./TextBox.jsx";
 import UserPseudo from "./UserPseudo.jsx";
 import { useSelector } from "react-redux";
 import { getCurrentUserId, getMessages } from "../store/Selectors.jsx";
+import { useEffect } from "react";
 
 const StyledChat = styled.div`
   height: 100%;
@@ -102,6 +103,8 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
 
   const currentUserId = useSelector(getCurrentUserId());
 
+  const scrollbar = useRef(null);
+
   const handleOneDigitNumber = (number) => {
     return number < 10 ? `0${number}` : number;
   };
@@ -170,10 +173,14 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
     }
   };
 
+  useEffect(() => {
+    scrollbar.current.scrollToBottom();
+  }, []);
+
   return (
     <StyledChat>
       <div className="historic">
-        <Scrollbars style={{ width: "99%", height: "100%" }}>
+        <Scrollbars ref={scrollbar} style={{ width: "99%", height: "100%" }}>
           {messages.length > 0 &&
             messages.map((message) => (
               <div className="message" key={message.id}>
