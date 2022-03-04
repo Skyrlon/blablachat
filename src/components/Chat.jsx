@@ -177,6 +177,15 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
     scrollbar.current.scrollToBottom();
   }, []);
 
+  useEffect(
+    () => {
+      if (messages[messages.length - 1].writerID === currentUserId)
+        scrollbar.current.scrollToBottom();
+    },
+    // eslint-disable-next-line
+    [messages]
+  );
+
   return (
     <StyledChat>
       <div className="historic">
