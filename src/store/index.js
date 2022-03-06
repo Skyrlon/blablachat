@@ -328,6 +328,9 @@ function reducer(state = initialState, action) {
         receiver.friendsRequest = receiver.friendsRequest.filter(
           (request) => request !== action.payload.senderId
         );
+        draft.currentUser.friendsRequest = receiver.friendsRequest.filter(
+          (request) => request !== action.payload.senderId
+        );
       });
 
     case SEND_FRIEND_REQUEST:
@@ -336,6 +339,7 @@ function reducer(state = initialState, action) {
           (user) => user.id === action.payload.receiverId
         );
         receiver.friendsRequest.push(action.payload.senderId);
+        draft.currentUser.friendsRequest.push(action.payload.senderId);
       });
 
     case REMOVE_FRIEND:
