@@ -344,15 +344,21 @@ function reducer(state = initialState, action) {
 
     case REMOVE_FRIEND:
       return produce(state, (draft) => {
-        draft.users.map((user) => {
-          if (action.payload.formerFriends.includes(user.id))
-            user.friendsID = user.friendsID.filter(
-              (friend) =>
-                friend !==
-                action.payload.formerFriends.find((x) => x !== user.id)
-            );
-          return user;
-        });
+        const friendToRemove = draft.users.find(
+          (user) => user.id === action.payload.friendToRemove
+        );
+        const currentUser = draft.users.find(
+          (user) => user.id === state.currentUser.id
+        );
+        friendToRemove.friendsID = friendToRemove.friendsID.filter(
+          (friend) => friend !== state.currentUser.id
+        );
+        currentUser.friendsID = currentUser.friendsID.filter(
+          (friend) => friend !== action.payload.friendToRemove
+        );
+        draft.currentUser.friendsID = draft.currentUser.friendsID.filter(
+          (friend) => friend !== action.payload.friendToRemove
+        );
       });
 
     default:

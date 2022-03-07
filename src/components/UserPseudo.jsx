@@ -51,7 +51,7 @@ const UserPseudo = ({ userId }) => {
   const removeFriend = (friendId) => {
     dispatch({
       type: "REMOVE_FRIEND",
-      payload: { formerFriends: [currentUserId, friendId] },
+      payload: { friendToRemove: friendId },
     });
     setShowMenu(false);
   };
