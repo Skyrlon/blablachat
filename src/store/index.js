@@ -339,7 +339,6 @@ function reducer(state = initialState, action) {
           (user) => user.id === action.payload.receiverId
         );
         receiver.friendsRequest.push(state.currentUser.id);
-        draft.currentUser.friendsRequest.push(state.currentUser.id);
       });
 
     case REMOVE_FRIEND:
