@@ -3,14 +3,12 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUserId, getUsersFound } from "../store/Selectors";
+import { getUsersFound } from "../store/Selectors";
 
 const StyledAddFriendTab = styled.div``;
 
 const AddFriendTab = () => {
   const dispatch = useDispatch();
-
-  const currentUserId = useSelector(getCurrentUserId());
 
   const [showUsersFound, setShowUsersFound] = useState(false);
 
@@ -36,7 +34,7 @@ const AddFriendTab = () => {
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: currentUserId },
+      payload: { receiverId: friendIdToSendRequest },
     });
   };
 

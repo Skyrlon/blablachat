@@ -43,7 +43,7 @@ const UserPseudo = ({ userId }) => {
   const sendFriendRequest = (friendIdToSendRequest) => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
-      payload: { receiverId: friendIdToSendRequest, senderId: currentUserId },
+      payload: { receiverId: friendIdToSendRequest },
     });
     setShowMenu(false);
   };

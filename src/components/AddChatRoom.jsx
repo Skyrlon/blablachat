@@ -37,7 +37,6 @@ const AddChatRoom = ({ chatrooms, changeCurrentChatroom }) => {
       dispatch({
         type: "CREATE_CHATROOM",
         payload: {
-          creator: currentUserId,
           members: newChatroomMembers,
         },
       });

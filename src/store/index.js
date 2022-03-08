@@ -229,7 +229,7 @@ function reducer(state = initialState, action) {
         ).messages;
         messages.push({
           id: messages.length,
-          writerID: action.payload.writer,
+          writerID: state.currentUser.id,
           time: action.payload.time,
           text: action.payload.text,
           modified: false,
@@ -251,7 +251,7 @@ function reducer(state = initialState, action) {
         draft.chatrooms.push({
           id: draft.chatrooms.length,
           name: "",
-          ownerID: action.payload.creator,
+          ownerID: state.currentUser.id,
           membersID: action.payload.members,
           messages: [],
         });
@@ -290,7 +290,7 @@ function reducer(state = initialState, action) {
           (chatroom) => chatroom.id === action.payload.chatroomId
         );
         chatroomToLeave.membersID = chatroomToLeave.membersID.filter(
-          (member) => member !== action.payload.userLeaving
+          (member) => member !== state.currentUser.id
         );
       });
 
@@ -307,9 +307,9 @@ function reducer(state = initialState, action) {
           (user) => user.id === action.payload.senderId
         );
         const receiver = draft.users.find(
-          (user) => user.id === action.payload.receiverId
+          (user) => user.id === state.currentUser.id
         );
-        sender.friendsID.push(action.payload.receiverId);
+        sender.friendsID.push(state.currentUser.id);
         receiver.friendsID.push(action.payload.senderId);
         receiver.friendsRequest = receiver.friendsRequest.filter(
           (request) => request !== action.payload.senderId
@@ -323,7 +323,7 @@ function reducer(state = initialState, action) {
     case REJECT_FRIEND_REQUEST:
       return produce(state, (draft) => {
         const receiver = draft.users.find(
-          (user) => user.id === action.payload.receiverId
+          (user) => user.id === state.currentUser.id
         );
         receiver.friendsRequest = receiver.friendsRequest.filter(
           (request) => request !== action.payload.senderId
@@ -338,8 +338,8 @@ function reducer(state = initialState, action) {
         const receiver = draft.users.find(
           (user) => user.id === action.payload.receiverId
         );
-        receiver.friendsRequest.push(action.payload.senderId);
-        draft.currentUser.friendsRequest.push(action.payload.senderId);
+        receiver.friendsRequest.push(state.currentUser.id);
+        draft.currentUser.friendsRequest.push(state.currentUser.id);
       });
 
     case REMOVE_FRIEND:

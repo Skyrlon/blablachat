@@ -96,7 +96,7 @@ const ChatRoomNavItems = ({
     setShowMenu(false);
     dispatch({
       type: "LEAVE_CHATROOM",
-      payload: { chatroomId, userLeaving: currentUserId },
+      payload: { chatroomId },
     });
     if (chatroomId === currentChatroomId) leaveCurrentChatroom(chatroomId);
   };
