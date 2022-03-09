@@ -23,74 +23,24 @@ const StyledSignIn = styled.form`
 `;
 
 const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/gi;
+
   const users = useSelector(getUsers());
 
   const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setpasswordConfirm] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const [isSubmitCorrect, setIsSubmitCorrect] = useState(undefined);
-
-  const [isUsernameLengthCorrect, setIsUsernameLengthCorrect] = useState(false);
-  const [isUsernameTaken, setIsUsernameTaken] = useState(undefined);
-
-  const [isPasswordMinChar, setIsPasswordMinChar] = useState(false);
-  const [isPasswordUppercase, setIsPasswordUppercase] = useState(false);
-  const [isPasswordLowercase, setIsPasswordLowercase] = useState(false);
-  const [isPasswordNumber, setIsPasswordNumber] = useState(false);
-  const [isPasswordSpecial, setIsPasswordSpecial] = useState(false);
-
-  const [isPasswordConfirmSame, setIsPasswordConfirmSame] = useState(undefined);
+  const [usernameSubmitted, setUsernameSubmitted] = useState(undefined);
+  const [passwordSubmitted, setPasswordSubmitted] = useState(undefined);
+  const [passwordConfirmSubmitted, setPasswordConfirmSubmitted] =
+    useState(undefined);
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleOnChangeUserName = (e) => {
-    if (!signIn) {
-      const usernameChars = e.target.value.split("");
-      usernameChars.length > 5 && usernameChars.length < 31
-        ? setIsUsernameLengthCorrect(true)
-        : setIsUsernameLengthCorrect(false);
-    }
-    setUsername(e.target.value);
-  };
-
-  const handleOnChangePassword = (e) => {
-    if (!signIn) {
-      const passwordChars = e.target.value.split("");
-      passwordChars.length > 7
-        ? setIsPasswordMinChar(true)
-        : setIsPasswordMinChar(false);
-      passwordChars.some(
-        (element) => isNaN(element) && element === element.toUpperCase()
-      )
-        ? setIsPasswordUppercase(true)
-        : setIsPasswordUppercase(false);
-      passwordChars.some(
-        (element) => isNaN(element) && element === element.toLowerCase()
-      )
-        ? setIsPasswordLowercase(true)
-        : setIsPasswordLowercase(false);
-      passwordChars.some((element) => !isNaN(element) && element !== " ")
-        ? setIsPasswordNumber(true)
-        : setIsPasswordNumber(false);
-      passwordChars.some((element) =>
-        ` !"#$%&'()*+,-./:;<=>?@[\\]^_\`{|}~`.split("").includes(element)
-      )
-        ? setIsPasswordSpecial(true)
-        : setIsPasswordSpecial(false);
-    }
-    setPassword(e.target.value);
-  };
-
-  const handleOnChangePasswordConfirm = (e) => {
-    e.target.value === password
-      ? setIsPasswordConfirmSame(true)
-      : setIsPasswordConfirmSame(false);
-    setpasswordConfirm(e.target.value);
-  };
 
   const handleInputSubmit = (e) => {
     if (e.key === "Enter") {
@@ -102,26 +52,17 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setUsernameSubmitted(username);
+    setPasswordSubmitted(password);
+    setPasswordConfirmSubmitted(passwordConfirm);
     if (!signIn) {
       if (
-        [
-          isUsernameLengthCorrect,
-          isPasswordMinChar,
-          isPasswordUppercase,
-          isPasswordLowercase,
-          isPasswordNumber,
-          isPasswordSpecial,
-          isPasswordConfirmSame,
-        ].some((element) => element === false) ||
-        users.some((user) => user.name === username)
+        username.length < 6 ||
+        !!users.find((user) => user.name === usernameSubmitted) ||
+        !passwordRegex.test(password)
       ) {
-        users.some((user) => user.name === username)
-          ? setIsUsernameTaken(true)
-          : setIsUsernameTaken(false);
-        setIsSubmitCorrect(false);
         setIsLoading(false);
       } else {
-        setIsSubmitCorrect(undefined);
         addUser({ name: username, password: password });
         setIsLoading(false);
         alert("Account Created");
@@ -153,19 +94,27 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
         type="text"
         label="Username"
         placeholder="Username"
-        onChange={handleOnChangeUserName}
+        onChange={(e) => setUsername(e.target.value)}
         onKeyPress={(e) => handleInputSubmit(e)}
         value={username}
-        error={!signIn && isSubmitCorrect === false && isUsernameTaken}
+        error={
+          !signIn &&
+          usernameSubmitted !== undefined &&
+          (usernameSubmitted.length < 6 ||
+            users.find((user) => user.name === usernameSubmitted))
+        }
         helperText={
-          !signIn && isSubmitCorrect === false && isUsernameTaken
+          !signIn &&
+          usernameSubmitted !== undefined &&
+          !!users.find((user) => user.name === usernameSubmitted)
             ? "Username already taken"
             : ""
         }
       />
       {!signIn &&
-        isSubmitCorrect === false &&
-        (isUsernameLengthCorrect && !isUsernameTaken ? (
+        usernameSubmitted !== undefined &&
+        (usernameSubmitted.length > 5 &&
+        !users.find((user) => user.name === usernameSubmitted) ? (
           <CheckIcon />
         ) : (
           <ClearIcon />
@@ -174,18 +123,12 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
         type={showPassword ? "text" : "password"}
         label="Password"
         placeholder="Password"
-        onChange={handleOnChangePassword}
+        onChange={(e) => setPassword(e.target.value)}
         onKeyPress={(e) => handleInputSubmit(e)}
         value={password}
         error={
-          isSubmitCorrect === false &&
-          !(
-            isPasswordMinChar &&
-            isPasswordUppercase &&
-            isPasswordLowercase &&
-            isPasswordNumber &&
-            isPasswordSpecial
-          )
+          passwordSubmitted !== undefined &&
+          !passwordRegex.test(passwordSubmitted)
         }
       />
 
@@ -194,43 +137,27 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
       </div>
 
       {!signIn && (
-        <>
-          <ul>
-            Password must have atleast:
-            <li>
-              {isPasswordMinChar ? <CheckIcon /> : <ClearIcon />} 8 characters
-              minimum
-            </li>
-            <li>
-              {isPasswordUppercase ? <CheckIcon /> : <ClearIcon />} 1 uppercase
-              letter
-            </li>
-            <li>
-              {isPasswordLowercase ? <CheckIcon /> : <ClearIcon />} 1 lowercase
-              letter
-            </li>
-            <li>{isPasswordNumber ? <CheckIcon /> : <ClearIcon />} 1 number</li>
-            <li>
-              {isPasswordSpecial ? <CheckIcon /> : <ClearIcon />} 1 special
-              character
-            </li>
-          </ul>
-          <TextField
-            type={showPassword ? "text" : "password"}
-            label="Confirm Password"
-            name="password-confirm"
-            placeholder="Password"
-            onChange={handleOnChangePasswordConfirm}
-            onKeyPress={(e) => handleInputSubmit(e)}
-            value={passwordConfirm}
-            error={isSubmitCorrect === false && !isPasswordConfirmSame}
-            helperText={
-              isSubmitCorrect === false && !isPasswordConfirmSame
-                ? "Not same password"
-                : ""
-            }
-          />
-        </>
+        <TextField
+          type={showPassword ? "text" : "password"}
+          label="Confirm Password"
+          name="password-confirm"
+          placeholder="Password"
+          onChange={(e) => setPasswordConfirm(e.target.value)}
+          onKeyPress={(e) => handleInputSubmit(e)}
+          value={passwordConfirm}
+          error={
+            passwordSubmitted !== undefined &&
+            passwordConfirmSubmitted !== undefined &&
+            passwordSubmitted !== passwordConfirmSubmitted
+          }
+          helperText={
+            passwordSubmitted !== undefined &&
+            passwordConfirmSubmitted !== undefined &&
+            passwordSubmitted !== passwordConfirmSubmitted
+              ? "Not same password"
+              : ""
+          }
+        />
       )}
       <LoadingButton
         loading={isLoading}
