@@ -22,17 +22,6 @@ const App = () => {
 
   const [isAuthentified, setIsAuthentified] = useState(false);
 
-  const handleAddUser = (signupInfos) => {
-    dispatch({
-      type: "CREATE_NEW_USER",
-      payload: { name: signupInfos.name, password: signupInfos.password },
-    });
-  };
-
-  const handleSignIn = (userId) => {
-    dispatch({ type: "LOAD_USER", payload: { id: userId } });
-  };
-
   const handleLogout = () => {
     dispatch({ type: "LOG_OUT" });
   };
@@ -72,11 +61,7 @@ const App = () => {
 
           <Switch>
             <Route path="/sign">
-              <SignIn
-                addUser={handleAddUser}
-                onSuccessfulSignIn={handleSignIn}
-                isAuthentified={isAuthentified}
-              />
+              <SignIn isAuthentified={isAuthentified} />
             </Route>
 
             <Route path="/friends">

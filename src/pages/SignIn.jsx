@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router";
+import { useDispatch } from "react-redux";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
@@ -22,7 +23,9 @@ const StyledSignIn = styled.form`
   width: 20%;
 `;
 
-const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
+const SignIn = ({ isAuthentified }) => {
+  const dispatch = useDispatch();
+
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/gi;
 
@@ -58,12 +61,15 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
     if (!signIn) {
       if (
         username.length < 6 ||
-        !!users.find((user) => user.name === usernameSubmitted) ||
+        !users.find((user) => user.name === usernameSubmitted) ||
         !passwordRegex.test(password)
       ) {
         setIsLoading(false);
       } else {
-        addUser({ name: username, password: password });
+        dispatch({
+          type: "CREATE_NEW_USER",
+          payload: { name: username, password: password },
+        });
         setIsLoading(false);
         alert("Account Created");
       }
@@ -74,7 +80,10 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
             `http://localhost:3004/users?name=${username}&password=${password}`
           )
           .then((response) => {
-            onSuccessfulSignIn(response.data[0].id);
+            dispatch({
+              type: "LOAD_USER",
+              payload: { id: response.data[0].id },
+            });
           })
           .catch(() => {
             setIsLoading(false);
@@ -177,8 +186,7 @@ const SignIn = ({ addUser, onSuccessfulSignIn, isAuthentified }) => {
 };
 
 SignIn.propTypes = {
-  addUser: PropTypes.func,
-  onSuccessfulSignIn: PropTypes.func,
+  isAuthentified: PropTypes.bool.isRequired,
 };
 
 export default SignIn;
