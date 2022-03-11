@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import TextBox from "./TextBox";
 import { useDispatch } from "react-redux";
 
-const StyledSendMessage = styled.div`
-  grid-area: send;
-`;
+const StyledSendMessage = styled.div``;
 
 const SendMessage = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
   const dispatch = useDispatch();

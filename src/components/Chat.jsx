@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { getCurrentUserId, getMessages } from "../store/Selectors.jsx";
 import { useEffect } from "react";
 
+import SendMessage from "../components/SendMessage.jsx";
+
 const StyledChat = styled.div`
   height: 100%;
   grid-area: chat;
@@ -25,7 +27,7 @@ const StyledChat = styled.div`
     flex-direction: column;
     border: 1px solid black;
     width: 100%;
-    height: 100%;
+    height: 95%;
     overflow-y: auto;
   }
 
@@ -252,6 +254,11 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
             ))}
         </Scrollbars>
       </div>
+      <SendMessage
+        showEmojis={showEmojis}
+        switchShowEmojis={switchShowEmojis}
+        currentChatroomId={currentChatroomId}
+      />
     </StyledChat>
   );
 };

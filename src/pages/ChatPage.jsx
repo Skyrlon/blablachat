@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Chat from "../components/Chat.jsx";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
-import SendMessage from "../components/SendMessage.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import AddMember from "../components/AddMember.jsx";
 import { getChatrooms } from "../store/Selectors.jsx";
@@ -23,7 +22,7 @@ const StyledChatPage = styled.div`
   grid-template:
     "nav chat members" auto
     "nav chat members" auto
-    "nav send members" 5% / 10vw auto 10vw;
+    "nav chat members" 5% / 10vw auto 10vw;
   & .nav {
     grid-area: nav;
     & a {
@@ -91,14 +90,6 @@ const ChatPage = ({ isAuthentified }) => {
 
       {chatrooms.length > 0 && (
         <Chat
-          showEmojis={showEmojis}
-          switchShowEmojis={(e) => setShowEmojis(e)}
-          currentChatroomId={currentChatroomId}
-        />
-      )}
-
-      {chatrooms.length > 0 && (
-        <SendMessage
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
           currentChatroomId={currentChatroomId}
