@@ -40,7 +40,7 @@ const FriendsPage = ({ isAuthentified }) => {
   ];
 
   if (!isAuthentified) {
-    return <Redirect to="/sign" />;
+    return <Redirect to="/connexion" />;
   }
   return (
     <StyledFriendsPage>

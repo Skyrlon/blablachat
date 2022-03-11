@@ -16,14 +16,14 @@ import { getUsers } from "../store/Selectors";
 
 const axios = require("axios");
 
-const StyledSignIn = styled.form`
+const StyledConnexionPage = styled.form`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   width: 20%;
 `;
 
-const SignIn = ({ isAuthentified }) => {
+const ConnexionPage = ({ isAuthentified }) => {
   const dispatch = useDispatch();
 
   const passwordRegex =
@@ -98,7 +98,7 @@ const SignIn = ({ isAuthentified }) => {
   }
 
   return (
-    <StyledSignIn onSubmit={handleSubmit}>
+    <StyledConnexionPage onSubmit={handleSubmit}>
       <TextField
         type="text"
         label="Username"
@@ -181,12 +181,12 @@ const SignIn = ({ isAuthentified }) => {
           ? "Don't have an account yet ? Sign Up !"
           : "Already have an account ? Sign In !"}
       </div>
-    </StyledSignIn>
+    </StyledConnexionPage>
   );
 };
 
-SignIn.propTypes = {
+ConnexionPage.propTypes = {
   isAuthentified: PropTypes.bool.isRequired,
 };
 
-export default SignIn;
+export default ConnexionPage;

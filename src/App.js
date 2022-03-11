@@ -13,7 +13,7 @@ import Logout from "./components/Logout.jsx";
 import "./App.css";
 import ChatPage from "./pages/ChatPage.jsx";
 import FriendsPage from "./pages/FriendsPage";
-import SignIn from "./pages/SignIn.jsx";
+import ConnexionPage from "./pages/ConnexionPage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -60,8 +60,8 @@ const App = () => {
           )}
 
           <Switch>
-            <Route path="/sign">
-              <SignIn isAuthentified={isAuthentified} />
+            <Route path="/connexion">
+              <ConnexionPage isAuthentified={isAuthentified} />
             </Route>
 
             <Route path="/friends">
