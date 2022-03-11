@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -13,8 +14,8 @@ import { getChatrooms } from "../store/Selectors.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
-  width: 98.5vw;
-  height: 87vh;
+  width: 100vw;
+  height: 95vh;
   display: grid;
   grid-template:
     "nav chat members" auto
@@ -62,14 +63,18 @@ const ChatPage = ({ isAuthentified }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
-      {chatrooms.length > 0 && (
-        <ChatRoomNav
-          chatrooms={chatrooms}
-          changeCurrentChatroom={handleChangeCurrentChatroom}
-          currentChatroomId={currentChatroomId}
-          leaveCurrentChatroom={handleLeaveCurrentChatroom}
-        />
-      )}
+      <nav>
+        <Link to="/friends">Friends</Link>
+
+        {chatrooms.length > 0 && (
+          <ChatRoomNav
+            chatrooms={chatrooms}
+            changeCurrentChatroom={handleChangeCurrentChatroom}
+            currentChatroomId={currentChatroomId}
+            leaveCurrentChatroom={handleLeaveCurrentChatroom}
+          />
+        )}
+      </nav>
       {chatrooms.length > 0 && (
         <Chat
           showEmojis={showEmojis}

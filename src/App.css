@@ -4,6 +4,7 @@
 }
 
 .App-header {
+  height: 5vh;
   background-color: grey;
   display: flex;
   flex-direction: column;

@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -45,33 +44,18 @@ const App = () => {
       <header className="App-header">BlaBlaChat</header>
       {isAuthentified && <Logout onLogoutClick={handleLogout} />}
       <Router>
-        <div>
-          {isAuthentified && (
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/">Chat</Link>
-                </li>
-                <li>
-                  <Link to="/friends">Friends</Link>
-                </li>
-              </ul>
-            </nav>
-          )}
+        <Switch>
+          <Route path="/connexion">
+            <ConnexionPage isAuthentified={isAuthentified} />
+          </Route>
 
-          <Switch>
-            <Route path="/connexion">
-              <ConnexionPage isAuthentified={isAuthentified} />
-            </Route>
-
-            <Route path="/friends">
-              <FriendsPage isAuthentified={isAuthentified} />
-            </Route>
-            <Route path="/">
-              <ChatPage isAuthentified={isAuthentified} />
-            </Route>
-          </Switch>
-        </div>
+          <Route path="/friends">
+            <FriendsPage isAuthentified={isAuthentified} />
+          </Route>
+          <Route path="/">
+            <ChatPage isAuthentified={isAuthentified} />
+          </Route>
+        </Switch>
       </Router>
     </div>
   );
