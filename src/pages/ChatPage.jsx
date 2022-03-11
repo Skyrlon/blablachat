@@ -23,7 +23,7 @@ const StyledChatPage = styled.div`
   grid-template:
     "nav chat members" auto
     "nav chat members" auto
-    "nav send members" 5% / 10vw auto 7vw;
+    "nav send members" 5% / 10vw auto 10vw;
   & .nav {
     grid-area: nav;
     & a {

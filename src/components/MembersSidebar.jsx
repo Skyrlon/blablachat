@@ -10,18 +10,12 @@ import {
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown } from "@fortawesome/free-solid-svg-icons";
+import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
+import { ListItemButton, ListItemIcon } from "@mui/material";
 
-const StyledMembersSidebar = styled.div`
+const StyledMembersSidebar = styled(List)`
   grid-area: members;
-  border: 1px solid;
-  padding: 1rem;
-  & .title {
-    margin-bottom: 1rem;
-  }
-  & .member {
-    display: flex;
-    flex-direction: row;
-  }
 `;
 
 const MembersSidebar = ({ currentChatroomId }) => {
@@ -32,15 +26,25 @@ const MembersSidebar = ({ currentChatroomId }) => {
   const ownerID = useSelector(getCharoomOwnerId(currentChatroomId));
 
   return (
-    <StyledMembersSidebar>
-      <div className="title">Members ({members.length})</div>
+    <StyledMembersSidebar
+      component="nav"
+      subheader={
+        <ListSubheader component="div" id="nested-list-subheader">
+          Members ({members.length})
+        </ListSubheader>
+      }
+    >
       {members.map((member) => (
-        <div className="member" key={member.id}>
+        <ListItemButton key={member.id}>
           <UserPseudo userId={member.id} currentUserId={currentUserId}>
             {member.name}
           </UserPseudo>
-          {member.id === ownerID && <FontAwesomeIcon icon={faCrown} />}
-        </div>
+          {member.id === ownerID && (
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faCrown} />
+            </ListItemIcon>
+          )}
+        </ListItemButton>
       ))}
     </StyledMembersSidebar>
   );
