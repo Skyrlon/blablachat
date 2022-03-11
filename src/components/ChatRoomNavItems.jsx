@@ -7,14 +7,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import ContextMenu from "./ContextMenu";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemButton from "@mui/material/ListItemButton";
 
-const StyledChatRoomNavItems = styled.div`
-  background-color: ${(props) => (props.isActive ? "lightblue" : "")};
+const StyledChatRoomNavItems = styled(ListItemButton)`
   position: relative;
-  box-sizing: border-box;
   width: 100%;
   padding: 1em;
-  border: 1px solid;
   & .chatroom-name {
     overflow: hidden;
     white-space: nowrap;
@@ -132,12 +131,12 @@ const ChatRoomNavItems = ({
     <>
       <StyledChatRoomNavItems
         ref={chatroomItemRef}
-        isActive={chatroomId === currentChatroomId}
+        selected={chatroomId === currentChatroomId}
         key={chatroomId}
         onClick={() => changeCurrentChatroom(chatroomId)}
         onContextMenu={(e) => handleContextMenu(e, chatroomId)}
       >
-        <span className="chatroom-name">{chatroomName}</span>
+        <ListItemText>{chatroomName}</ListItemText>
       </StyledChatRoomNavItems>
       {showMenu && (
         <ContextMenu

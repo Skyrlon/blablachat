@@ -11,6 +11,9 @@ import SendMessage from "../components/SendMessage.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import AddMember from "../components/AddMember.jsx";
 import { getChatrooms } from "../store/Selectors.jsx";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import Divider from "@mui/material/Divider";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -21,6 +24,13 @@ const StyledChatPage = styled.div`
     "nav chat members" auto
     "nav chat members" auto
     "nav send members" 5% / 10vw auto 7vw;
+  & .nav {
+    grid-area: nav;
+    & a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+  }
 `;
 
 const ChatPage = ({ isAuthentified }) => {
@@ -63,9 +73,12 @@ const ChatPage = ({ isAuthentified }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
-      <nav>
-        <Link to="/friends">Friends</Link>
 
+      <List className="nav">
+        <ListItemButton>
+          <Link to="/friends">Friends</Link>
+        </ListItemButton>
+        <Divider />
         {chatrooms.length > 0 && (
           <ChatRoomNav
             chatrooms={chatrooms}
@@ -74,7 +87,8 @@ const ChatPage = ({ isAuthentified }) => {
             leaveCurrentChatroom={handleLeaveCurrentChatroom}
           />
         )}
-      </nav>
+      </List>
+
       {chatrooms.length > 0 && (
         <Chat
           showEmojis={showEmojis}
@@ -82,6 +96,7 @@ const ChatPage = ({ isAuthentified }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
+
       {chatrooms.length > 0 && (
         <SendMessage
           showEmojis={showEmojis}
@@ -89,6 +104,7 @@ const ChatPage = ({ isAuthentified }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
+
       {chatrooms.length > 0 && (
         <MembersSidebar currentChatroomId={currentChatroomId} />
       )}

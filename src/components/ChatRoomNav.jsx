@@ -2,14 +2,12 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import AddChatRoom from "./AddChatRoom";
 import ChatRoomNavItems from "./ChatRoomNavItems";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
-const StyledChatRoomNav = styled.div`
-  grid-area: nav;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  border: 1px solid black;
-`;
+const StyledChatRoomNav = styled(List)``;
 
 const ChatRoomNav = ({
   chatrooms,
@@ -19,10 +17,15 @@ const ChatRoomNav = ({
 }) => {
   return (
     <StyledChatRoomNav>
-      <AddChatRoom
-        chatrooms={chatrooms}
-        changeCurrentChatroom={changeCurrentChatroom}
-      />
+      <ListItem>
+        <ListItemText>Chatrooms</ListItemText>
+        <ListItemIcon>
+          <AddChatRoom
+            chatrooms={chatrooms}
+            changeCurrentChatroom={changeCurrentChatroom}
+          />
+        </ListItemIcon>
+      </ListItem>
 
       {chatrooms.map((chatroom) => (
         <ChatRoomNavItems
