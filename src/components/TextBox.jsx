@@ -4,6 +4,7 @@ import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
+import SendIcon from "@mui/icons-material/Send";
 
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
@@ -129,7 +130,13 @@ const TextBox = ({
             </div>
           </ClickAwayListener>
         )}
+        {type === "new" && (
+          <IconButton sx={{ margin: "0rem 1rem" }}>
+            <SendIcon onClick={onSubmit} />
+          </IconButton>
+        )}
       </StyledTextBox>
+
       {type === "edit" && (
         <div className="tips">
           Press Esc to <span onClick={cancelEdit}>cancel</span> - Press Enter to{" "}
