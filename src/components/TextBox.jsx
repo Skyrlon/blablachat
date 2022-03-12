@@ -1,7 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
@@ -23,7 +25,6 @@ const StyledTextBox = styled.form`
   flex-direction: row;
   min-height: 2em;
   width: 100%;
-  border: 2px solid;
   border-radius: 0.5em;
   align-items: center;
 
@@ -33,24 +34,8 @@ const StyledTextBox = styled.form`
     right: 0px;
   }
 
-  & .emoji-button {
-    position: absolute;
-    right: 1%;
-  }
-
   & .emoji-mart-preview {
     display: none;
-  }
-`;
-
-const StyledTextArea = styled(TextareaAutosize)`
-  resize: none;
-  border: none;
-  overflow: hidden;
-  margin-left: 1%;
-  width: 90%;
-  &:focus {
-    outline: none;
   }
 `;
 
@@ -81,6 +66,16 @@ const TextBox = ({
     }
   };
 
+  const handleClickEmojiButton = (e) => {
+    onEmojiButtonClick({
+      show:
+        showEmojis.input !== type ||
+        (showEmojis.input === type && !showEmojis.show),
+      input: type,
+    });
+    setMessagePosition(e.pageY / window.innerHeight);
+  };
+
   const addEmoji = (emoji) => {
     setMessage(`${message} ${emoji.native}`);
   };
@@ -96,28 +91,31 @@ const TextBox = ({
   return (
     <StyledTextBoxContainer>
       <StyledTextBox onSubmit={onSubmit} position={messagePosition}>
-        <StyledTextArea
-          minRows={1}
+        <TextField
+          sx={{
+            width: "95%",
+            margin: "1rem 0rem",
+          }}
+          multiline
           maxRows={3}
           value={message}
           onKeyDown={handleKeyDown}
-          onChange={(e) => handleChange(e)}
-        />
-
-        <div
-          className="emoji-button"
-          onClick={(e) => {
-            onEmojiButtonClick({
-              show:
-                showEmojis.input !== type ||
-                (showEmojis.input === type && !showEmojis.show),
-              input: type,
-            });
-            setMessagePosition(e.pageY / window.innerHeight);
+          onChange={handleChange}
+          placeholder="Write a message..."
+          InputProps={{
+            endAdornment: (
+              <IconButton>
+                <EmojiEmotionsOutlinedIcon
+                  className="emoji-button"
+                  onClick={handleClickEmojiButton}
+                />
+              </IconButton>
+            ),
+            style: {
+              padding: "0.25rem 1rem",
+            },
           }}
-        >
-          Emoji
-        </div>
+        />
 
         {showEmojis.show && showEmojis.input === type && (
           <ClickAwayListener

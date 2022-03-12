@@ -27,7 +27,7 @@ const StyledChat = styled.div`
     flex-direction: column;
     border: 1px solid black;
     width: 100%;
-    height: 95%;
+    height: 90%;
     overflow-y: auto;
   }
 
