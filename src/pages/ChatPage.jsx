@@ -3,12 +3,11 @@ import styled from "styled-components";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Chat from "../components/Chat.jsx";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
-import AddMember from "../components/AddMember.jsx";
 import { getChatrooms } from "../store/Selectors.jsx";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -30,8 +29,6 @@ const StyledChatPage = styled.div`
 `;
 
 const ChatPage = ({ isAuthentified }) => {
-  const dispatch = useDispatch();
-
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
   const chatrooms = useSelector(getChatrooms());
@@ -42,13 +39,6 @@ const ChatPage = ({ isAuthentified }) => {
 
   const handleChangeCurrentChatroom = (chatroomId) => {
     setCurrentChatroomId(chatroomId);
-  };
-
-  const handleAddMember = (chatroomId, friendsSelected) => {
-    dispatch({
-      type: "ADD_MEMBER",
-      payload: { newMember: friendsSelected, chatroomId: chatroomId },
-    });
   };
 
   const handleLeaveCurrentChatroom = (chatroomId) => {
@@ -63,13 +53,6 @@ const ChatPage = ({ isAuthentified }) => {
 
   return (
     <StyledChatPage>
-      {chatrooms.length > 0 && (
-        <AddMember
-          addMember={(ids) => handleAddMember(currentChatroomId, ids)}
-          currentChatroomId={currentChatroomId}
-        />
-      )}
-
       <List className="nav">
         <ListItemButton>
           <Link to="/friends">Friends</Link>

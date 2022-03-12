@@ -131,8 +131,8 @@ const TextBox = ({
           </ClickAwayListener>
         )}
         {type === "new" && (
-          <IconButton sx={{ margin: "0rem 1rem" }}>
-            <SendIcon onClick={onSubmit} />
+          <IconButton sx={{ margin: "0rem 1rem" }} onClick={onSubmit}>
+            <SendIcon />
           </IconButton>
         )}
       </StyledTextBox>

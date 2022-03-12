@@ -8,14 +8,12 @@ import { getCurrentUserFriends, getMembers } from "../store/Selectors";
 import { useSelector } from "react-redux";
 
 const StyledAddMember = styled.div`
-  position: absolute;
-  top: -2rem;
-  right: 8vw;
+  position: relative;
   & .menu {
     position: absolute;
     z-index: 100;
     background-color: white;
-    border: 1px solid blue;
+    border: 1px solid grey;
     left: 100%;
     & .friend {
       display: flex;

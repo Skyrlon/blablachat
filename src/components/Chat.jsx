@@ -13,10 +13,19 @@ import Linkify from "react-linkify";
 import TextBox from "./TextBox.jsx";
 import UserPseudo from "./UserPseudo.jsx";
 import { useSelector } from "react-redux";
-import { getCurrentUserId, getMessages } from "../store/Selectors.jsx";
+import {
+  getCurrentUserId,
+  getMessages,
+  getChatroomName,
+} from "../store/Selectors.jsx";
 import { useEffect } from "react";
 
 import SendMessage from "../components/SendMessage.jsx";
+import { Typography, Divider } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+
+import AddMember from "../components/AddMember.jsx";
 
 const StyledChat = styled.div`
   width: 80%;
@@ -26,12 +35,11 @@ const StyledChat = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 90%;
+    height: 84%;
     overflow-y: auto;
   }
 
   & .historic > div {
-    margin-top: 1em;
     margin-left: 0.5em;
   }
 
@@ -93,6 +101,8 @@ const StyledChat = styled.div`
 
 const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
   const dispatch = useDispatch();
+
+  const chatroomName = useSelector(getChatroomName(currentChatroomId));
 
   const [isEditingMessage, setIsEditingMessage] = useState(false);
 
@@ -174,6 +184,13 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
     }
   };
 
+  const handleAddMember = (chatroomId, friendsSelected) => {
+    dispatch({
+      type: "ADD_MEMBER",
+      payload: { newMember: friendsSelected, chatroomId: chatroomId },
+    });
+  };
+
   useEffect(() => {
     scrollbar.current.scrollToBottom();
   }, []);
@@ -189,6 +206,23 @@ const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
 
   return (
     <StyledChat>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography sx={{ padding: "1rem" }}>{chatroomName}</Typography>
+        <IconButton>
+          <AddMember
+            addMember={(ids) => handleAddMember(currentChatroomId, ids)}
+            currentChatroomId={currentChatroomId}
+          />
+        </IconButton>
+      </Box>
+      <Divider />
+
       <div className="historic">
         <Scrollbars ref={scrollbar} style={{ width: "99%", height: "100%" }}>
           {messages.length > 0 &&
