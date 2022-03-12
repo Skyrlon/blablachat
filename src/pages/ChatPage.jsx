@@ -18,13 +18,10 @@ const StyledChatPage = styled.div`
   position: relative;
   width: 100vw;
   height: 95vh;
-  display: grid;
-  grid-template:
-    "nav chat members" auto
-    "nav chat members" auto
-    "nav chat members" 5% / 10vw auto 10vw;
+  display: flex;
+  flex-direction: row;
   & .nav {
-    grid-area: nav;
+    width: 10%;
     & a {
       color: inherit;
       text-decoration: inherit;
@@ -88,6 +85,8 @@ const ChatPage = ({ isAuthentified }) => {
         )}
       </List>
 
+      <Divider flexItem={true} orientation="vertical" />
+
       {chatrooms.length > 0 && (
         <Chat
           showEmojis={showEmojis}
@@ -95,6 +94,8 @@ const ChatPage = ({ isAuthentified }) => {
           currentChatroomId={currentChatroomId}
         />
       )}
+
+      <Divider flexItem={true} orientation="vertical" />
 
       {chatrooms.length > 0 && (
         <MembersSidebar currentChatroomId={currentChatroomId} />

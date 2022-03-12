@@ -15,7 +15,7 @@ const StyledTextBoxContainer = styled.div`
   flex-direction: column;
   & .tips {
     & span {
-      color: blue;
+      color: #18181a;
     }
   }
 `;
@@ -95,7 +95,7 @@ const TextBox = ({
         <TextField
           sx={{
             width: "95%",
-            margin: "1rem 0rem",
+            margin: "1rem 1rem",
           }}
           multiline
           maxRows={3}

@@ -15,7 +15,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import { ListItemButton, ListItemIcon } from "@mui/material";
 
 const StyledMembersSidebar = styled(List)`
-  grid-area: members;
+  width: 10%;
 `;
 
 const MembersSidebar = ({ currentChatroomId }) => {
