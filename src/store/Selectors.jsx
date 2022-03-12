@@ -55,6 +55,8 @@ export const getMembers = (chatroomId) => {
   };
 };
 
+export const getCurrentChatroomId = () => (state) => state.currentChatroomId;
+
 export const getChatroomName = (chatroomId) => {
   return (state) => {
     const chatroomToLookAt = state.chatrooms.find(

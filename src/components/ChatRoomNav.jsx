@@ -9,12 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 
 const StyledChatRoomNav = styled(List)``;
 
-const ChatRoomNav = ({
-  chatrooms,
-  changeCurrentChatroom,
-  currentChatroomId,
-  leaveCurrentChatroom,
-}) => {
+const ChatRoomNav = ({ chatrooms }) => {
+
   return (
     <StyledChatRoomNav>
       <ListItem>
@@ -22,7 +18,6 @@ const ChatRoomNav = ({
         <ListItemIcon>
           <AddChatRoom
             chatrooms={chatrooms}
-            changeCurrentChatroom={changeCurrentChatroom}
           />
         </ListItemIcon>
       </ListItem>
@@ -32,9 +27,6 @@ const ChatRoomNav = ({
           key={chatroom.id}
           chatroomId={chatroom.id}
           chatroomOwnerId={chatroom.ownerID}
-          changeCurrentChatroom={changeCurrentChatroom}
-          currentChatroomId={currentChatroomId}
-          leaveCurrentChatroom={leaveCurrentChatroom}
         />
       ))}
     </StyledChatRoomNav>
@@ -43,10 +35,7 @@ const ChatRoomNav = ({
 
 ChatRoomNav.propTypes = {
   chatrooms: PropTypes.array,
-  changeCurrentChatroom: PropTypes.func,
-  currentChatroomId: PropTypes.number,
   createChatRoom: PropTypes.func,
-  leaveCurrentChatroom: PropTypes.func,
 };
 
 export default ChatRoomNav;

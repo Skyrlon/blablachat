@@ -10,6 +10,8 @@ const initialState = {
     friendsRequest: undefined,
   },
 
+  currentChatroomId: null,
+
   users: [
     {
       id: 0,
@@ -164,6 +166,10 @@ const CREATE_CHATROOM = "CREATE_CHATROOM";
 
 const ADD_MEMBER = "ADD_MEMBER";
 
+const CHANGE_CURRENT_CHATROOM = "CHANGE_CURRENT_CHATROOM";
+
+const LEAVE_CURRENT_CHATROOM = "LEAVE_CURRENT_CHATROOM";
+
 const LEAVE_CHATROOM = "LEAVE_CHATROOM";
 
 const ACCEPT_FRIEND_REQUEST = "ACCEPT_FRIEND_REQUEST";
@@ -282,6 +288,16 @@ function reducer(state = initialState, action) {
         chatroomToEdit.membersID = chatroomToEdit.membersID.filter(
           (member) => member !== action.payload.userId
         );
+      });
+
+    case CHANGE_CURRENT_CHATROOM:
+      return produce(state, (draft) => {
+        draft.currentChatroomId = action.payload.id;
+      });
+
+    case LEAVE_CURRENT_CHATROOM:
+      return produce(state, (draft) => {
+        draft.currentChatroomId = null;
       });
 
     case LEAVE_CHATROOM:

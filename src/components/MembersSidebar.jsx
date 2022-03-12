@@ -6,6 +6,7 @@ import {
   getMembers,
   getCharoomOwnerId,
   getCurrentUserId,
+  getCurrentChatroomId,
 } from "../store/Selectors";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,9 @@ const StyledMembersSidebar = styled(List)`
   width: 10%;
 `;
 
-const MembersSidebar = ({ currentChatroomId }) => {
+const MembersSidebar = () => {
+  const currentChatroomId = useSelector(getCurrentChatroomId());
+
   const currentUserId = useSelector(getCurrentUserId());
 
   const members = useSelector(getMembers(currentChatroomId));

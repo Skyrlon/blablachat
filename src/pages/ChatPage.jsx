@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import Chat from "../components/Chat.jsx";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
-import { getChatrooms } from "../store/Selectors.jsx";
+import { getChatrooms, getCurrentChatroomId } from "../store/Selectors.jsx";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import Divider from "@mui/material/Divider";
@@ -33,19 +33,7 @@ const ChatPage = ({ isAuthentified }) => {
 
   const chatrooms = useSelector(getChatrooms());
 
-  const [currentChatroomId, setCurrentChatroomId] = useState(
-    chatrooms.length > 0 ? chatrooms[0].id : null
-  );
-
-  const handleChangeCurrentChatroom = (chatroomId) => {
-    setCurrentChatroomId(chatroomId);
-  };
-
-  const handleLeaveCurrentChatroom = (chatroomId) => {
-    setCurrentChatroomId(
-      chatrooms.find((chatroom) => chatroom.id !== chatroomId).id
-    );
-  };
+  const currentChatroomId = useSelector(getCurrentChatroomId());
 
   if (!isAuthentified) {
     return <Redirect to="/connexion" />;
@@ -58,31 +46,21 @@ const ChatPage = ({ isAuthentified }) => {
           <Link to="/friends">Friends</Link>
         </ListItemButton>
         <Divider />
-        {chatrooms.length > 0 && (
-          <ChatRoomNav
-            chatrooms={chatrooms}
-            changeCurrentChatroom={handleChangeCurrentChatroom}
-            currentChatroomId={currentChatroomId}
-            leaveCurrentChatroom={handleLeaveCurrentChatroom}
-          />
-        )}
+        {chatrooms.length > 0 && <ChatRoomNav chatrooms={chatrooms} />}
       </List>
 
       <Divider flexItem={true} orientation="vertical" />
 
-      {chatrooms.length > 0 && (
+      {chatrooms.length > 0 && currentChatroomId !== null && (
         <Chat
           showEmojis={showEmojis}
           switchShowEmojis={(e) => setShowEmojis(e)}
-          currentChatroomId={currentChatroomId}
         />
       )}
 
       <Divider flexItem={true} orientation="vertical" />
 
-      {chatrooms.length > 0 && (
-        <MembersSidebar currentChatroomId={currentChatroomId} />
-      )}
+      {chatrooms.length > 0 && currentChatroomId !== null && <MembersSidebar />}
     </StyledChatPage>
   );
 };

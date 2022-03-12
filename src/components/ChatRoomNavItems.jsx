@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCurrentUserId, getChatroomName } from "../store/Selectors.jsx";
+import {
+  getCurrentUserId,
+  getChatroomName,
+  getCurrentChatroomId,
+} from "../store/Selectors.jsx";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -43,14 +47,10 @@ const StyledChatRoomNavItems = styled(ListItemButton)`
   }
 `;
 
-const ChatRoomNavItems = ({
-  chatroomId,
-  chatroomOwnerId,
-  changeCurrentChatroom,
-  currentChatroomId,
-  leaveCurrentChatroom,
-}) => {
+const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
   const dispatch = useDispatch();
+
+  const currentChatroomId = useSelector(getCurrentChatroomId());
 
   const currentUserId = useSelector(getCurrentUserId());
 
@@ -97,7 +97,8 @@ const ChatRoomNavItems = ({
       type: "LEAVE_CHATROOM",
       payload: { chatroomId },
     });
-    if (chatroomId === currentChatroomId) leaveCurrentChatroom(chatroomId);
+    if (chatroomId === currentChatroomId)
+      dispatch({ type: "LEAVE_CURRENT_CHATROOM" });
   };
 
   const renameChatroomName = () => {
@@ -125,6 +126,10 @@ const ChatRoomNavItems = ({
     setShowRenameInput(false);
   };
 
+  const onClickChatroomItem = (chatroomId) => {
+    dispatch({ type: "CHANGE_CURRENT_CHATROOM", payload: { id: chatroomId } });
+  };
+
   const renameFormRef = useRef(null);
 
   return (
@@ -133,7 +138,7 @@ const ChatRoomNavItems = ({
         ref={chatroomItemRef}
         selected={chatroomId === currentChatroomId}
         key={chatroomId}
-        onClick={() => changeCurrentChatroom(chatroomId)}
+        onClick={() => onClickChatroomItem(chatroomId)}
         onContextMenu={(e) => handleContextMenu(e, chatroomId)}
       >
         <ListItemText>{chatroomName}</ListItemText>
@@ -176,9 +181,6 @@ const ChatRoomNavItems = ({
 ChatRoomNavItems.propTypes = {
   chatroomId: PropTypes.number,
   chatroomOwnerId: PropTypes.number,
-  changeCurrentChatroom: PropTypes.func,
-  currentChatroomId: PropTypes.number,
-  leaveCurrentChatroom: PropTypes.func,
 };
 
 export default ChatRoomNavItems;

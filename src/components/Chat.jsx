@@ -17,6 +17,7 @@ import {
   getCurrentUserId,
   getMessages,
   getChatroomName,
+  getCurrentChatroomId,
 } from "../store/Selectors.jsx";
 import { useEffect } from "react";
 
@@ -99,8 +100,10 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
+const Chat = ({ showEmojis, switchShowEmojis }) => {
   const dispatch = useDispatch();
+
+  const currentChatroomId = useSelector(getCurrentChatroomId());
 
   const chatroomName = useSelector(getChatroomName(currentChatroomId));
 
@@ -306,7 +309,6 @@ Chat.propTypes = {
   switchShowEmojis: PropTypes.func,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
-  currentChatroomId: PropTypes.number,
 };
 
 export default Chat;
