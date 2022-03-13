@@ -10,9 +10,8 @@ import { getCurrentUserId } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
-import ChatPage from "./pages/ChatPage.jsx";
-import FriendsPage from "./pages/FriendsPage";
 import ConnexionPage from "./pages/ConnexionPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,11 +48,8 @@ const App = () => {
             <ConnexionPage isAuthentified={isAuthentified} />
           </Route>
 
-          <Route path="/friends">
-            <FriendsPage isAuthentified={isAuthentified} />
-          </Route>
           <Route path="/">
-            <ChatPage isAuthentified={isAuthentified} />
+            <HomePage isAuthentified={isAuthentified} />
           </Route>
         </Switch>
       </Router>

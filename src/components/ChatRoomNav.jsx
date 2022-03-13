@@ -10,25 +10,23 @@ import ListItemText from "@mui/material/ListItemText";
 const StyledChatRoomNav = styled(List)``;
 
 const ChatRoomNav = ({ chatrooms }) => {
-
   return (
     <StyledChatRoomNav>
       <ListItem>
         <ListItemText>Chatrooms</ListItemText>
         <ListItemIcon>
-          <AddChatRoom
-            chatrooms={chatrooms}
-          />
+          <AddChatRoom chatrooms={chatrooms} />
         </ListItemIcon>
       </ListItem>
 
-      {chatrooms.map((chatroom) => (
-        <ChatRoomNavItems
-          key={chatroom.id}
-          chatroomId={chatroom.id}
-          chatroomOwnerId={chatroom.ownerID}
-        />
-      ))}
+      {chatrooms.length > 0 &&
+        chatrooms.map((chatroom) => (
+          <ChatRoomNavItems
+            key={chatroom.id}
+            chatroomId={chatroom.id}
+            chatroomOwnerId={chatroom.ownerID}
+          />
+        ))}
     </StyledChatRoomNav>
   );
 };

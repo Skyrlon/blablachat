@@ -29,7 +29,7 @@ import IconButton from "@mui/material/IconButton";
 import AddMember from "../components/AddMember.jsx";
 
 const StyledChat = styled.div`
-  width: 80%;
+  width: 90%;
   height: 100%;
 
   & .historic {
