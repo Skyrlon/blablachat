@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useState } from "react";
 
@@ -6,6 +5,8 @@ import Chat from "../components/Chat.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import Divider from "@mui/material/Divider";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getIsAuthentified } from "../store/Selectors.jsx";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -15,10 +16,12 @@ const StyledChatPage = styled.div`
   flex-direction: row;
 `;
 
-const ChatPage = ({ isAuthentified }) => {
+const ChatPage = () => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
   let navigate = useNavigate();
+
+  const isAuthentified = useSelector(getIsAuthentified());
 
   if (!isAuthentified) {
     navigate("/connexion");
@@ -43,10 +46,6 @@ const ChatPage = ({ isAuthentified }) => {
       </Routes>
     </StyledChatPage>
   );
-};
-
-ChatPage.propTypes = {
-  isAuthentified: PropTypes.bool,
 };
 
 export default ChatPage;

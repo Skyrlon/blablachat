@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getCurrentUserId } from "./store/Selectors.jsx";
+import { getIsAuthentified } from "./store/Selectors.jsx";
 
 import Logout from "./components/Logout.jsx";
 import "./App.css";
@@ -11,34 +10,21 @@ import HomePage from "./pages/HomePage.jsx";
 const App = () => {
   const dispatch = useDispatch();
 
-  const currentUserId = useSelector(getCurrentUserId());
-
-  const [isAuthentified, setIsAuthentified] = useState(false);
+  const isAuthentified = useSelector(getIsAuthentified());
 
   const handleLogout = () => {
     dispatch({ type: "LOG_OUT" });
   };
-
-  useEffect(() => {
-    if (currentUserId !== undefined) {
-      setIsAuthentified(true);
-    } else {
-      setIsAuthentified(false);
-    }
-  }, [currentUserId]);
 
   return (
     <div className="App">
       <header className="App-header">BlaBlaChat</header>
       {isAuthentified && <Logout onLogoutClick={handleLogout} />}
       <Routes>
-        <Route
-          path="*"
-          element={<HomePage isAuthentified={isAuthentified} />}
-        />
+        <Route path="*" element={<HomePage />} />
         <Route
           path="/connexion"
-          element={<ConnexionPage isAuthentified={isAuthentified} />}
+          element={!isAuthentified ? <ConnexionPage /> : <Navigate to="*" />}
         />
       </Routes>
     </div>

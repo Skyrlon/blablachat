@@ -12,6 +12,8 @@ const initialState = {
 
   currentChatroomId: null,
 
+  isAuthentified: false,
+
   users: [
     {
       id: 0,
@@ -199,6 +201,7 @@ function reducer(state = initialState, action) {
         };
         draft.users.push(newUser);
         draft.currentUser = newUser;
+        draft.isAuthentified = true;
       });
 
     case LOAD_USER:
@@ -206,6 +209,7 @@ function reducer(state = initialState, action) {
         draft.currentUser = state.users.find(
           (user) => user.id === action.payload.id
         );
+        draft.isAuthentified = true;
       });
 
     case LOG_OUT:
@@ -217,6 +221,7 @@ function reducer(state = initialState, action) {
           friendsID: undefined,
           friendsRequest: undefined,
         };
+        draft.isAuthentified = false;
       });
 
     case EDIT_MESSAGE:

@@ -2,6 +2,8 @@ export const getUsers = () => {
   return (state) => state.users;
 };
 
+export const getIsAuthentified = () => (state) => state.isAuthentified;
+
 export const getCurrentUserId = () => (state) => state.currentUser.id;
 
 export const getCurrentUserFriends = () => {

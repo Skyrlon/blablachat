@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 
@@ -7,7 +6,10 @@ import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
 import AddFriendTab from "../components/AddFriendTab";
 import { useSelector } from "react-redux";
-import { getCurrentUserFriendsRequest } from "../store/Selectors";
+import {
+  getCurrentUserFriendsRequest,
+  getIsAuthentified,
+} from "../store/Selectors";
 import { useNavigate } from "react-router-dom";
 
 const StyledFriendsPage = styled.div`
@@ -28,8 +30,10 @@ const StyledFriendsPage = styled.div`
   }
 `;
 
-const FriendsPage = ({ isAuthentified }) => {
+const FriendsPage = () => {
   let navigate = useNavigate();
+
+  const isAuthentified = useSelector(getIsAuthentified());
 
   if (!isAuthentified) {
     navigate("/connexion");
@@ -74,10 +78,6 @@ const FriendsPage = ({ isAuthentified }) => {
       {categoryToShow === "add friend" && <AddFriendTab />}
     </StyledFriendsPage>
   );
-};
-
-FriendsPage.propTypes = {
-  isAuthentified: PropTypes.bool,
 };
 
 export default FriendsPage;

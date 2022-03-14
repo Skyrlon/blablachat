@@ -1,10 +1,9 @@
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
-import { getChatrooms } from "../store/Selectors.jsx";
+import { getChatrooms, getIsAuthentified } from "../store/Selectors.jsx";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -30,8 +29,10 @@ const StyledHomePage = styled.div`
   }
 `;
 
-const HomePage = ({ isAuthentified }) => {
+const HomePage = () => {
   const chatrooms = useSelector(getChatrooms());
+
+  const isAuthentified = useSelector(getIsAuthentified());
 
   if (!isAuthentified) {
     return <Navigate to="/connexion" />;
@@ -64,10 +65,6 @@ const HomePage = ({ isAuthentified }) => {
       </div>
     </StyledHomePage>
   );
-};
-
-HomePage.propTypes = {
-  isAuthentified: PropTypes.bool.isRequired,
 };
 
 export default HomePage;
