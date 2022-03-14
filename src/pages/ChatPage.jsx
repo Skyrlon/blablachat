@@ -6,6 +6,7 @@ import { useState } from "react";
 import Chat from "../components/Chat.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import Divider from "@mui/material/Divider";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 const StyledChatPage = styled.div`
   position: relative;
@@ -18,25 +19,28 @@ const StyledChatPage = styled.div`
 const ChatPage = ({ isAuthentified }) => {
   const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
 
+  let { path } = useRouteMatch();
+
   if (!isAuthentified) {
     return <Redirect to="/connexion" />;
   }
+  console.log(path);
 
   return (
     <StyledChatPage>
-      <Chat
-        showEmojis={showEmojis}
-        switchShowEmojis={(e) => setShowEmojis(e)}
-      />
-
-      <Divider flexItem={true} orientation="vertical" />
-
-      <MembersSidebar />
+      <Switch>
+        <Route path={`${path}/:id`}>
+          <Chat
+            showEmojis={showEmojis}
+            switchShowEmojis={(e) => setShowEmojis(e)}
+          />
+          <Divider flexItem={true} orientation="vertical" />
+          <MembersSidebar />
+        </Route>
+      </Switch>
     </StyledChatPage>
   );
 };
-
-ChatPage.defaultProps = { chatRooms: [] };
 
 ChatPage.propTypes = {
   isAuthentified: PropTypes.bool,

@@ -11,11 +11,11 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import ContextMenu from "./ContextMenu";
-import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import { Link } from "react-router-dom";
 
-const StyledChatRoomNavItems = styled(ListItemButton)`
+const StyledChatRoomNavItems = styled(ListItem)`
   position: relative;
   width: 100%;
   padding: 1em;
@@ -141,10 +141,10 @@ const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
         key={chatroomId}
         onClick={() => onClickChatroomItem(chatroomId)}
         onContextMenu={(e) => handleContextMenu(e, chatroomId)}
+        component={Link}
+        to={`/chatrooms/${chatroomId}`}
       >
-        <ListItemText>
-          <Link to={`/chatrooms/${chatroomId}`}>{chatroomName}</Link>
-        </ListItemText>
+        <ListItemButton>{chatroomName}</ListItemButton>
       </StyledChatRoomNavItems>
       {showMenu && (
         <ContextMenu

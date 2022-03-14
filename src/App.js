@@ -39,10 +39,11 @@ const App = () => {
   }, [isAuthentified]);
 
   return (
-    <div className="App">
-      <header className="App-header">BlaBlaChat</header>
-      {isAuthentified && <Logout onLogoutClick={handleLogout} />}
-      <Router>
+    <Router>
+      <div className="App">
+        <header className="App-header">BlaBlaChat</header>
+        {isAuthentified && <Logout onLogoutClick={handleLogout} />}
+
         <Switch>
           <Route path="/connexion">
             <ConnexionPage isAuthentified={isAuthentified} />
@@ -52,8 +53,8 @@ const App = () => {
             <HomePage isAuthentified={isAuthentified} />
           </Route>
         </Switch>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 };
 

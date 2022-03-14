@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import { getChatrooms } from "../store/Selectors.jsx";
 import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Divider from "@mui/material/Divider";
 import FriendsPage from "./FriendsPage.jsx";
@@ -39,25 +39,23 @@ const HomePage = ({ isAuthentified }) => {
   return (
     <StyledHomePage>
       <List className="nav">
-        <ListItemButton>
-          <Link to="/">Friends</Link>
-        </ListItemButton>
+        <ListItem component={Link} to="/">
+          <ListItemButton>Friends</ListItemButton>
+        </ListItem>
         <Divider />
-        {<ChatRoomNav chatrooms={chatrooms} />}
+        <ChatRoomNav chatrooms={chatrooms} />
       </List>
 
       <Divider flexItem={true} orientation="vertical" />
 
       <div className="content">
         <Switch>
-          <Route
-            path="/chatrooms/:id"
-            children={<ChatPage isAuthentified={isAuthentified} />}
-          />
-          <Route
-            path="/"
-            children={<FriendsPage isAuthentified={isAuthentified} />}
-          />
+          <Route exact path="/">
+            <FriendsPage isAuthentified={isAuthentified} />
+          </Route>
+          <Route path="/chatrooms">
+            <ChatPage isAuthentified={isAuthentified} />
+          </Route>
         </Switch>
       </div>
     </StyledHomePage>
