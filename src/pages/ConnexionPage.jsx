@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Redirect } from "react-router";
 import LogIn from "../components/LogIn";
 import SignUp from "../components/SignUp";
+import { useNavigate } from "react-router-dom";
 
 const StyledConnexionPage = styled.div`
   margin: 0 auto;
@@ -11,11 +11,13 @@ const StyledConnexionPage = styled.div`
 `;
 
 const ConnexionPage = ({ isAuthentified }) => {
-  const [displayLogIn, setDisplayLogIn] = useState(true);
+  let navigate = useNavigate();
 
   if (isAuthentified) {
-    return <Redirect to="/" />;
+    navigate("/");
   }
+
+  const [displayLogIn, setDisplayLogIn] = useState(true);
 
   return (
     <StyledConnexionPage>

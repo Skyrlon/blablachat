@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Routes, Route, Navigate, Link } from "react-router-dom";
 
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import { getChatrooms } from "../store/Selectors.jsx";
@@ -34,8 +34,9 @@ const HomePage = ({ isAuthentified }) => {
   const chatrooms = useSelector(getChatrooms());
 
   if (!isAuthentified) {
-    return <Redirect to="/connexion" />;
+    return <Navigate to="/connexion" />;
   }
+
   return (
     <StyledHomePage>
       <List className="nav">
@@ -49,14 +50,17 @@ const HomePage = ({ isAuthentified }) => {
       <Divider flexItem={true} orientation="vertical" />
 
       <div className="content">
-        <Switch>
-          <Route exact path="/">
-            <FriendsPage isAuthentified={isAuthentified} />
-          </Route>
-          <Route path="/chatrooms">
-            <ChatPage isAuthentified={isAuthentified} />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            exact
+            path="*"
+            element={<FriendsPage isAuthentified={isAuthentified} />}
+          />
+          <Route
+            path="chatrooms/*"
+            element={<ChatPage isAuthentified={isAuthentified} />}
+          />
+        </Routes>
       </div>
     </StyledHomePage>
   );

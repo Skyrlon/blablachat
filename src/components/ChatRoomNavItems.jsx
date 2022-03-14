@@ -142,7 +142,7 @@ const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
         onClick={() => onClickChatroomItem(chatroomId)}
         onContextMenu={(e) => handleContextMenu(e, chatroomId)}
         component={Link}
-        to={`/chatrooms/${chatroomId}`}
+        to={`chatrooms/${chatroomId}`}
       >
         <ListItemButton>{chatroomName}</ListItemButton>
       </StyledChatRoomNavItems>

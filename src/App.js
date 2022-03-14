@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUserId } from "./store/Selectors.jsx";
 
@@ -32,29 +27,21 @@ const App = () => {
     }
   }, [currentUserId]);
 
-  useEffect(() => {
-    if (isAuthentified) {
-      return <Redirect to="/" />;
-    }
-  }, [isAuthentified]);
-
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">BlaBlaChat</header>
-        {isAuthentified && <Logout onLogoutClick={handleLogout} />}
-
-        <Switch>
-          <Route path="/connexion">
-            <ConnexionPage isAuthentified={isAuthentified} />
-          </Route>
-
-          <Route path="/">
-            <HomePage isAuthentified={isAuthentified} />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <div className="App">
+      <header className="App-header">BlaBlaChat</header>
+      {isAuthentified && <Logout onLogoutClick={handleLogout} />}
+      <Routes>
+        <Route
+          path="*"
+          element={<HomePage isAuthentified={isAuthentified} />}
+        />
+        <Route
+          path="/connexion"
+          element={<ConnexionPage isAuthentified={isAuthentified} />}
+        />
+      </Routes>
+    </div>
   );
 };
 

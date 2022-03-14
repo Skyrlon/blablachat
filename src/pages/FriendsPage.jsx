@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Redirect } from "react-router";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 
@@ -9,6 +8,7 @@ import FriendsRequestsTab from "../components/FriendsRequestsTab";
 import AddFriendTab from "../components/AddFriendTab";
 import { useSelector } from "react-redux";
 import { getCurrentUserFriendsRequest } from "../store/Selectors";
+import { useNavigate } from "react-router-dom";
 
 const StyledFriendsPage = styled.div`
   & .requests-number {
@@ -29,6 +29,12 @@ const StyledFriendsPage = styled.div`
 `;
 
 const FriendsPage = ({ isAuthentified }) => {
+  let navigate = useNavigate();
+
+  if (!isAuthentified) {
+    navigate("/connexion");
+  }
+
   const [categoryToShow, setCategoryToShow] = useState("all");
 
   const friendsRequest = useSelector(getCurrentUserFriendsRequest());
@@ -39,9 +45,6 @@ const FriendsPage = ({ isAuthentified }) => {
     { category: "add friend", title: "Add Friend" },
   ];
 
-  if (!isAuthentified) {
-    return <Redirect to="/connexion" />;
-  }
   return (
     <StyledFriendsPage>
       {buttonsTab.map((tab) => (
