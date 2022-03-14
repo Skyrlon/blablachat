@@ -105,11 +105,8 @@ const TextBox = ({
           placeholder="Write a message..."
           InputProps={{
             endAdornment: (
-              <IconButton>
-                <EmojiEmotionsOutlinedIcon
-                  className="emoji-button"
-                  onClick={handleClickEmojiButton}
-                />
+              <IconButton onClick={handleClickEmojiButton}>
+                <EmojiEmotionsOutlinedIcon className="emoji-button" />
               </IconButton>
             ),
             style: {
