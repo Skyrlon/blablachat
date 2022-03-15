@@ -5,11 +5,13 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
 import { getChatrooms, getIsAuthentified } from "../store/Selectors.jsx";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 import Divider from "@mui/material/Divider";
 import FriendsPage from "./FriendsPage.jsx";
 import ChatPage from "./ChatPage.jsx";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import PeopleIcon from "@mui/icons-material/People";
 
 const StyledHomePage = styled.div`
   position: relative;
@@ -41,9 +43,12 @@ const HomePage = () => {
   return (
     <StyledHomePage>
       <List className="nav">
-        <ListItem component={Link} to="/">
-          <ListItemButton>Friends</ListItemButton>
-        </ListItem>
+        <ListItemButton component={Link} to="/">
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary="Friends" />
+        </ListItemButton>
         <Divider />
         <ChatRoomNav chatrooms={chatrooms} />
       </List>

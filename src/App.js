@@ -24,7 +24,7 @@ const App = () => {
         <Route path="*" element={<HomePage />} />
         <Route
           path="/connexion"
-          element={!isAuthentified ? <ConnexionPage /> : <Navigate to="*" />}
+          element={!isAuthentified ? <ConnexionPage /> : <Navigate to="/" />}
         />
       </Routes>
     </div>
