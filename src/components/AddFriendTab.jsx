@@ -4,8 +4,16 @@ import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersFound } from "../store/Selectors";
+import { Divider, List, ListItem, ListItemText } from "@mui/material";
 
-const StyledAddFriendTab = styled.div``;
+const StyledAddFriendTab = styled.div`
+  & form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+`;
 
 const AddFriendTab = () => {
   const dispatch = useDispatch();
@@ -43,27 +51,40 @@ const AddFriendTab = () => {
       <form onSubmit={onSubmit}>
         <TextField
           type="text"
-          label="Add friend"
+          sx={{ width: "98%", marginTop: "1rem" }}
           onChange={(e) => setTextTyped(e.target.value)}
           onKeyPress={(e) => handleInputSubmit(e)}
           value={textTyped}
+          InputProps={{
+            endAdornment: (
+              <Button variant="contained" onClick={onSubmit}>
+                Search
+              </Button>
+            ),
+          }}
         />
-        <Button onClick={onSubmit}>Search</Button>
       </form>
 
-      {showUsersFound &&
-        (usersFound.length > 0 ? (
-          usersFound.map((user) => (
-            <div key={user.id}>
-              <div>{user.name}</div>
-              <Button onClick={() => sendFriendRequest(user.id)}>
-                Request
-              </Button>
-            </div>
-          ))
-        ) : (
-          <div>No users found</div>
-        ))}
+      <List>
+        {showUsersFound &&
+          (usersFound.length > 0 ? (
+            usersFound.map((user) => (
+              <div key={user.id}>
+                <Divider />
+                <ListItem>
+                  <ListItemText>{user.name}</ListItemText>
+                  <Button onClick={() => sendFriendRequest(user.id)}>
+                    Send request
+                  </Button>
+                </ListItem>
+              </div>
+            ))
+          ) : (
+            <ListItem>
+              <ListItemText>No users found</ListItemText>
+            </ListItem>
+          ))}
+      </List>
     </StyledAddFriendTab>
   );
 };

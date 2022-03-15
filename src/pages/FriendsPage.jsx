@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Badge from "@mui/material/Badge";
+
 import { useState } from "react";
 
 import AllFriendsTab from "../components/AllFriendsTab";
@@ -11,21 +15,14 @@ import {
   getIsAuthentified,
 } from "../store/Selectors";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/system";
 
 const StyledFriendsPage = styled.div`
-  & .requests-number {
-    margin-left: 0.1rem;
-    border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #3f51b5;
-    color: white;
-    &.active {
-      color: #3f51b5;
-      background-color: white;
+  & .tab {
+    min-height: 1rem;
+
+    &-text {
+      padding-right: 0.75rem;
     }
   }
 `;
@@ -43,39 +40,37 @@ const FriendsPage = () => {
 
   const friendsRequest = useSelector(getCurrentUserFriendsRequest());
 
-  const buttonsTab = [
-    { category: "all", title: "All" },
-    { category: "requests", title: "Requests" },
-    { category: "add friend", title: "Add Friend" },
-  ];
+  const handleChange = (e, newValue) => {
+    setCategoryToShow(newValue);
+  };
 
   return (
     <StyledFriendsPage>
-      {buttonsTab.map((tab) => (
-        <Button
-          key={tab.category}
-          color="primary"
-          variant={categoryToShow === tab.category ? "contained" : "outlined"}
-          onClick={() => setCategoryToShow(tab.category)}
-        >
-          {tab.title}
-          {tab.category === "requests" && friendsRequest.length > 0 && (
-            <span
-              className={`requests-number${
-                categoryToShow === tab.category ? " active" : ""
-              }`}
-            >
-              {friendsRequest.length}
-            </span>
-          )}
-        </Button>
-      ))}
+      <Box sx={{ height: "3.5rem" }}>
+        <Tabs value={categoryToShow} onChange={handleChange}>
+          <Tab className="tab" value="all" label="All" />
+
+          <Tab
+            className="tab"
+            value="requests"
+            label={
+              <Badge badgeContent={friendsRequest.length} color="primary">
+                <span className="tab-text">Requests</span>
+              </Badge>
+            }
+          />
+
+          <Tab className="tab" value="add-friend" label="Add Friend" />
+        </Tabs>
+      </Box>
+
+      <Divider />
 
       {categoryToShow === "all" && <AllFriendsTab />}
 
       {categoryToShow === "requests" && <FriendsRequestsTab />}
 
-      {categoryToShow === "add friend" && <AddFriendTab />}
+      {categoryToShow === "add-friend" && <AddFriendTab />}
     </StyledFriendsPage>
   );
 };
