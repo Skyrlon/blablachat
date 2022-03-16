@@ -5,9 +5,12 @@ import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { getIsAuthentified } from "../store/Selectors";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const isAuthentified = useSelector(getIsAuthentified());
 
@@ -22,7 +25,11 @@ const Header = () => {
       sx={{ backgroundColor: "white", color: "black" }}
     >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          component="h6"
+          onClick={() => navigate("/")}
+          sx={{ flexGrow: 1, color: "inherit", cursor: "pointer" }}
+        >
           BlaBlaChat
         </Typography>
         {isAuthentified && (
