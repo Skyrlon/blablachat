@@ -4,15 +4,16 @@ import { useDispatch } from "react-redux";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useSelector } from "react-redux";
-import { getUsers } from "../store/Selectors";
 import Box from "@mui/material/Box";
 
+import { useSelector } from "react-redux";
+import { getUsers } from "../store/Selectors";
 const StyledSignUp = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -36,6 +37,7 @@ const SignUp = ({ children }) => {
     useState(undefined);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -110,16 +112,25 @@ const SignUp = ({ children }) => {
           passwordSubmitted !== undefined &&
           !passwordRegex.test(passwordSubmitted)
         }
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-
-      <div onClick={() => setShowPassword(!showPassword)}>
-        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-      </div>
 
       {
         <TextField
           margin="normal"
-          type={showPassword ? "text" : "password"}
+          type={showConfirmPassword ? "text" : "password"}
           label="Confirm Password"
           name="password-confirm"
           placeholder="Password"
@@ -138,6 +149,19 @@ const SignUp = ({ children }) => {
               ? "Not same password"
               : ""
           }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       }
       <LoadingButton

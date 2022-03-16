@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const axios = require("axios");
 
@@ -74,11 +76,22 @@ const LogIn = ({ children }) => {
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={(e) => handleInputSubmit(e)}
         value={password}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
 
-      <div onClick={() => setShowPassword(!showPassword)}>
-        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-      </div>
+      <div onClick={() => setShowPassword(!showPassword)}>{}</div>
 
       <LoadingButton
         loading={isLoading}
