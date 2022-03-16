@@ -5,6 +5,7 @@ import { getIsAuthentified } from "./store/Selectors.jsx";
 import ConnexionPage from "./pages/ConnexionPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import Header from "./components/Header.jsx";
+import Divider from "@mui/material/Divider";
 
 const App = () => {
   const isAuthentified = useSelector(getIsAuthentified());
@@ -12,6 +13,7 @@ const App = () => {
   return (
     <div className="App">
       <Header />
+      {isAuthentified && <Divider />}
       <Routes>
         <Route path="*" element={<HomePage />} />
         <Route
