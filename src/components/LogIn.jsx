@@ -6,16 +6,16 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { Box } from "@mui/material";
 
 const axios = require("axios");
 
-const StyledLogIn = styled.form`
-  width: 100%;
+const StyledLogIn = styled(Box)`
   display: flex;
   flex-direction: column;
 `;
 
-const LogIn = () => {
+const LogIn = ({ children }) => {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -54,8 +54,10 @@ const LogIn = () => {
   };
 
   return (
-    <StyledLogIn onSubmit={handleSubmit}>
+    <StyledLogIn component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
       <TextField
+        margin="normal"
+        fullWidth
         type="text"
         label="Username"
         placeholder="Username"
@@ -64,6 +66,8 @@ const LogIn = () => {
         value={username}
       />
       <TextField
+        margin="normal"
+        fullWidth
         type={showPassword ? "text" : "password"}
         label="Password"
         placeholder="Password"
@@ -81,9 +85,11 @@ const LogIn = () => {
         onClick={handleSubmit}
         variant="contained"
         color="primary"
+        fullWidth
       >
         Submit
       </LoadingButton>
+      {children}
     </StyledLogIn>
   );
 };

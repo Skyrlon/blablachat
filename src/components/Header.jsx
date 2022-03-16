@@ -20,13 +20,13 @@ const Header = () => {
 
   return (
     <AppBar
-      position="static"
+      position={isAuthentified ? "sticked" : "fixed"}
       elevation={0}
       sx={{ backgroundColor: "white", color: "black" }}
     >
       <Toolbar>
         <Typography
-          component="h6"
+          component="h1"
           onClick={() => navigate("/")}
           sx={{ flexGrow: 1, color: "inherit", cursor: "pointer" }}
         >

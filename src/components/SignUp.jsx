@@ -11,14 +11,14 @@ import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSelector } from "react-redux";
 import { getUsers } from "../store/Selectors";
+import Box from "@mui/material/Box";
 
-const StyledSignUp = styled.form`
-  width: 100%;
+const StyledSignUp = styled(Box)`
   display: flex;
   flex-direction: column;
 `;
 
-const SignUp = () => {
+const SignUp = ({ children }) => {
   const dispatch = useDispatch();
 
   const passwordRegex =
@@ -70,8 +70,9 @@ const SignUp = () => {
   };
 
   return (
-    <StyledSignUp>
+    <StyledSignUp component="form" sx={{ mt: 1 }}>
       <TextField
+        margin="normal"
         type="text"
         label="Username"
         placeholder="Username"
@@ -98,6 +99,7 @@ const SignUp = () => {
           <ClearIcon />
         ))}
       <TextField
+        margin="normal"
         type={showPassword ? "text" : "password"}
         label="Password"
         placeholder="Password"
@@ -116,6 +118,7 @@ const SignUp = () => {
 
       {
         <TextField
+          margin="normal"
           type={showPassword ? "text" : "password"}
           label="Confirm Password"
           name="password-confirm"
@@ -145,6 +148,7 @@ const SignUp = () => {
       >
         Submit
       </LoadingButton>
+      {children}
     </StyledSignUp>
   );
 };
