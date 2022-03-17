@@ -17,7 +17,7 @@ const StyledLogIn = styled(Box)`
   flex-direction: column;
 `;
 
-const LogIn = ({ children }) => {
+const LogIn = () => {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -102,7 +102,6 @@ const LogIn = ({ children }) => {
       >
         Submit
       </LoadingButton>
-      {children}
     </StyledLogIn>
   );
 };

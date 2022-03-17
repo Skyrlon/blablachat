@@ -11,7 +11,7 @@ const App = () => {
   const isAuthentified = useSelector(getIsAuthentified());
 
   return (
-    <div className="App" style={{ margin: "0 auto" }}>
+    <div className="App" style={{ margin: "0 auto", display: "flex" }}>
       <Header />
       {isAuthentified && <Divider />}
       <Routes>

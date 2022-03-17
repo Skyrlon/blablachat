@@ -36,24 +36,13 @@ const ConnexionPage = () => {
         <Typography component="h1" variant="h5">
           {displayLogIn ? "Log in" : "Sign Up"}
         </Typography>
-        {displayLogIn && (
-          <LogIn>
-            <Link onClick={() => setDisplayLogIn((v) => !v)}>
-              {displayLogIn
-                ? "Don't have an account yet ? Create One !"
-                : "Already have an account ? Log In !"}
-            </Link>
-          </LogIn>
-        )}
-        {!displayLogIn && (
-          <SignUp>
-            <Link onClick={() => setDisplayLogIn((v) => !v)}>
-              {displayLogIn
-                ? "Don't have an account yet ? Create One !"
-                : "Already have an account ? Log In !"}
-            </Link>
-          </SignUp>
-        )}
+        {displayLogIn && <LogIn />}
+        {!displayLogIn && <SignUp />}
+        <Link data-testid="link" onClick={() => setDisplayLogIn((v) => !v)}>
+          {displayLogIn
+            ? "Don't have an account yet ? Create One !"
+            : "Already have an account ? Log In !"}
+        </Link>
       </Box>
     </StyledConnexionPage>
   );

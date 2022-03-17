@@ -19,7 +19,7 @@ const StyledSignUp = styled(Box)`
   flex-direction: column;
 `;
 
-const SignUp = ({ children }) => {
+const SignUp = () => {
   const dispatch = useDispatch();
 
   const passwordRegex =
@@ -172,7 +172,6 @@ const SignUp = ({ children }) => {
       >
         Submit
       </LoadingButton>
-      {children}
     </StyledSignUp>
   );
 };
