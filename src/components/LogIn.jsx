@@ -61,6 +61,7 @@ const LogIn = () => {
         margin="normal"
         fullWidth
         type="text"
+        name="Username"
         label="Username"
         placeholder="Username"
         onChange={(e) => setUsername(e.target.value)}
@@ -71,6 +72,7 @@ const LogIn = () => {
         margin="normal"
         fullWidth
         type={showPassword ? "text" : "password"}
+        name="Password"
         label="Password"
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
@@ -91,8 +93,6 @@ const LogIn = () => {
         }}
       />
 
-      <div onClick={() => setShowPassword(!showPassword)}>{}</div>
-
       <LoadingButton
         loading={isLoading}
         onClick={handleSubmit}
@@ -100,7 +100,7 @@ const LogIn = () => {
         color="primary"
         fullWidth
       >
-        Submit
+        Log in
       </LoadingButton>
     </StyledLogIn>
   );
