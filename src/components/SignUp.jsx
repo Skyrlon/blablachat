@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import ClearIcon from "@mui/icons-material/Clear";
-import CheckIcon from "@mui/icons-material/Check";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
@@ -23,7 +21,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   const passwordRegex =
-    /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/gi;
+    /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/g;
 
   const users = useSelector(getUsers());
 
@@ -57,7 +55,7 @@ const SignUp = () => {
 
     if (
       username.length < 6 ||
-      !users.find((user) => user.name === usernameSubmitted) ||
+      !users.find((user) => user.name === username) ||
       !passwordRegex.test(password)
     ) {
       setIsLoading(false);
@@ -72,7 +70,7 @@ const SignUp = () => {
   };
 
   return (
-    <StyledSignUp component="form" sx={{ mt: 1 }}>
+    <StyledSignUp component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
       <TextField
         margin="normal"
         type="text"
@@ -93,13 +91,7 @@ const SignUp = () => {
             : ""
         }
       />
-      {usernameSubmitted !== undefined &&
-        (usernameSubmitted.length > 5 &&
-        !users.find((user) => user.name === usernameSubmitted) ? (
-          <CheckIcon />
-        ) : (
-          <ClearIcon />
-        ))}
+
       <TextField
         margin="normal"
         type={showPassword ? "text" : "password"}
@@ -153,7 +145,7 @@ const SignUp = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  aria-label="toggle password visibility"
+                  aria-label="toggle confirm password visibility"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   edge="end"
                 >
@@ -170,7 +162,7 @@ const SignUp = () => {
         variant="contained"
         color="primary"
       >
-        Submit
+        Sign up
       </LoadingButton>
     </StyledSignUp>
   );
