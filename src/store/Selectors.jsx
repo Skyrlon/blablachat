@@ -9,7 +9,7 @@ export const getCurrentUserId = () => (state) => state.currentUser.id;
 export const getCurrentUserFriends = () => {
   return (state) => {
     const currentUser = state.currentUser;
-    return currentUser.friendsID.map((friendID) => {
+    return currentUser.friendsID?.map((friendID) => {
       return {
         id: friendID,
         name: state.users.find((user) => user.id === friendID).name,

@@ -64,7 +64,8 @@ const SelectFriendsDropdown = ({
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <StyledSelectFriendsDropdown>
-        {friends.length > 0 &&
+        {!!friends &&
+          friends.length > 0 &&
           friends.map((friend) => (
             <div className="friend" key={friend.id}>
               <div
@@ -81,7 +82,7 @@ const SelectFriendsDropdown = ({
             </div>
           ))}
 
-        {friends.length === 0 && <div>No Friends to Add</div>}
+        {(!friends || friends.length === 0) && <div>No Friends to Add</div>}
 
         <Button color="primary" onClick={handleSubmit}>
           {buttonText}
