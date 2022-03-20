@@ -104,29 +104,31 @@ const TextBox = ({
           onChange={handleChange}
           placeholder="Write a message..."
           InputProps={{
-            endAdornment: (
-              <IconButton onClick={handleClickEmojiButton}>
-                <EmojiEmotionsOutlinedIcon className="emoji-button" />
-              </IconButton>
-            ),
             style: {
               padding: "0.25rem 1rem",
             },
+            endAdornment: (
+              <div className="emoji-container">
+                <IconButton onClick={handleClickEmojiButton}>
+                  <EmojiEmotionsOutlinedIcon className="emoji-button" />
+                </IconButton>
+                {showEmojis.show && showEmojis.input === type && (
+                  <ClickAwayListener
+                    onClickAway={(e) => {
+                      if (e.target.className !== "emoji-button")
+                        onEmojiClickAway({ show: false, input: "" });
+                    }}
+                  >
+                    <div className="emoji-mart-container">
+                      <Picker onSelect={addEmoji} emojiTooltip={true} />
+                    </div>
+                  </ClickAwayListener>
+                )}
+              </div>
+            ),
           }}
         />
 
-        {showEmojis.show && showEmojis.input === type && (
-          <ClickAwayListener
-            onClickAway={(e) => {
-              if (e.target.className !== "emoji-button")
-                onEmojiClickAway({ show: false, input: "" });
-            }}
-          >
-            <div className="emoji-mart-container">
-              <Picker onSelect={addEmoji} emojiTooltip={true} />
-            </div>
-          </ClickAwayListener>
-        )}
         {type === "new" && (
           <IconButton sx={{ margin: "0rem 1rem" }} onClick={onSubmit}>
             <SendIcon />
