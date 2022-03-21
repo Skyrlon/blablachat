@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 const StyledSendMessage = styled.div``;
 
-const SendMessage = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
+const SendMessage = ({ currentChatroomId }) => {
   const dispatch = useDispatch();
 
   const submitNewMessage = (message) => {
@@ -21,14 +21,7 @@ const SendMessage = ({ showEmojis, switchShowEmojis, currentChatroomId }) => {
 
   return (
     <StyledSendMessage>
-      <TextBox
-        type="new"
-        showEmojis={showEmojis}
-        onEmojiButtonClick={switchShowEmojis}
-        onEmojiClickAway={switchShowEmojis}
-        submitMessage={submitNewMessage}
-        text=""
-      />
+      <TextBox type="new" submitMessage={submitNewMessage} text="" />
     </StyledSendMessage>
   );
 };
@@ -38,8 +31,6 @@ SendMessage.defaultProps = {
 };
 
 SendMessage.propTypes = {
-  showEmojis: PropTypes.object,
-  switchShowEmojis: PropTypes.func,
   currentChatroomId: PropTypes.number,
 };
 

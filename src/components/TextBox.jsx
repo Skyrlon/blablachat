@@ -40,15 +40,9 @@ const StyledTextBox = styled.form`
   }
 `;
 
-const TextBox = ({
-  type,
-  showEmojis,
-  onEmojiButtonClick,
-  onEmojiClickAway,
-  submitMessage,
-  text,
-  cancelEdit,
-}) => {
+const TextBox = ({ type, submitMessage, text, cancelEdit }) => {
+  const [showEmojiMenu, setShowEmojiMenu] = useState();
+
   const [message, setMessage] = useState(text);
 
   const [messagePosition, setMessagePosition] = useState(null);
@@ -60,20 +54,17 @@ const TextBox = ({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      setShowEmojiMenu(false);
       onSubmit(e);
     }
     if (e.key === "Escape") {
+      setShowEmojiMenu(false);
       cancelEdit();
     }
   };
 
   const handleClickEmojiButton = (e) => {
-    onEmojiButtonClick({
-      show:
-        showEmojis.input !== type ||
-        (showEmojis.input === type && !showEmojis.show),
-      input: type,
-    });
+    setShowEmojiMenu((v) => !v);
     setMessagePosition(e.pageY / window.innerHeight);
   };
 
@@ -86,6 +77,7 @@ const TextBox = ({
     //Prevent submiting message with only spaces, line breaks, and tabs
     if (!message.replace(/\s/g, "")) return;
     submitMessage(message);
+    setShowEmojiMenu(false);
     setMessage("");
   };
 
@@ -112,12 +104,9 @@ const TextBox = ({
                 <IconButton onClick={handleClickEmojiButton}>
                   <EmojiEmotionsOutlinedIcon className="emoji-button" />
                 </IconButton>
-                {showEmojis.show && showEmojis.input === type && (
+                {showEmojiMenu && (
                   <ClickAwayListener
-                    onClickAway={(e) => {
-                      if (e.target.className !== "emoji-button")
-                        onEmojiClickAway({ show: false, input: "" });
-                    }}
+                    onClickAway={() => setShowEmojiMenu(false)}
                   >
                     <div className="emoji-mart-container">
                       <Picker onSelect={addEmoji} emojiTooltip={true} />
@@ -150,9 +139,6 @@ export default TextBox;
 
 TextBox.propTypes = {
   type: PropTypes.string,
-  showEmojis: PropTypes.object,
-  onEmojiButtonClick: PropTypes.func,
-  onEmojiClickAway: PropTypes.func,
   submitMessage: PropTypes.func,
   text: PropTypes.string,
   cancelEdit: PropTypes.func,

@@ -100,7 +100,7 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = ({ showEmojis, switchShowEmojis }) => {
+const Chat = () => {
   const dispatch = useDispatch();
 
   const currentChatroomId = useSelector(getCurrentChatroomId());
@@ -127,14 +127,12 @@ const Chat = ({ showEmojis, switchShowEmojis }) => {
     setIsEditingMessage(true);
     setIdMessageToEdit(id);
     setTextToEdit(messages.find((msg) => msg.id === id).text);
-    switchShowEmojis({ show: false, input: "" });
   };
 
   const handleCancelEdit = () => {
     setIsEditingMessage(false);
     setIdMessageToEdit(undefined);
     setTextToEdit("");
-    switchShowEmojis({ show: false, input: "" });
   };
 
   const handleEditedMessage = (textEdited) => {
@@ -277,9 +275,6 @@ const Chat = ({ showEmojis, switchShowEmojis }) => {
                   <div className="message-editing">
                     <TextBox
                       type="edit"
-                      showEmojis={showEmojis}
-                      onEmojiButtonClick={switchShowEmojis}
-                      onEmojiClickAway={switchShowEmojis}
                       submitMessage={handleEditedMessage}
                       text={textToEdit}
                       cancelEdit={handleCancelEdit}
@@ -290,11 +285,7 @@ const Chat = ({ showEmojis, switchShowEmojis }) => {
             ))}
         </Scrollbars>
       </div>
-      <SendMessage
-        showEmojis={showEmojis}
-        switchShowEmojis={switchShowEmojis}
-        currentChatroomId={currentChatroomId}
-      />
+      <SendMessage currentChatroomId={currentChatroomId} />
     </StyledChat>
   );
 };
@@ -305,8 +296,6 @@ Chat.defaultProps = {
 
 Chat.propTypes = {
   users: PropTypes.array,
-  showEmojis: PropTypes.object,
-  switchShowEmojis: PropTypes.func,
   currentUser: PropTypes.object,
   friends: PropTypes.array,
 };

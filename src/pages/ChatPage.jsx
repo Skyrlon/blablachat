@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
-
 import Chat from "../components/Chat.jsx";
 import MembersSidebar from "../components/MembersSidebar.jsx";
 import Divider from "@mui/material/Divider";
@@ -17,8 +15,6 @@ const StyledChatPage = styled.div`
 `;
 
 const ChatPage = () => {
-  const [showEmojis, setShowEmojis] = useState({ show: false, input: "" });
-
   let navigate = useNavigate();
 
   const isAuthentified = useSelector(getIsAuthentified());
@@ -34,10 +30,7 @@ const ChatPage = () => {
           path=":id"
           element={
             <>
-              <Chat
-                showEmojis={showEmojis}
-                switchShowEmojis={(e) => setShowEmojis(e)}
-              />
+              <Chat />
               <Divider flexItem={true} orientation="vertical" />
               <MembersSidebar />
             </>
