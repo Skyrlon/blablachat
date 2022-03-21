@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getIsAuthentified } from "../store/Selectors";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const Header = () => {
 
   return (
     <AppBar
-      position={isAuthentified ? "sticked" : "fixed"}
+      position="static"
       elevation={0}
       sx={{ backgroundColor: "white", color: "black" }}
     >
@@ -28,10 +29,11 @@ const Header = () => {
         <Typography
           component="h1"
           onClick={() => navigate("/")}
-          sx={{ flexGrow: 1, color: "inherit", cursor: "pointer" }}
+          sx={{ color: "inherit", cursor: "pointer" }}
         >
           BlaBlaChat
         </Typography>
+        <Box sx={{ flexGrow: 1 }}></Box>
         {isAuthentified && (
           <IconButton size="large" color="inherit" onClick={handleLogoutClick}>
             <ExitToAppIcon />
