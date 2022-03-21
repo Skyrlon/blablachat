@@ -89,12 +89,19 @@ const TextBox = ({ type, submitMessage, text, cancelEdit }) => {
             width: "95%",
             margin: "1rem 1rem",
           }}
+          autoFocus={type === "edit"}
+          onFocus={(e) =>
+            e.currentTarget.setSelectionRange(
+              e.currentTarget.value.length,
+              e.currentTarget.value.length
+            )
+          }
           multiline
           maxRows={3}
           value={message}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
-          placeholder="Write a message..."
+          placeholder={type === "new" ? "Write a message..." : ""}
           InputProps={{
             style: {
               padding: "0.25rem 1rem",
