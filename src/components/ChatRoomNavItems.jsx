@@ -16,25 +16,19 @@ import { Link } from "react-router-dom";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import TextsmsIcon from "@mui/icons-material/Textsms";
+import { Box } from "@mui/material";
 
 const StyledChatRoomNavItems = styled(ListItemButton)`
   position: relative;
   width: 100%;
 
-  & .dropdown {
-    position: absolute;
-    margin: 0;
-    list-style: none;
-    background-color: blue;
-    z-index: 100;
-    border: 1px solid;
-    left: 100%;
-    top: 0;
-  }
   & .rename-chatroom {
     position: absolute;
+    background-color: white;
+    box-sizing: border-box;
+    border: 1px solid grey;
     z-index: 100;
-    background-color: lightcoral;
+    top: 0%;
     left: 100%;
     width: 15rem;
     &-input {
@@ -126,8 +120,6 @@ const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
     dispatch({ type: "CHANGE_CURRENT_CHATROOM", payload: { id: chatroomId } });
   };
 
-  const renameFormRef = useRef(null);
-
   return (
     <>
       <StyledChatRoomNavItems
@@ -143,6 +135,27 @@ const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
           <TextsmsIcon />
         </ListItemIcon>
         <ListItemText primary={chatroomName} />
+        {showRenameInput && (
+          <ClickAwayListener
+            mouseEvent="onMouseDown"
+            onClickAway={handleClickOutside}
+          >
+            <Box
+              component="form"
+              onSubmit={renameChatroomName}
+              className="rename-chatroom"
+            >
+              <TextField
+                className="rename-chatroom-input"
+                value={newChatroomName}
+                onChange={(e) => setNewChatroomName(e.target.value)}
+                variant="outlined"
+              />
+              <Button onClick={cancelRenameChatroom}>Cancel</Button>
+              <Button onClick={renameChatroomName}>Rename</Button>
+            </Box>
+          </ClickAwayListener>
+        )}
       </StyledChatRoomNavItems>
       {showMenu && (
         <ContextMenu
@@ -153,27 +166,6 @@ const ChatRoomNavItems = ({ chatroomId, chatroomOwnerId }) => {
           menuContent={contextMenuContent.current}
           menuEvent={(menuEvent) => menuEvent}
         />
-      )}
-      {showRenameInput && (
-        <ClickAwayListener
-          mouseEvent="onMouseDown"
-          onClickAway={handleClickOutside}
-        >
-          <form
-            ref={renameFormRef}
-            onSubmit={renameChatroomName}
-            className="rename-chatroom"
-          >
-            <TextField
-              className="rename-chatroom-input"
-              value={newChatroomName}
-              onChange={(e) => setNewChatroomName(e.target.value)}
-              variant="outlined"
-            />
-            <Button onClick={cancelRenameChatroom}>Cancel</Button>
-            <Button onClick={renameChatroomName}>Rename</Button>
-          </form>
-        </ClickAwayListener>
       )}
     </>
   );
