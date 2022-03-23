@@ -1,9 +1,13 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 
 import ChatRoomNav from "../components/ChatRoomNav.jsx";
-import { getChatrooms, getIsAuthentified } from "../store/Selectors.jsx";
+import {
+  getChatrooms,
+  getCurrentChatroomId,
+  getIsAuthentified,
+} from "../store/Selectors.jsx";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -32,18 +36,31 @@ const StyledHomePage = styled.div`
 `;
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+
   const chatrooms = useSelector(getChatrooms());
 
   const isAuthentified = useSelector(getIsAuthentified());
+
+  const currentChatromId = useSelector(getCurrentChatroomId());
 
   if (!isAuthentified) {
     return <Navigate to="/connexion" />;
   }
 
+  const onFriendItemClick = () => {
+    dispatch({ type: "CHANGE_CURRENT_CHATROOM", payload: { id: undefined } });
+  };
+
   return (
     <StyledHomePage>
       <List className="nav">
-        <ListItemButton component={Link} to="/">
+        <ListItemButton
+          component={Link}
+          to="/"
+          onClick={onFriendItemClick}
+          selected={currentChatromId === undefined}
+        >
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>

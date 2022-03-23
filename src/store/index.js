@@ -10,7 +10,7 @@ const initialState = {
     friendsRequest: undefined,
   },
 
-  currentChatroomId: null,
+  currentChatroomId: undefined,
 
   isAuthentified: false,
 
