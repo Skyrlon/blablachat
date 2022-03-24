@@ -22,6 +22,6 @@ it("should show SelectFriendsDropDown menu after clicking on add icon", async ()
   render(<MockAddChatRoom />);
   const addIcon = screen.getByTestId("AddIcon");
   fireEvent.click(addIcon);
-  const dropdownButon = screen.getByRole("button", { name: "Create Chatroom" });
-  expect(dropdownButon).toBeInTheDocument();
+  const dropdown = screen.getByTestId("select-friends-dropdown");
+  expect(dropdown).toBeInTheDocument();
 });

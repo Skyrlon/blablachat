@@ -4,12 +4,21 @@ import styled from "styled-components";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
-const StyledSelectFriendsDropdown = styled.form`
+const StyledSelectFriendsDropdown = styled(List)`
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 100;
-  background-color: white;
-  border: 1px solid blue;
+  border: 1px solid grey;
   left: 0%;
   & .friend {
     display: flex;
@@ -39,14 +48,6 @@ const SelectFriendsDropdown = ({
     }
   };
 
-  const handleChange = (e, id) => {
-    if (e.target.checked) {
-      setFriendsSelected((prev) => [...prev, id]);
-    } else {
-      setFriendsSelected((prev) => prev.filter((element) => element !== id));
-    }
-  };
-
   const handleSubmit = () => {
     friendsSubmitted(friendsSelected);
     setFriendsSelected([]);
@@ -63,28 +64,39 @@ const SelectFriendsDropdown = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <StyledSelectFriendsDropdown>
+      <StyledSelectFriendsDropdown
+        sx={{ bgcolor: "background.paper" }}
+        data-testid="select-friends-dropdown"
+      >
         {!!friends &&
           friends.length > 0 &&
           friends.map((friend) => (
-            <div className="friend" key={friend.id}>
-              <div
-                onClick={() => onFriendNameClick(friend.id)}
-                className="friend-name"
-              >
-                {friend.name}
-              </div>
-              <Checkbox
-                className="friend-checkbox"
-                checked={friendsSelected.includes(friend.id)}
-                onChange={(e) => handleChange(e, friend.id)}
-              />
-            </div>
+            <ListItem key={friend.id} disablePadding>
+              <ListItemButton onClick={() => onFriendNameClick(friend.id)}>
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={friendsSelected.includes(friend.id)}
+                  />
+                </ListItemIcon>
+                <ListItemText>{friend.name}</ListItemText>
+              </ListItemButton>
+            </ListItem>
           ))}
 
-        {(!friends || friends.length === 0) && <div>No Friends to Add</div>}
+        {(!friends || friends.length === 0) && (
+          <ListItem>
+            <ListItemText>No Friends to Add</ListItemText>
+          </ListItem>
+        )}
 
-        <Button color="primary" onClick={handleSubmit}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={friendsSelected.length === 0}
+          sx={{ textTransform: "none" }}
+          onClick={handleSubmit}
+        >
           {buttonText}
         </Button>
       </StyledSelectFriendsDropdown>
