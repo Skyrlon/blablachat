@@ -185,13 +185,6 @@ const Chat = () => {
     }
   };
 
-  const handleAddMember = (chatroomId, friendsSelected) => {
-    dispatch({
-      type: "ADD_MEMBER",
-      payload: { newMember: friendsSelected, chatroomId: chatroomId },
-    });
-  };
-
   useEffect(() => {
     scrollbar.current.scrollToBottom();
   }, []);
@@ -216,10 +209,7 @@ const Chat = () => {
       >
         <Typography sx={{ padding: "1rem" }}>{chatroomName}</Typography>
         <IconButton>
-          <AddMember
-            addMember={(ids) => handleAddMember(currentChatroomId, ids)}
-            currentChatroomId={currentChatroomId}
-          />
+          <AddMember currentChatroomId={currentChatroomId} />
         </IconButton>
       </Box>
       <Divider />

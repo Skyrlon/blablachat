@@ -5,7 +5,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
 import { getCurrentUserFriends, getMembers } from "../store/Selectors";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const StyledAddMember = styled.div`
   position: relative;
@@ -22,7 +22,9 @@ const StyledAddMember = styled.div`
   }
 `;
 
-const AddMember = ({ addMember, currentChatroomId }) => {
+const AddMember = ({ currentChatroomId }) => {
+  const dispatch = useDispatch();
+
   const members = useSelector(getMembers(currentChatroomId));
 
   const friends = useSelector(getCurrentUserFriends());
@@ -30,9 +32,13 @@ const AddMember = ({ addMember, currentChatroomId }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleFriendsSubmitted = (friendsSelected) => {
-    addMember(friendsSelected);
+    dispatch({
+      type: "ADD_MEMBER",
+      payload: { newMember: friendsSelected, chatroomId: currentChatroomId },
+    });
     setShowMenu(false);
   };
+
   return (
     <StyledAddMember>
       <PersonAddIcon
@@ -54,7 +60,6 @@ const AddMember = ({ addMember, currentChatroomId }) => {
 };
 
 AddMember.propTypes = {
-  addMember: PropTypes.func,
   currentChatroomId: PropTypes.number,
 };
 
