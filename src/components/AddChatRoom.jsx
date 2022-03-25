@@ -23,7 +23,7 @@ const AddChatRoom = ({ chatrooms }) => {
   const handleFriendsSubmitted = (friendsSelected) => {
     const newChatroomMembers = [currentUserId, ...friendsSelected];
 
-    const chatroomWithSameMembers = chatrooms.find(
+    const chatroomWithSameMembers = chatrooms?.find(
       (chatroom) =>
         chatroom.membersID.length === newChatroomMembers.length &&
         chatroom.membersID.every((member) =>
