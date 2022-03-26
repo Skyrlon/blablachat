@@ -4,7 +4,11 @@ import styled from "styled-components";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import SelectFriendsDropdown from "./SelectFriendsDropdown";
-import { getCurrentUserFriends, getMembers } from "../store/Selectors";
+import {
+  getCurrentUserFriends,
+  getMembers,
+  getCurrentChatroomId,
+} from "../store/Selectors";
 import { useSelector, useDispatch } from "react-redux";
 
 const StyledAddMember = styled.div`
@@ -22,8 +26,10 @@ const StyledAddMember = styled.div`
   }
 `;
 
-const AddMember = ({ currentChatroomId }) => {
+const AddMember = () => {
   const dispatch = useDispatch();
+
+  const currentChatroomId = useSelector(getCurrentChatroomId());
 
   const members = useSelector(getMembers(currentChatroomId));
 

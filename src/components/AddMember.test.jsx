@@ -12,6 +12,7 @@ const userWithFriend = {
     friendsID: [1, 2],
     friendsRequest: [],
   },
+  currentChatroomId: 0,
   users: [
     {
       id: 0,
@@ -54,6 +55,7 @@ const userWithoutFriend = {
     friendsID: [],
     friendsRequest: [],
   },
+  currentChatroomId: 0,
   users: [
     {
       id: 0,
@@ -91,7 +93,7 @@ const MockAddMember = ({ gotFriends }) => {
 
   return (
     <Provider store={store}>
-      <AddMember currentChatroomId={0} />
+      <AddMember />
     </Provider>
   );
 };
