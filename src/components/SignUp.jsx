@@ -54,18 +54,19 @@ const SignUp = () => {
     setPasswordConfirmSubmitted(passwordConfirm);
 
     if (
-      username.length < 6 ||
-      !users.find((user) => user.name === username) ||
-      !passwordRegex.test(password)
+      username.length > 5 &&
+      !users.find((user) => user.name === username) &&
+      passwordRegex.test(password) &&
+      password === passwordConfirm
     ) {
-      setIsLoading(false);
-    } else {
       dispatch({
         type: "CREATE_NEW_USER",
         payload: { name: username, password: password },
       });
       setIsLoading(false);
       alert("Account Created");
+    } else {
+      setIsLoading(false);
     }
   };
 
