@@ -32,7 +32,7 @@ const MembersSidebar = () => {
     <StyledMembersSidebar
       component="nav"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
+        <ListSubheader component="div">
           Members ({members.length})
         </ListSubheader>
       }
