@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Badge from "@mui/material/Badge";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AllFriendsTab from "../components/AllFriendsTab";
 import FriendsRequestsTab from "../components/FriendsRequestsTab";
@@ -32,10 +32,6 @@ const FriendsPage = () => {
 
   const isAuthentified = useSelector(getIsAuthentified());
 
-  if (!isAuthentified) {
-    navigate("/connexion");
-  }
-
   const [categoryToShow, setCategoryToShow] = useState("all");
 
   const friendsRequest = useSelector(getCurrentUserFriendsRequest());
@@ -43,6 +39,16 @@ const FriendsPage = () => {
   const handleChange = (e, newValue) => {
     setCategoryToShow(newValue);
   };
+
+  useEffect(
+    () => {
+      if (!isAuthentified) {
+        navigate("/connexion");
+      }
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   return (
     <StyledFriendsPage>
