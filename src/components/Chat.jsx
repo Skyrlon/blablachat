@@ -209,7 +209,7 @@ const Chat = () => {
       >
         <Typography sx={{ padding: "1rem" }}>{chatroomName}</Typography>
         <IconButton>
-          <AddMember currentChatroomId={currentChatroomId} />
+          <AddMember />
         </IconButton>
       </Box>
       <Divider />
