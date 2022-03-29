@@ -92,7 +92,8 @@ export const getUsersFound = (text) => {
     const usersFound = state.users.filter(
       (user) =>
         user.name.toLowerCase().startsWith(text.toLowerCase()) &&
-        !currentUserFriends.includes(user.id)
+        !currentUserFriends.includes(user.id) &&
+        user.id !== state.currentUser.id
     );
     return usersFound.map((user) => {
       return { id: user.id, name: user.name };

@@ -54,6 +54,7 @@ const AddFriendTab = () => {
           sx={{ width: "98%", marginTop: "1rem" }}
           onChange={(e) => setTextTyped(e.target.value)}
           onKeyPress={(e) => handleInputSubmit(e)}
+          placeholder="Search user"
           value={textTyped}
           InputProps={{
             endAdornment: (
