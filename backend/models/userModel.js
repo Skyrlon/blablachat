@@ -1,28 +1,32 @@
-import mongoose from 'mongoose';
-const {
-    Schema
-} = mongoose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: [true, "Please add a name"],
+      type: String,
+      required: [true, "Please add a name"],
     },
     password: {
-        type: String,
-        required: [true, "Please add a password"],
+      type: String,
+      required: [true, "Please add a password"],
     },
-    friendsID: [{
+    friendsID: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-    friendsRequests: [{
+        ref: "User",
+      },
+    ],
+    friendsRequests: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }]
-}, {
+        ref: "User",
+      },
+    ],
+  },
+  {
     timestamps: true,
-})
+  }
+);
 
-
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema);
