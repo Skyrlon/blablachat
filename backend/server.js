@@ -15,6 +15,8 @@ app.use(express.urlencoded({
     extended: false
 }))
 
-app.use("/api/users/", require("./routes/userRoutes.js"))
+app.use("/api/users", require("./routes/userRoutes.js"))
+
+app.use("/api/chatrooms", require("./routes/chatroomRoutes.js"))
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
