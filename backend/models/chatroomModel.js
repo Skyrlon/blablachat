@@ -9,7 +9,12 @@ const chatroomSchema = new Schema(
     },
     membersID: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-      validate: [(v) => v.length > 1, "Need atleast 2 members"],
+      required: [
+        function () {
+          return this.length > 1;
+        },
+        "Need atleast 2 members",
+      ],
     },
     ownerID: {
       type: mongoose.Schema.Types.ObjectId,

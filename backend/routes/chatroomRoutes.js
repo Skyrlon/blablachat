@@ -52,4 +52,38 @@ router.delete("/:id", asyncHandler(async (req, res) => {
     })
 }))
 
+//Add new message
+router.post("/:id/messages", asyncHandler(async (req, res) => {
+    const message = await Chatroom.findByIdAndUpdate(req.params.id, {
+        $push: {
+            messages: req.body
+        }
+    }, {
+        new: true,
+        upsert: true,
+        runValidators: true
+    })
+    res.status(200).json(message)
+}))
+
+//Update message
+router.put("/:id/messages/:idMessage", asyncHandler(async (req, res) => {
+    const message = await Chatroom.findOneAndUpdate({
+        _id: req.params.id,
+        "messages._id": req.params.idMessage
+    }, {
+        $set: {
+            'messages.$.time': req.body.time,
+            'messages.$.text': req.body.text,
+            'messages.$.deleted': req.body.deleted,
+            'messages.$.modified': req.body.modified,
+            'messages.$.writerID': req.body.writerID,
+        }
+    }, {
+        new: true,
+        runValidators: true
+    })
+    res.status(200).json(message)
+}))
+
 module.exports = router;
