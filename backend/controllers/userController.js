@@ -7,10 +7,9 @@ const getUser = asyncHandler(async (req, res) => {
     const {
         name
     } = req.body
-    const user = await User.find({
+    const user = await User.findOne({
         name
     })
-
     if (!user) {
         res.status(400)
         throw new Error('User not found')
@@ -22,6 +21,10 @@ const getUser = asyncHandler(async (req, res) => {
 
 //Create a new user
 const registerUser = asyncHandler(async (req, res) => {
+    if (!req.body.name || !req.body.password) {
+        res.status(400)
+        throw new Error('Please add all fields')
+    }
     const user = await User.create({
         name: req.body.name,
         password: req.body.password,

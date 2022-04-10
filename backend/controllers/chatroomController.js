@@ -4,17 +4,19 @@ const Chatroom = require("../models/chatroomModel")
 //Get chatroom data
 const getChatroom = asyncHandler(async (req, res) => {
     const chatroom = await Chatroom.findById(req.params.id)
-
     if (!chatroom) {
         res.status(400)
         throw new Error('Chatroom not found')
     }
-
     res.status(200).json(chatroom)
 })
 
 //Create a new chatroom
 const createChatroom = asyncHandler(async (req, res) => {
+    if (!req.body.name || req.body.membersID || req.body.ownerID) {
+        res.status(400)
+        throw new Error('Give all infos')
+    }
     const chatroom = await Chatroom.create({
         name: req.body.name,
         membersID: req.body.membersID,
@@ -51,6 +53,11 @@ const deleteChatroom = asyncHandler(async (req, res) => {
 
 //Add new message
 const addMessage = asyncHandler(async (req, res) => {
+    const chatroom = await Chatroom.findById(req.params.id)
+    if (!chatroom) {
+        res.status(400)
+        throw new Error('Chatroom not found')
+    }
     const message = await Chatroom.findByIdAndUpdate(req.params.id, {
         $push: {
             messages: req.body
@@ -65,6 +72,11 @@ const addMessage = asyncHandler(async (req, res) => {
 
 //Update message
 const updateMessage = asyncHandler(async (req, res) => {
+    const chatroom = await Chatroom.findById(req.params.id)
+    if (!chatroom) {
+        res.status(400)
+        throw new Error('Chatroom not found')
+    }
     const message = await Chatroom.findOneAndUpdate({
         _id: req.params.id,
         "messages._id": req.params.idMessage
