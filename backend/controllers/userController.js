@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const User = require("../models/userModel")
+const bcrypt = require('bcryptjs')
 
 
 //Get user's infos
@@ -21,13 +22,23 @@ const getUser = asyncHandler(async (req, res) => {
 
 //Create a new user
 const registerUser = asyncHandler(async (req, res) => {
-    if (!req.body.name || !req.body.password) {
+    const {
+        name,
+        password
+    } = req.body
+
+    if (!name || !password) {
         res.status(400)
         throw new Error('Please add all fields')
     }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const user = await User.create({
-        name: req.body.name,
-        password: req.body.password,
+        name: name,
+        password: hashedPassword,
     })
     res.status(200).json(user)
 })
