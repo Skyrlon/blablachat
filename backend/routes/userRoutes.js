@@ -10,7 +10,7 @@ const {
 
 router.get("/", getUser);
 
-router.get("/login", loginUser);
+router.post("/login", loginUser);
 
 router.post("/", registerUser);
 

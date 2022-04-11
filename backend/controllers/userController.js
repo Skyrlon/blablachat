@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler")
 const User = require("../models/userModel")
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 
 //Get user's infos
@@ -35,6 +36,7 @@ const loginUser = asyncHandler(async (req, res) => {
         res.json({
             _id: user.id,
             name: user.name,
+            token: generateToken(user._id),
         })
     } else {
         res.status(400)
@@ -54,6 +56,16 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Please add all fields')
     }
 
+    // Check if user exists
+    const userExists = await User.findOne({
+        name
+    })
+
+    if (userExists) {
+        res.status(400)
+        throw new Error('User already exists')
+    }
+
     // Hash password
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
@@ -62,11 +74,19 @@ const registerUser = asyncHandler(async (req, res) => {
         name: name,
         password: hashedPassword,
     })
+
+    if (user) {
+        res.status(201).json({
+            _id: user.id,
+            name: user.name,
+            token: generateToken(user._id),
+        })
+    } else {
+        res.status(400)
+        throw new Error('Invalid user data')
+    }
     res.status(200).json(user)
 })
-
-
-
 
 //Update user's info
 const updateUser = asyncHandler(async (req, res) => {
@@ -93,6 +113,15 @@ const deleteUser = asyncHandler(async (req, res) => {
         id: req.params.id
     })
 })
+
+// Generate JWT
+const generateToken = (id) => {
+    return jwt.sign({
+        id
+    }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    })
+}
 
 module.exports = {
     getUser,

@@ -23,6 +23,7 @@
     "emoji-mart": "^3.0.1",
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.9",
     "react": "^17.0.2",
     "react-click-away-listener": "^2.0.3",
