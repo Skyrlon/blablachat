@@ -19,6 +19,28 @@ const getUser = asyncHandler(async (req, res) => {
     res.status(200).json(user)
 })
 
+//Connect User
+
+const loginUser = asyncHandler(async (req, res) => {
+    const {
+        name,
+        password
+    } = req.body
+
+    const user = await User.findOne({
+        name
+    })
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+        res.json({
+            _id: user.id,
+            name: user.name,
+        })
+    } else {
+        res.status(400)
+        throw new Error('Invalid login infos')
+    }
+})
 
 //Create a new user
 const registerUser = asyncHandler(async (req, res) => {
@@ -42,6 +64,8 @@ const registerUser = asyncHandler(async (req, res) => {
     })
     res.status(200).json(user)
 })
+
+
 
 
 //Update user's info
@@ -72,6 +96,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 module.exports = {
     getUser,
+    loginUser,
     registerUser,
     updateUser,
     deleteUser
