@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getUser,
+  getFilteredUsers,
   loginUser,
   registerUser,
   updateUser,
@@ -9,7 +9,7 @@ const {
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
 
-router.get("/", protect, getUser);
+router.get("/", protect, getFilteredUsers);
 
 router.post("/login", loginUser);
 

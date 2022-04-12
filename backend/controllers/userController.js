@@ -4,11 +4,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 //Get user's infos
-const getUser = asyncHandler(async (req, res) => {
-  const { name } = req.body;
-  const user = await User.findOne({
-    name,
-  });
+const getFilteredUsers = asyncHandler(async (req, res) => {
+  const user = await User.find({
+    _id: {
+      $in: req.body.ids,
+    },
+  }).select("-password");
   if (!user) {
     res.status(400);
     throw new Error("User not found");
@@ -127,7 +128,7 @@ const generateToken = (id) => {
 };
 
 module.exports = {
-  getUser,
+  getFilteredUsers,
   loginUser,
   registerUser,
   updateUser,
