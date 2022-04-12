@@ -19,7 +19,6 @@ const getFilteredUsers = asyncHandler(async (req, res) => {
 });
 
 //Connect User
-
 const loginUser = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
 

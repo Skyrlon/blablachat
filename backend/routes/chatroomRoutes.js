@@ -18,7 +18,7 @@ router.put("/:id", protect, updateChatrooom);
 
 router.delete("/:id", protect, deleteChatroom);
 
-router.post("/:id/messages", protect, addMessage);
+router.put("/:id/messages", protect, addMessage);
 
 router.put("/:id/messages/:idMessage", protect, updateMessage);
 
