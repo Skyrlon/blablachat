@@ -1,9 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const Chatroom = require("../models/chatroomModel");
 
-//Get chatroom data
-const getChatroom = asyncHandler(async (req, res) => {
-  const chatroom = await Chatroom.findById(req.params.id);
+//Get chatrooms data
+const getChatrooms = asyncHandler(async (req, res) => {
+  const chatroom = await Chatroom.find({
+    _id: {
+      $in: req.body.ids,
+    },
+  });
   if (!chatroom) {
     res.status(400);
     throw new Error("Chatroom not found");
@@ -132,7 +136,7 @@ const updateMessage = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getChatroom,
+  getChatrooms,
   createChatroom,
   updateChatrooom,
   deleteChatroom,

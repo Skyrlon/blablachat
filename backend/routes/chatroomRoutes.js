@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getChatroom,
+  getChatrooms,
   createChatroom,
   updateChatrooom,
   deleteChatroom,
@@ -10,7 +10,7 @@ const {
 } = require("../controllers/chatroomController");
 const { protect } = require("../middleware/authMiddleware");
 
-router.get("/:id", protect, getChatroom);
+router.get("/", protect, getChatrooms);
 
 router.post("/", protect, createChatroom);
 
