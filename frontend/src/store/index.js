@@ -1,4 +1,4 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import produce from "immer";
 
 const initialState = {
@@ -188,7 +188,7 @@ const RENAME_CHATROOM = "RENAME_CHATROOM";
 
 const EJECT_MEMBER = "EJECT_MEMBER";
 
-function reducer(state = initialState, action) {
+function oldReducer(state = initialState, action) {
   switch (action.type) {
     case CREATE_NEW_USER:
       return produce(state, (draft) => {
@@ -386,7 +386,9 @@ function reducer(state = initialState, action) {
   }
 }
 
-export const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+export const store = configureStore({
+  reducer: { old: oldReducer },
+  devTools:
+    window.__REDUX_DEVTOOLS_EXTENSION__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION__(),
+});
